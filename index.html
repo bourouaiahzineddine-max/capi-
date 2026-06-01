@@ -97,9 +97,9 @@ nav.scrolled{box-shadow:0 4px 30px rgba(0,0,0,.3)}
 #hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:120px;background:linear-gradient(to top,var(--off),transparent);pointer-events:none;z-index:0}
 .hero-inner{max-width:820px;position:relative;z-index:1}
 .hero-badge{display:inline-block;background:rgba(184,146,44,.18);border:1px solid rgba(184,146,44,.55);color:var(--gold);padding:6px 22px;border-radius:30px;font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:1.8rem;font-weight:500}
-.hero-title{font-size:clamp(2.2rem,5vw,4.2rem);color:#fff;line-height:1.18;margin-bottom:1.3rem;font-weight:700}
+.hero-title{font-size:clamp(2.2rem,5vw,4.2rem);color:#fff;line-height:1.18;margin-bottom:1.3rem;font-weight:700;text-shadow:0 2px 20px rgba(0,0,0,.95),0 4px 60px rgba(0,0,0,.7)}
 .hero-title em{color:var(--gold);font-style:italic}
-.hero-sub{font-size:clamp(.92rem,2vw,1.1rem);color:rgba(248,246,241,.82);line-height:1.78;margin-bottom:2.8rem;font-weight:300}
+.hero-sub{font-size:clamp(.92rem,2vw,1.1rem);color:rgba(248,246,241,.92);line-height:1.78;margin-bottom:2.8rem;font-weight:300;text-shadow:0 1px 12px rgba(0,0,0,.8)}
 .hero-btn{display:inline-flex;align-items:center;gap:10px;background:var(--gold);color:var(--navy);padding:15px 36px;border-radius:4px;text-decoration:none;font-weight:700;font-size:.95rem;letter-spacing:.5px;transition:all .3s;box-shadow:0 10px 38px rgba(184,146,44,.42)}
 .hero-btn:hover{transform:translateY(-3px);box-shadow:0 16px 50px rgba(184,146,44,.58);background:var(--gold-l)}
 .hero-btn svg{width:20px;height:20px;fill:var(--navy)}
@@ -142,7 +142,7 @@ section{padding:5.5rem 2rem}
 .prob-item p{color:rgba(248,246,241,.55);font-size:.86rem;line-height:1.6;margin:0}
 .prob-cta-text{margin-top:1.6rem;font-size:1rem;color:var(--gold);font-family:'Playfair Display',serif;font-style:italic;font-weight:600}
 .prob-img-wrap{position:relative}
-.prob-img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:12px;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.prob-img{width:100%;aspect-ratio:unset;max-height:420px;object-fit:cover;border-radius:12px;box-shadow:0 30px 80px rgba(0,0,0,.45)}
 .prob-badge{position:absolute;bottom:-16px;left:-16px;background:var(--gold);color:var(--navy);padding:1rem 1.3rem;border-radius:8px;box-shadow:0 10px 32px rgba(184,146,44,.45)}
 .pb-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;line-height:1}
 .pb-txt{font-size:.68rem;font-weight:600;letter-spacing:.5px;margin-top:.2rem}
@@ -174,7 +174,8 @@ section{padding:5.5rem 2rem}
 .disc-tag{background:var(--red);color:#fff;padding:2px 8px;border-radius:20px;font-size:.68rem;font-weight:700;letter-spacing:.5px}
 
 .prod-body{padding:1.3rem;flex:1;display:flex;flex-direction:column}
-.prod-name{font-family:'Playfair Display',serif;font-size:1.08rem;color:var(--navy);margin-bottom:.4rem;font-weight:600;line-height:1.3}
+.prod-name{font-family:'Playfair Display',serif;font-size:1.08rem;color:var(--navy);margin-bottom:.4rem;font-weight:600;line-height:1.3;cursor:pointer;transition:color .2s}
+.prod-name:hover{color:var(--gold)}
 .prod-duration{display:inline-flex;align-items:center;gap:5px;background:rgba(184,146,44,.1);color:var(--gold);padding:2px 9px;border-radius:20px;font-size:.68rem;font-weight:600;margin-bottom:.7rem;letter-spacing:.3px}
 .prod-desc{color:var(--gray);font-size:.82rem;line-height:1.7;margin-bottom:1rem;flex:1}
 
@@ -183,21 +184,19 @@ section{padding:5.5rem 2rem}
 .cp-lbl{font-size:.75rem;color:var(--navy);font-weight:600;margin-bottom:.55rem;letter-spacing:.3px}
 .cp-swatches{display:flex;flex-wrap:wrap;gap:.45rem;margin-bottom:.6rem}
 .swatch{
-  width:62px;height:52px;border-radius:8px;cursor:pointer;
+  width:84px;cursor:pointer;border-radius:8px;overflow:hidden;
   border:2.5px solid transparent;transition:all .2s;flex-shrink:0;
-  background-image:url('assets/color-chart.jpg');
-  background-size:248px 412px;background-repeat:no-repeat;overflow:hidden;
+  background:#f5f0e8;
 }
 .swatch:hover{border-color:rgba(184,146,44,.7);transform:scale(1.05)}
-.swatch.sel{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,146,44,.35);transform:scale(1.05)}
+.swatch.sel{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,146,44,.35)}
+.swatch img{width:100%;display:block}
 .cp-chosen{font-size:.72rem;color:var(--navy);font-weight:600;letter-spacing:.2px}
 .cp-chosen span{color:var(--gold)}
 
 .prod-btn{display:flex;align-items:center;justify-content:center;gap:8px;background:transparent;border:2px solid var(--gold);color:var(--gold);padding:10px;border-radius:4px;text-decoration:none;font-size:.82rem;font-weight:700;letter-spacing:.4px;transition:all var(--transition);width:100%;font-family:'DM Sans',sans-serif}
 .prod-btn:hover{background:var(--gold);color:var(--navy)}
 .prod-btn svg{width:16px;height:16px;fill:currentColor;flex-shrink:0}
-.prod-fiche-btn{display:flex;align-items:center;justify-content:center;gap:.45rem;background:transparent;border:1.5px solid rgba(184,146,44,.4);color:var(--navy);padding:9px 12px;border-radius:6px;font-size:.82rem;font-weight:600;cursor:pointer;margin:.7rem 0 .5rem;transition:all .2s;width:100%;font-family:'DM Sans',sans-serif;letter-spacing:.2px}
-.prod-fiche-btn:hover{background:rgba(184,146,44,.08);border-color:var(--gold)}
 
 /* =========================================
    BEFORE / AFTER
@@ -215,6 +214,9 @@ section{padding:5.5rem 2rem}
 .ba-labs span{padding:5px 8px;font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
 .lbef{background:rgba(255,255,255,.06);color:rgba(248,246,241,.5)}
 .laft{background:rgba(184,146,44,.15);color:var(--gold)}
+.ba-img-full img{width:100%;display:block;border-radius:10px 10px 0 0;object-fit:cover}
+.ba-label-row{display:flex;align-items:center;justify-content:center;gap:.8rem;padding:6px 10px;background:rgba(255,255,255,.04)}
+.ba-label-row .lbef,.ba-label-row .laft{background:none;padding:0}
 .ba-info{padding:.85rem 1rem;text-align:left}
 .ba-name{color:var(--off);font-weight:600;font-size:.88rem}
 .ba-loc{color:var(--gold);font-size:.76rem;margin-top:.15rem}
@@ -583,7 +585,7 @@ footer{background:var(--dark);padding:4rem 2rem 2rem;border-top:1px solid rgba(1
         <p class="prob-cta-text" data-i18n="prob_cta">Chez CapiXpert, nous avons la solution.</p>
       </div>
       <div class="prob-img-wrap fi d2">
-        <img class="prob-img" src="https://picsum.photos/seed/elegantman/600/750" alt="Homme élégant Paris" loading="lazy">
+        <img class="prob-img" src="assets/voiture.jpeg" alt="Avant après traitement capillaire" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/elegantman/600/750'">
         <div class="prob-badge"><div class="pb-num">50%</div><div class="pb-txt" data-i18n="prob_stat">Des hommes<br>avant 50 ans</div></div>
       </div>
     </div>
@@ -746,36 +748,33 @@ footer{background:var(--dark);padding:4rem 2rem 2rem;border-top:1px solid rgba(1
 /* ============================================================
    HAIR COLOR PALETTE
    ============================================================ */
-/* Couleurs calées sur le color-chart.jpg (770×1280, 4 col × 5 lignes, titre ~100px) */
 const HAIR_COLORS = [
-  {c:'1',    n:'Jet Black',              col:0,row:0},
-  {c:'1B',   n:'Off Black',              col:1,row:0},
-  {c:'2',    n:'Darkest Brown',          col:2,row:0},
-  {c:'3',    n:'Dark Brown',             col:3,row:0},
-  {c:'4',    n:'Medium Brown',           col:0,row:1},
-  {c:'5',    n:'Medium Light Brown',     col:1,row:1},
-  {c:'6',    n:'Light Brown',            col:2,row:1},
-  {c:'7',    n:'Very Light Brown',       col:3,row:1},
-  {c:'1B10', n:'Off Black & 10% White',  col:0,row:2},
-  {c:'1B20', n:'Off Black & 20% White',  col:1,row:2},
-  {c:'1B30', n:'Off Black & 30% White',  col:2,row:2},
-  {c:'1B40', n:'Off Black & 40% White',  col:3,row:2},
-  {c:'17',   n:'Dark Ash Blonde',        col:0,row:3},
-  {c:'18',   n:'Medium Blonde',          col:1,row:3},
-  {c:'20',   n:'Light Ash Blonde',       col:2,row:3},
-  {c:'22R',  n:'Beige Blonde',           col:3,row:3},
-  {c:'1B65', n:'Off Black & 65% White',  col:0,row:4},
-  {c:'1B80', n:'Off Black & 80% White',  col:1,row:4},
-  {c:'613',  n:'Platinum Blonde',        col:2,row:4},
-  {c:'60R',  n:'Silver White',           col:3,row:4},
+  {c:'1',    n:'Jet Black',             f:'sw_1.jpg'},
+  {c:'1B',   n:'Off Black',             f:'sw_1b.jpg'},
+  {c:'2',    n:'Darkest Brown',         f:'sw_2.jpg'},
+  {c:'3',    n:'Dark Brown',            f:'sw_3.jpg'},
+  {c:'4',    n:'Medium Brown',          f:'sw_4.jpg'},
+  {c:'5',    n:'Medium Light Brown',    f:'sw_5.jpg'},
+  {c:'6',    n:'Light Brown',           f:'sw_6.jpg'},
+  {c:'7',    n:'Very Light Brown',      f:'sw_7.jpg'},
+  {c:'1B10', n:'Off Black & 10% White', f:'sw_1b10.jpg'},
+  {c:'1B20', n:'Off Black & 20% White', f:'sw_1b20.jpg'},
+  {c:'1B30', n:'Off Black & 30% White', f:'sw_1b30.jpg'},
+  {c:'1B40', n:'Off Black & 40% White', f:'sw_1b40.jpg'},
+  {c:'17',   n:'Dark Ash Blonde',       f:'sw_17.jpg'},
+  {c:'18',   n:'Medium Blonde',         f:'sw_18.jpg'},
+  {c:'20',   n:'Light Ash Blonde',      f:'sw_20.jpg'},
+  {c:'22R',  n:'Beige Blonde',          f:'sw_22r.jpg'},
+  {c:'1B65', n:'Off Black & 65% White', f:'sw_1b65.jpg'},
+  {c:'1B80', n:'Off Black & 80% White', f:'sw_1b80.jpg'},
+  {c:'613',  n:'Platinum Blonde',       f:'sw_613.jpg'},
+  {c:'60R',  n:'Silver White',          f:'sw_60r.jpg'},
 ];
 
 function swatchesHTML(){
-  return HAIR_COLORS.map((hc,i)=>{
-    const bx = -(hc.col * 62);
-    const by = -(32 + hc.row * 76);
-    return `<div class="swatch${i===0?' sel':''}" style="background-position:${bx}px ${by}px" data-code="${hc.c}" data-name="${hc.n}" title="${hc.c} — ${hc.n}" tabindex="0" role="button" aria-label="${hc.n}"></div>`;
-  }).join('');
+  return HAIR_COLORS.map((hc,i)=>
+    `<div class="swatch${i===0?' sel':''}" data-code="${hc.c}" data-name="${hc.n}" title="${hc.c} — ${hc.n}" tabindex="0" role="button" aria-label="${hc.n}"><img src="assets/${hc.f}" alt="${hc.n}" loading="lazy"></div>`
+  ).join('');
 }
 
 function colorPickerHTML(prodId){
@@ -833,10 +832,10 @@ const DEFAULT = {
     }
   ],
   beforeAfter:[
-    {before:'assets/ba1-before.jpg',after:'assets/ba1-after.jpg',name:'Jean-Pierre',location:'Paris 8e'},
-    {before:'assets/ba2-before.jpg',after:'assets/ba2-after.jpg',name:'François',location:'Neuilly-sur-Seine'},
-    {before:'assets/ba3-before.jpg',after:'assets/ba3-after.jpg',name:'Nicolas',location:'Paris 16e'},
-    {before:'assets/ba4-before.jpg',after:'assets/ba4-after.jpg',name:'Julien',location:'Versailles'},
+    {combined:'assets/ba1-combined.jpg',name:'Jean-Pierre',location:'Paris 8e'},
+    {combined:'assets/ba2-combined.jpg',name:'François',location:'Neuilly-sur-Seine'},
+    {combined:'assets/ba3-combined.jpg',name:'Nicolas',location:'Paris 16e'},
+    {combined:'assets/ba4-combined.jpg',name:'Julien',location:'Versailles'},
   ],
   testimonials:[
     {
@@ -1000,27 +999,21 @@ function renderProducts(){
     return `<div class="prod-card fi" data-prod-id="${p.id}">
       <div class="prod-img-wrap" data-imga="${p.imgA}" data-imgb="${p.imgB||''}" onclick="openLightbox(this)" role="button" aria-label="Agrandir l'image">${imgHtml}<div class="prod-pill">${p.badge}</div><div class="lb-icon">🔍</div></div>
       <div class="prod-body">
-        <div class="prod-name">${p.name}</div>
+        <div class="prod-name" onclick="openProdModal('${p.id}')" role="button" tabindex="0" aria-label="Voir la fiche ${p.name}">${p.name}</div>
         <div class="price-wrap">
           <span class="old-price">${p.oldPrice}</span>
           <span class="new-price">${p.newPrice}</span>
           <span class="disc-tag">${p.discount}</span>
         </div>
         ${durHtml}
-        <button class="prod-fiche-btn" onclick="openProdModal('${p.id}')">📋 ${T[l].fiche_btn||'Voir la fiche complète'}</button>
-        <button class="prod-btn" onclick="productWA(this)" data-prod-name="${p.name}">
-          <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.856L.043 23.957l6.226-1.464A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.853 0-3.601-.498-5.113-1.371l-.368-.217-3.694.868.897-3.604-.24-.38A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
-          <span>${T[l].prod_btn}</span>
-        </button>
       </div>
     </div>`;
   }).join('');
-  initSwatches();
   observeFi();
 }
 
 function productWA(btn){
-  const card = btn.closest('.prod-card');
+  const card = btn ? btn.closest('.prod-card') : null;
   const name = btn.dataset.prodName;
   const selSwatch = card.querySelector('.swatch.sel');
   let colorPart = '';
@@ -1050,19 +1043,23 @@ function initSwatches(){
 function renderBA(){
   const g = document.getElementById('baGrid');
   const bfb = 'https://picsum.photos/seed/';
-  g.innerHTML = data.beforeAfter.map((b,i)=>`
-    <div class="ba-card fi">
-      <div class="ba-imgs">
-        <img src="${b.before}" alt="Avant" loading="lazy" onerror="this.onerror=null;this.src='${bfb}bef${i+10}/300/300'">
-        <img src="${b.after}" alt="Après" loading="lazy" onerror="this.onerror=null;this.src='${bfb}aft${i+10}/300/300'">
-        <div class="ba-sep">→</div>
+  g.innerHTML = data.beforeAfter.map((b,i)=>{
+    const imgSrc = b.combined || b.before || `${bfb}ba${i+10}/700/450`;
+    return `<div class="ba-card fi">
+      <div class="ba-img-full">
+        <img src="${imgSrc}" alt="Avant/Après ${b.name}" loading="lazy" onerror="this.onerror=null;this.src='${bfb}ba${i+10}/700/450'">
       </div>
-      <div class="ba-labs"><span class="lbef">AVANT</span><span class="laft">APRÈS</span></div>
+      <div class="ba-label-row">
+        <span class="lbef">AVANT</span>
+        <span style="color:var(--gold);font-weight:700">→</span>
+        <span class="laft">APRÈS</span>
+      </div>
       <div class="ba-info">
         <div class="ba-name">${b.name}</div>
         <div class="ba-loc">📍 ${b.location}</div>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
   observeFi();
 }
 
@@ -1223,8 +1220,10 @@ function buildAdminPanels(){
       <h4>Résultat ${i+1} — ${b.name}</h4>
       <div class="af"><label>Prénom</label><input type="text" id="baname${i}" value="${b.name}"></div>
       <div class="af"><label>Ville</label><input type="text" id="baloc${i}" value="${b.location}"></div>
-      <div class="af"><label>URL Photo AVANT</label><input type="text" id="babef${i}" value="${b.before}" oninput="document.getElementById('babefp${i}').src=this.value"><img class="af-img" id="babefp${i}" src="${b.before}"></div>
-      <div class="af"><label>URL Photo APRÈS</label><input type="text" id="baaft${i}" value="${b.after}" oninput="document.getElementById('baaftp${i}').src=this.value"><img class="af-img" id="baaftp${i}" src="${b.after}"></div>
+      <div class="af"><label>URL Photo (Avant/Après combiné)</label>
+        <input type="text" id="bacomb${i}" value="${b.combined||b.before||''}" oninput="document.getElementById('bacp${i}').src=this.value">
+        <img class="af-img" id="bacp${i}" src="${b.combined||b.before||''}">
+      </div>
     </div>`).join('');
 
   /* Testimonials */
@@ -1262,8 +1261,7 @@ function saveBA(){
   data.beforeAfter = data.beforeAfter.map((_,i)=>({
     name:document.getElementById(`baname${i}`).value,
     location:document.getElementById(`baloc${i}`).value,
-    before:document.getElementById(`babef${i}`).value,
-    after:document.getElementById(`baaft${i}`).value
+    combined:document.getElementById(`bacomb${i}`).value
   }));
   saveData(); renderBA(); showMsg('baMsg');
 }
