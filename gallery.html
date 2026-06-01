@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Galerie Photo</title>
+<style>
+/* ── Reset ──────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+  background: #F4F5F7;
+  color: #1A1A2E;
+  min-height: 100vh;
+}
+
+/* ── Variables ──────────────────────────────── */
+:root {
+  --bg: #F4F5F7;
+  --surface: #FFFFFF;
+  --border: #E4E7EC;
+  --text: #1A1A2E;
+  --text-2: #6B7280;
+  --text-3: #9CA3AF;
+  --accent: #3B6CF8;
+  --accent-l: #EEF2FF;
+  --green: #10B981;
+  --green-l: #ECFDF5;
+  --red: #EF4444;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.04);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,.12), 0 4px 12px rgba(0,0,0,.06);
+  --radius: 12px;
+  --transition: .2s ease;
+}
+
+/* ── Header ─────────────────────────────────── */
+.header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  gap: 1rem;
+}
+.header-left { display: flex; align-items: center; gap: 1rem; }
+.logo {
+  display: flex; align-items: center; gap: .55rem;
+  font-weight: 700; font-size: 1.05rem; color: var(--text); text-decoration: none;
+}
+.logo-icon {
+  width: 32px; height: 32px; background: var(--accent); border-radius: 8px;
+  display: flex; align-items: center; justify-content: center; font-size: .9rem;
+}
+.total-badge {
+  background: var(--bg); border: 1px solid var(--border);
+  color: var(--text-2); padding: 3px 10px; border-radius: 20px; font-size: .75rem; font-weight: 500;
+}
+
+.header-right { display: flex; align-items: center; gap: .6rem; }
+.search-wrap { position: relative; }
+.search-input {
+  background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+  padding: 7px 12px 7px 34px; font-size: .85rem; color: var(--text);
+  width: 220px; outline: none; transition: all var(--transition);
+  font-family: inherit;
+}
+.search-input:focus { border-color: var(--accent); background: #fff; box-shadow: 0 0 0 3px rgba(59,108,248,.12); }
+.search-icon {
+  position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+  color: var(--text-3); pointer-events: none; font-size: .85rem;
+}
+.sort-select {
+  background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+  padding: 7px 10px; font-size: .82rem; color: var(--text-2); outline: none;
+  cursor: pointer; font-family: inherit; transition: all var(--transition);
+}
+.sort-select:focus { border-color: var(--accent); }
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border-radius: 8px; font-size: .82rem;
+  font-weight: 600; cursor: pointer; border: none; transition: all var(--transition);
+  font-family: inherit; white-space: nowrap;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: #2d5ce0; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(59,108,248,.35); }
+.btn-ghost { background: var(--bg); color: var(--text-2); border: 1px solid var(--border); }
+.btn-ghost:hover { background: var(--border); color: var(--text); }
+.btn-danger { background: #FEF2F2; color: var(--red); border: 1px solid #FECACA; }
+.btn-danger:hover { background: var(--red); color: #fff; }
+.btn svg { width: 15px; height: 15px; }
+
+/* ── Toolbar (filters + actions) ────────────── */
+.toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: .9rem 2rem; gap: 1rem; flex-wrap: wrap;
+  border-bottom: 1px solid var(--border); background: var(--surface);
+}
+.filters { display: flex; gap: .4rem; flex-wrap: wrap; }
+.filter-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 14px; border-radius: 20px; font-size: .8rem;
+  font-weight: 500; cursor: pointer; border: 1px solid var(--border);
+  background: var(--bg); color: var(--text-2); transition: all var(--transition);
+  font-family: inherit;
+}
+.filter-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-l); }
+.filter-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600; }
+.filter-btn .pill {
+  background: rgba(255,255,255,.25); color: inherit; padding: 1px 7px;
+  border-radius: 10px; font-size: .72rem; font-weight: 700; min-width: 20px; text-align: center;
+}
+.filter-btn:not(.active) .pill { background: var(--border); color: var(--text-2); }
+
+.toolbar-actions { display: flex; gap: .5rem; align-items: center; }
+.storage-info { font-size: .78rem; color: var(--text-3); }
+
+/* ── Drop Zone ──────────────────────────────── */
+.drop-area {
+  margin: 1.5rem 2rem 0;
+  border: 2px dashed var(--border); border-radius: var(--radius);
+  background: var(--surface); padding: 2rem 1rem;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: .7rem; cursor: pointer; transition: all var(--transition);
+  text-align: center;
+}
+.drop-area:hover, .drop-area.drag-over {
+  border-color: var(--accent); background: var(--accent-l);
+}
+.drop-area.drag-over { border-style: solid; box-shadow: 0 0 0 4px rgba(59,108,248,.1); }
+.drop-icon {
+  width: 48px; height: 48px; background: var(--accent-l); border-radius: 12px;
+  display: flex; align-items: center; justify-content: center; font-size: 1.4rem;
+  transition: transform var(--transition);
+}
+.drop-area.drag-over .drop-icon { transform: scale(1.1); }
+.drop-title { font-weight: 600; font-size: .95rem; color: var(--text); }
+.drop-sub { font-size: .8rem; color: var(--text-3); }
+.drop-sub span { color: var(--accent); font-weight: 600; cursor: pointer; text-decoration: underline; }
+.drop-formats { font-size: .72rem; color: var(--text-3); margin-top: .2rem; }
+
+/* Hidden inputs */
+#fileInput, #dirInput { display: none; }
+
+/* ── Gallery Grid ────────────────────────────── */
+.gallery-wrap { padding: 1.5rem 2rem 3rem; }
+.gallery-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+.gallery-count { font-size: .82rem; color: var(--text-2); }
+.view-btns { display: flex; gap: .3rem; }
+.view-btn {
+  width: 30px; height: 30px; border: 1px solid var(--border); background: var(--bg);
+  border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: .8rem; color: var(--text-2); transition: all var(--transition); padding: 0;
+}
+.view-btn.active, .view-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+.gallery.view-2 { grid-template-columns: repeat(2, 1fr); }
+.gallery.view-1 { grid-template-columns: 1fr; }
+
+/* ── Photo Card ──────────────────────────────── */
+.card {
+  background: var(--surface); border-radius: var(--radius);
+  box-shadow: var(--shadow-sm); overflow: hidden;
+  border: 1px solid var(--border); transition: all var(--transition);
+  display: flex; flex-direction: column;
+}
+.card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); border-color: transparent; }
+.card-img {
+  position: relative; overflow: hidden; background: var(--bg);
+  aspect-ratio: 4/3; cursor: zoom-in;
+}
+.card-img img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform .4s ease;
+}
+.card:hover .card-img img { transform: scale(1.04); }
+.card-overlay {
+  position: absolute; inset: 0; background: rgba(0,0,0,.0);
+  display: flex; align-items: flex-start; justify-content: flex-end;
+  padding: .6rem; gap: .4rem;
+  transition: background var(--transition);
+}
+.card:hover .card-overlay { background: rgba(0,0,0,.08); }
+.card-action {
+  width: 28px; height: 28px; border-radius: 6px; border: none;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: .75rem; transition: all var(--transition);
+  opacity: 0; transform: translateY(-4px);
+  font-family: inherit;
+}
+.card:hover .card-action { opacity: 1; transform: translateY(0); }
+.card-action:nth-child(1) { transition-delay: .03s; }
+.card-action:nth-child(2) { transition-delay: .06s; }
+.card-action.expand { background: rgba(255,255,255,.9); color: var(--text); }
+.card-action.expand:hover { background: #fff; }
+.card-action.del { background: rgba(239,68,68,.9); color: #fff; }
+.card-action.del:hover { background: var(--red); }
+
+.card-source {
+  position: absolute; bottom: .5rem; left: .5rem;
+  padding: 2px 8px; border-radius: 10px; font-size: .65rem; font-weight: 700;
+  letter-spacing: .5px; text-transform: uppercase;
+}
+.src-extracted { background: var(--green-l); color: var(--green); }
+.src-imported { background: var(--accent-l); color: var(--accent); }
+
+.card-info { padding: .8rem 1rem; flex: 1; }
+.card-name {
+  font-size: .82rem; font-weight: 600; color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  margin-bottom: .35rem; cursor: help;
+}
+.card-meta {
+  display: flex; gap: .5rem; flex-wrap: wrap;
+  font-size: .72rem; color: var(--text-3);
+}
+.card-meta span {
+  display: inline-flex; align-items: center; gap: 3px;
+  background: var(--bg); padding: 2px 7px; border-radius: 6px;
+}
+
+/* ── Empty State ─────────────────────────────── */
+.empty {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 5rem 2rem; text-align: center; gap: 1rem;
+  display: none;
+}
+.empty.show { display: flex; }
+.empty-icon { font-size: 3rem; opacity: .3; }
+.empty-title { font-size: 1.1rem; font-weight: 600; color: var(--text-2); }
+.empty-sub { font-size: .85rem; color: var(--text-3); max-width: 320px; }
+
+/* ── Lightbox ────────────────────────────────── */
+.lightbox {
+  display: none; position: fixed; inset: 0; z-index: 9999;
+  background: rgba(10,12,18,.94); align-items: center; justify-content: center;
+  padding: 1rem; cursor: zoom-out;
+  backdrop-filter: blur(8px);
+}
+.lightbox.open { display: flex; animation: lbIn .2s ease; }
+@keyframes lbIn { from { opacity: 0 } to { opacity: 1 } }
+.lb-inner {
+  position: relative; max-width: 90vw; max-height: 88vh;
+  display: flex; flex-direction: column; align-items: center; gap: .8rem;
+  cursor: default;
+}
+.lb-inner img {
+  max-width: 90vw; max-height: 80vh; object-fit: contain;
+  border-radius: 8px; box-shadow: 0 0 60px rgba(0,0,0,.5);
+  animation: imgIn .25s ease;
+}
+@keyframes imgIn { from { transform: scale(.94); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.lb-info {
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+  border-radius: 8px; padding: .5rem 1.2rem; display: flex; gap: 1.2rem;
+  font-size: .78rem; color: rgba(255,255,255,.7); flex-wrap: wrap; justify-content: center;
+}
+.lb-info span { display: flex; align-items: center; gap: 4px; }
+.lb-close {
+  position: fixed; top: 1rem; right: 1rem;
+  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.15);
+  color: #fff; width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
+  font-size: 1rem; display: flex; align-items: center; justify-content: center;
+  transition: background .2s; z-index: 2; font-family: inherit;
+}
+.lb-close:hover { background: rgba(255,255,255,.2); }
+.lb-nav {
+  position: fixed; top: 50%; transform: translateY(-50%);
+  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.15);
+  color: #fff; width: 44px; height: 44px; border-radius: 50%; cursor: pointer;
+  font-size: 1.3rem; display: flex; align-items: center; justify-content: center;
+  transition: background .2s; z-index: 2; font-family: inherit;
+}
+.lb-nav:hover { background: rgba(255,255,255,.22); }
+.lb-prev { left: 1rem; }
+.lb-next { right: 1rem; }
+.lb-counter { position: fixed; bottom: 1.2rem; left: 50%; transform: translateX(-50%);
+  font-size: .78rem; color: rgba(255,255,255,.5); }
+
+/* ── Progress bar ────────────────────────────── */
+.progress-bar {
+  position: fixed; top: 0; left: 0; height: 3px;
+  background: var(--accent); z-index: 9998;
+  width: 0; transition: width .3s ease; display: none;
+}
+.progress-bar.active { display: block; }
+
+/* ── Toast ───────────────────────────────────── */
+.toasts { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9990; display: flex; flex-direction: column; gap: .5rem; }
+.toast {
+  background: var(--text); color: #fff; padding: .7rem 1.2rem; border-radius: 8px;
+  font-size: .82rem; box-shadow: var(--shadow-lg); max-width: 300px;
+  display: flex; align-items: center; gap: .6rem;
+  animation: toastIn .25s ease; pointer-events: none;
+}
+.toast.success { background: var(--green); }
+.toast.error { background: var(--red); }
+@keyframes toastIn { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes toastOut { to { transform: translateY(10px); opacity: 0; } }
+
+/* ── Responsive ──────────────────────────────── */
+@media (max-width: 1024px) { .gallery { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 768px) {
+  .header { padding: 0 1rem; }
+  .search-input { width: 160px; }
+  .toolbar { padding: .8rem 1rem; }
+  .gallery-wrap { padding: 1rem 1rem 3rem; }
+  .drop-area { margin: 1rem 1rem 0; }
+}
+@media (max-width: 600px) {
+  .gallery { grid-template-columns: 1fr !important; }
+  .header-right .sort-select { display: none; }
+  .search-input { width: 130px; }
+  .lb-prev { left: .3rem; }
+  .lb-next { right: .3rem; }
+}
+@media (max-width: 400px) {
+  .logo span { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Progress -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-left">
+    <div class="logo">
+      <div class="logo-icon">🖼️</div>
+      <span>Galerie Photo</span>
+    </div>
+    <div class="total-badge" id="totalBadge">0 photo</div>
+  </div>
+  <div class="header-right">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" id="searchInput" placeholder="Rechercher...">
+    </div>
+    <select class="sort-select" id="sortSelect">
+      <option value="date-desc">Plus récents</option>
+      <option value="date-asc">Plus anciens</option>
+      <option value="name-asc">Nom A → Z</option>
+      <option value="name-desc">Nom Z → A</option>
+      <option value="size-desc">Plus lourd</option>
+      <option value="size-asc">Plus léger</option>
+    </select>
+    <button class="btn btn-primary" onclick="loadDirectory()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v13h18V9l-5-5H3z"/><path d="M3 9h13V4"/></svg>
+      Charger un dossier
+    </button>
+  </div>
+</header>
+
+<!-- Toolbar -->
+<div class="toolbar">
+  <div class="filters" id="filters">
+    <button class="filter-btn active" data-filter="all" onclick="setFilter('all',this)">
+      Toutes <span class="pill" id="cnt-all">0</span>
+    </button>
+    <button class="filter-btn" data-filter="extracted" onclick="setFilter('extracted',this)">
+      📁 Extraites <span class="pill" id="cnt-extracted">0</span>
+    </button>
+    <button class="filter-btn" data-filter="imported" onclick="setFilter('imported',this)">
+      ⬆️ Importées <span class="pill" id="cnt-imported">0</span>
+    </button>
+  </div>
+  <div class="toolbar-actions">
+    <span class="storage-info" id="storageInfo"></span>
+    <button class="btn btn-ghost" onclick="exportList()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+      Exporter liste
+    </button>
+    <button class="btn btn-danger" onclick="clearAll()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+      Vider
+    </button>
+  </div>
+</div>
+
+<!-- Drop Zone -->
+<div class="drop-area" id="dropArea" onclick="document.getElementById('fileInput').click()">
+  <div class="drop-icon">📸</div>
+  <div class="drop-title">Glissez vos images ici</div>
+  <div class="drop-sub">ou <span>parcourir des fichiers</span></div>
+  <div class="drop-formats">JPG · PNG · GIF · WebP · AVIF · SVG</div>
+</div>
+
+<!-- Hidden inputs -->
+<input type="file" id="fileInput" multiple accept="image/*">
+<input type="file" id="dirInput" multiple accept="image/*" webkitdirectory>
+
+<!-- Gallery -->
+<div class="gallery-wrap">
+  <div class="gallery-meta">
+    <div class="gallery-count" id="galleryCount"></div>
+    <div class="view-btns">
+      <button class="view-btn" title="1 colonne" onclick="setView(1)">▬</button>
+      <button class="view-btn active" title="3 colonnes" onclick="setView(3)">⊞</button>
+      <button class="view-btn" title="Auto" onclick="setView(0)">≡</button>
+    </div>
+  </div>
+  <div class="gallery" id="gallery"></div>
+  <div class="empty" id="emptyState">
+    <div class="empty-icon">🖼️</div>
+    <div class="empty-title">Aucune photo ici</div>
+    <div class="empty-sub">Chargez un dossier ou glissez-déposez des images pour commencer.</div>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="lbClose(event)">
+  <button class="lb-close" onclick="lbClose()">✕</button>
+  <button class="lb-nav lb-prev" onclick="lbNav(-1,event)" aria-label="Précédent">‹</button>
+  <div class="lb-inner" id="lbInner">
+    <img id="lbImg" src="" alt="">
+    <div class="lb-info" id="lbInfo"></div>
+  </div>
+  <button class="lb-nav lb-next" onclick="lbNav(1,event)" aria-label="Suivant">›</button>
+  <div class="lb-counter" id="lbCounter"></div>
+</div>
+
+<!-- Toasts -->
+<div class="toasts" id="toasts"></div>
+
+<script>
+/* ============================================================
+   STATE
+   ============================================================ */
+let photos = [];
+let filter = 'all';
+let searchQuery = '';
+let sortKey = 'date-desc';
+let currentView = 3;
+let lbIndex = 0;
+let lbFiltered = [];
+
+/* ============================================================
+   UTILS
+   ============================================================ */
+function formatSize(bytes) {
+  if (bytes === 0) return '0 o';
+  if (bytes < 1024) return bytes + ' o';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' Ko';
+  return (bytes / (1024 * 1024)).toFixed(2) + ' Mo';
+}
+
+function totalSize(arr) {
+  const total = arr.reduce((s, p) => s + p.size, 0);
+  return formatSize(total);
+}
+
+function getImageDimensions(url) {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => resolve({ w: img.naturalWidth, h: img.naturalHeight });
+    img.onerror = () => resolve({ w: 0, h: 0 });
+    img.src = url;
+  });
+}
+
+function uid() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2);
+}
+
+function escHtml(s) {
+  return s.replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+}
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+function toast(msg, type = '') {
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.innerHTML = `<span>${type === 'success' ? '✓' : type === 'error' ? '✗' : 'ℹ'}</span> ${escHtml(msg)}`;
+  document.getElementById('toasts').appendChild(el);
+  setTimeout(() => {
+    el.style.animation = 'toastOut .25s ease forwards';
+    setTimeout(() => el.remove(), 260);
+  }, 3000);
+}
+
+/* ============================================================
+   PROGRESS
+   ============================================================ */
+function showProgress(pct) {
+  const bar = document.getElementById('progressBar');
+  bar.style.display = 'block';
+  bar.style.width = pct + '%';
+  if (pct >= 100) setTimeout(() => { bar.style.display = 'none'; bar.style.width = '0'; }, 400);
+}
+
+/* ============================================================
+   ADD PHOTO
+   ============================================================ */
+async function addPhoto(file, source) {
+  const url = URL.createObjectURL(file);
+  const dims = await getImageDimensions(url);
+  photos.push({
+    id: uid(),
+    url,
+    name: file.name,
+    size: file.size,
+    type: file.type || 'image/*',
+    w: dims.w,
+    h: dims.h,
+    source,       // 'extracted' | 'imported'
+    addedAt: Date.now()
+  });
+}
+
+async function processFiles(files, source) {
+  const imageFiles = [...files].filter(f => f.type.startsWith('image/') || /\.(jpg|jpeg|png|gif|webp|avif|svg|bmp|ico)$/i.test(f.name));
+  if (!imageFiles.length) { toast('Aucune image trouvée.', 'error'); return; }
+  let done = 0;
+  for (const file of imageFiles) {
+    await addPhoto(file, source);
+    done++;
+    showProgress(Math.round(done / imageFiles.length * 100));
+  }
+  renderGallery();
+  toast(`${imageFiles.length} image${imageFiles.length > 1 ? 's' : ''} ${source === 'extracted' ? 'extraite' : 'importée'}${imageFiles.length > 1 ? 's' : ''}.`, 'success');
+}
+
+/* ============================================================
+   LOAD DIRECTORY
+   ============================================================ */
+async function loadDirectory() {
+  if ('showDirectoryPicker' in window) {
+    try {
+      const dir = await window.showDirectoryPicker({ mode: 'read' });
+      const files = [];
+      for await (const entry of dir.values()) {
+        if (entry.kind === 'file') {
+          const file = await entry.getFile();
+          if (file.type.startsWith('image/')) files.push(file);
+        }
+      }
+      await processFiles(files, 'extracted');
+    } catch (e) {
+      if (e.name !== 'AbortError') {
+        // Fallback for unsupported browsers
+        document.getElementById('dirInput').click();
+      }
+    }
+  } else {
+    document.getElementById('dirInput').click();
+  }
+}
+
+/* ============================================================
+   FILE INPUT HANDLERS
+   ============================================================ */
+document.getElementById('fileInput').addEventListener('change', e => {
+  processFiles(e.target.files, 'imported');
+  e.target.value = '';
+});
+
+document.getElementById('dirInput').addEventListener('change', e => {
+  processFiles(e.target.files, 'extracted');
+  e.target.value = '';
+});
+
+/* ============================================================
+   DRAG AND DROP
+   ============================================================ */
+const dropArea = document.getElementById('dropArea');
+
+['dragenter', 'dragover'].forEach(evt => {
+  dropArea.addEventListener(evt, e => { e.preventDefault(); dropArea.classList.add('drag-over'); });
+  document.body.addEventListener(evt, e => e.preventDefault());
+});
+
+['dragleave', 'dragend'].forEach(evt => {
+  dropArea.addEventListener(evt, () => dropArea.classList.remove('drag-over'));
+});
+
+dropArea.addEventListener('drop', async e => {
+  e.preventDefault();
+  dropArea.classList.remove('drag-over');
+  await processFiles(e.dataTransfer.files, 'imported');
+});
+
+/* Prevent default on body drop */
+document.body.addEventListener('drop', e => {
+  if (!e.target.closest('#dropArea')) {
+    e.preventDefault();
+    processFiles(e.dataTransfer.files, 'imported');
+  }
+});
+
+/* ============================================================
+   FILTER / SEARCH / SORT
+   ============================================================ */
+function setFilter(f, btn) {
+  filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderGallery();
+}
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchQuery = e.target.value.toLowerCase().trim();
+  renderGallery();
+});
+
+document.getElementById('sortSelect').addEventListener('change', e => {
+  sortKey = e.target.value;
+  renderGallery();
+});
+
+function getFiltered() {
+  let arr = [...photos];
+  if (filter !== 'all') arr = arr.filter(p => p.source === filter);
+  if (searchQuery) arr = arr.filter(p => p.name.toLowerCase().includes(searchQuery));
+  arr.sort((a, b) => {
+    switch (sortKey) {
+      case 'date-asc':  return a.addedAt - b.addedAt;
+      case 'date-desc': return b.addedAt - a.addedAt;
+      case 'name-asc':  return a.name.localeCompare(b.name);
+      case 'name-desc': return b.name.localeCompare(a.name);
+      case 'size-asc':  return a.size - b.size;
+      case 'size-desc': return b.size - a.size;
+    }
+    return 0;
+  });
+  return arr;
+}
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+function renderGallery() {
+  const filtered = getFiltered();
+  lbFiltered = filtered;
+
+  /* Counts */
+  document.getElementById('cnt-all').textContent = photos.length;
+  document.getElementById('cnt-extracted').textContent = photos.filter(p => p.source === 'extracted').length;
+  document.getElementById('cnt-imported').textContent = photos.filter(p => p.source === 'imported').length;
+
+  const total = photos.length;
+  document.getElementById('totalBadge').textContent = total + (total === 1 ? ' photo' : ' photos');
+  document.getElementById('storageInfo').textContent = total ? '📦 ' + totalSize(photos) : '';
+  document.getElementById('galleryCount').textContent = filtered.length
+    ? `${filtered.length} photo${filtered.length > 1 ? 's' : ''}${searchQuery ? ' trouvée' + (filtered.length > 1 ? 's' : '') : ''}`
+    : '';
+
+  const grid = document.getElementById('gallery');
+  const empty = document.getElementById('emptyState');
+
+  if (!filtered.length) {
+    grid.innerHTML = '';
+    empty.classList.add('show');
+    return;
+  }
+  empty.classList.remove('show');
+
+  grid.innerHTML = filtered.map((p, i) => `
+    <div class="card" data-id="${p.id}">
+      <div class="card-img" onclick="lbOpen(${i})" role="button" aria-label="Agrandir ${escHtml(p.name)}">
+        <img src="${p.url}" alt="${escHtml(p.name)}" loading="lazy">
+        <div class="card-overlay">
+          <button class="card-action expand" title="Agrandir" onclick="lbOpen(${i});event.stopPropagation()">⛶</button>
+          <button class="card-action del" title="Supprimer" onclick="deletePhoto('${p.id}');event.stopPropagation()">✕</button>
+        </div>
+        <div class="card-source src-${p.source}">${p.source === 'extracted' ? 'Extraite' : 'Importée'}</div>
+      </div>
+      <div class="card-info">
+        <div class="card-name" title="${escHtml(p.name)}">${escHtml(p.name)}</div>
+        <div class="card-meta">
+          <span>📦 ${formatSize(p.size)}</span>
+          ${p.w ? `<span>📐 ${p.w} × ${p.h} px</span>` : ''}
+          <span>${p.type.split('/')[1]?.toUpperCase() || 'IMG'}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+/* ============================================================
+   DELETE / CLEAR
+   ============================================================ */
+function deletePhoto(id) {
+  const idx = photos.findIndex(p => p.id === id);
+  if (idx === -1) return;
+  URL.revokeObjectURL(photos[idx].url);
+  photos.splice(idx, 1);
+  renderGallery();
+}
+
+function clearAll() {
+  if (!photos.length) return;
+  if (!confirm(`Supprimer les ${photos.length} photo${photos.length > 1 ? 's' : ''} ?`)) return;
+  photos.forEach(p => URL.revokeObjectURL(p.url));
+  photos = [];
+  renderGallery();
+  toast('Galerie vidée.', 'success');
+}
+
+/* ============================================================
+   VIEW TOGGLE
+   ============================================================ */
+function setView(cols) {
+  currentView = cols;
+  const grid = document.getElementById('gallery');
+  grid.className = 'gallery';
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  if (cols === 1) { grid.classList.add('view-1'); document.querySelector('.view-btn:nth-child(1)').classList.add('active'); }
+  else if (cols === 3) { document.querySelector('.view-btn:nth-child(2)').classList.add('active'); }
+  else { grid.classList.add('view-2'); document.querySelector('.view-btn:nth-child(3)').classList.add('active'); }
+}
+
+/* ============================================================
+   LIGHTBOX
+   ============================================================ */
+function lbOpen(idx) {
+  lbFiltered = getFiltered();
+  lbIndex = idx;
+  lbShow();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function lbShow() {
+  const p = lbFiltered[lbIndex];
+  if (!p) return;
+  const img = document.getElementById('lbImg');
+  img.style.animation = 'none';
+  img.offsetHeight; // reflow
+  img.style.animation = '';
+  img.src = p.url;
+  img.alt = p.name;
+  document.getElementById('lbInfo').innerHTML = `
+    <span>📄 ${escHtml(p.name)}</span>
+    <span>📦 ${formatSize(p.size)}</span>
+    ${p.w ? `<span>📐 ${p.w} × ${p.h}</span>` : ''}
+    <span class="src-${p.source}" style="padding:1px 8px;border-radius:10px;font-size:.7rem;font-weight:700">
+      ${p.source === 'extracted' ? 'Extraite' : 'Importée'}
+    </span>`;
+  document.getElementById('lbCounter').textContent = `${lbIndex + 1} / ${lbFiltered.length}`;
+  /* Show/hide nav */
+  document.querySelector('.lb-prev').style.display = lbFiltered.length > 1 ? 'flex' : 'none';
+  document.querySelector('.lb-next').style.display = lbFiltered.length > 1 ? 'flex' : 'none';
+}
+
+function lbNav(dir, e) {
+  if (e) e.stopPropagation();
+  lbIndex = (lbIndex + dir + lbFiltered.length) % lbFiltered.length;
+  lbShow();
+}
+
+function lbClose(e) {
+  const inner = document.getElementById('lbInner');
+  if (e && inner.contains(e.target) && e.target !== document.getElementById('lightbox')) return;
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ============================================================
+   KEYBOARD SHORTCUTS
+   ============================================================ */
+document.addEventListener('keydown', e => {
+  const lb = document.getElementById('lightbox');
+  if (lb.classList.contains('open')) {
+    if (e.key === 'Escape') lbClose();
+    if (e.key === 'ArrowLeft') lbNav(-1, null);
+    if (e.key === 'ArrowRight') lbNav(1, null);
+  }
+});
+
+/* ============================================================
+   EXPORT LIST
+   ============================================================ */
+function exportList() {
+  if (!photos.length) { toast('Aucune photo à exporter.', 'error'); return; }
+  const rows = [['Nom', 'Catégorie', 'Taille', 'Dimensions', 'Type'].join('\t')];
+  photos.forEach(p => rows.push([p.name, p.source === 'extracted' ? 'Extraite' : 'Importée', formatSize(p.size), `${p.w}×${p.h}`, p.type].join('\t')));
+  const blob = new Blob([rows.join('\n')], { type: 'text/plain;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `galerie-${new Date().toISOString().slice(0,10)}.tsv`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast('Liste exportée (TSV).', 'success');
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+renderGallery();
+</script>
+</body>
+</html>
