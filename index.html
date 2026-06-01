@@ -354,9 +354,87 @@ footer{background:var(--dark);padding:4rem 2rem 2rem;border-top:1px solid rgba(1
 @media(max-width:400px){
   .prod-grid{grid-template-columns:1fr}
 }
+
+/* =========================================
+   LIGHTBOX
+   ========================================= */
+.lightbox{display:none;position:fixed;inset:0;z-index:99990;background:rgba(6,15,30,.96);align-items:center;justify-content:center;padding:1rem;cursor:zoom-out}
+.lightbox.open{display:flex;animation:lbFade .25s ease}
+@keyframes lbFade{from{opacity:0}to{opacity:1}}
+.lb-img-wrap{position:relative;max-width:90vw;max-height:88vh;display:flex;align-items:center;justify-content:center}
+.lb-img-wrap img{max-width:90vw;max-height:88vh;object-fit:contain;border-radius:10px;box-shadow:0 0 80px rgba(0,0,0,.7);cursor:default;animation:lbScale .3s ease}
+@keyframes lbScale{from{transform:scale(.88);opacity:0}to{transform:scale(1);opacity:1}}
+.lb-close-btn{position:fixed;top:18px;right:22px;background:rgba(184,146,44,.2);border:1px solid rgba(184,146,44,.4);color:var(--gold);width:42px;height:42px;border-radius:50%;cursor:pointer;font-size:1.2rem;display:flex;align-items:center;justify-content:center;z-index:2;transition:all .3s;font-family:'DM Sans',sans-serif}
+.lb-close-btn:hover{background:var(--gold);color:var(--navy)}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(184,146,44,.2);border:1px solid rgba(184,146,44,.4);color:var(--gold);width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .3s;z-index:2}
+.lb-nav:hover{background:var(--gold);color:var(--navy)}
+.lb-prev{left:-22px}.lb-next{right:-22px}
+.lb-icon{position:absolute;bottom:10px;right:10px;background:rgba(184,146,44,.85);color:var(--navy);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;pointer-events:none;opacity:0;transition:opacity .25s}
+.prod-img-wrap:hover .lb-icon{opacity:1}
+.prod-img-wrap{cursor:zoom-in}
+
+/* =========================================
+   PRODUCT DETAIL MODAL
+   ========================================= */
+.prod-modal{display:none;position:fixed;inset:0;z-index:99980;background:rgba(6,15,30,.92);align-items:center;justify-content:center;padding:1rem;overflow-y:auto}
+.prod-modal.open{display:flex;animation:lbFade .25s ease}
+.pm-inner{background:var(--white);border-radius:16px;max-width:920px;width:100%;max-height:92vh;overflow-y:auto;position:relative;animation:pmSlide .35s ease;box-shadow:0 30px 100px rgba(0,0,0,.5)}
+@keyframes pmSlide{from{transform:translateY(24px);opacity:0}to{transform:translateY(0);opacity:1}}
+.pm-close-btn{position:absolute;top:14px;right:14px;background:rgba(10,25,49,.08);border:1px solid rgba(10,25,49,.12);color:var(--navy);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;z-index:2;transition:all .3s;font-family:'DM Sans',sans-serif}
+.pm-close-btn:hover{background:var(--navy);color:#fff}
+.pm-layout{display:grid;grid-template-columns:1fr 1.1fr;min-height:440px}
+.pm-img-col{position:relative;overflow:hidden;border-radius:16px 0 0 16px;background:#f0ede8}
+.pm-img-col img{width:100%;height:100%;object-fit:cover;min-height:320px}
+.pm-info-col{padding:2.2rem 2rem;overflow-y:auto}
+.pm-badge-row{margin-bottom:.7rem}
+.pm-badge-tag{display:inline-block;background:var(--navy);color:var(--gold);padding:3px 11px;border-radius:20px;font-size:.65rem;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.pm-title{font-family:'Playfair Display',serif;font-size:1.55rem;color:var(--navy);margin-bottom:.5rem;line-height:1.25;font-weight:700}
+.pm-price-row{display:flex;align-items:center;gap:.6rem;margin:.5rem 0 .9rem;flex-wrap:wrap}
+.pm-old{text-decoration:line-through;color:var(--gray);font-size:.85rem}
+.pm-new{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:700;color:var(--navy)}
+.pm-disc-tag{background:#c0392b;color:#fff;padding:3px 9px;border-radius:20px;font-size:.7rem;font-weight:700}
+.pm-dur-tag{display:inline-flex;align-items:center;gap:5px;background:rgba(184,146,44,.12);color:var(--gold);padding:4px 11px;border-radius:20px;font-size:.73rem;font-weight:600;margin-bottom:1rem}
+.pm-section-lbl{font-size:.72rem;font-weight:700;color:var(--navy);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:.6rem;padding-bottom:.4rem;border-bottom:1px solid rgba(10,25,49,.08)}
+.pm-full-desc{color:#444;font-size:.88rem;line-height:1.82;margin-bottom:1.3rem}
+.pm-specs-grid{display:grid;grid-template-columns:1fr 1fr;gap:.35rem .7rem;margin-bottom:1.3rem}
+.pm-spec{display:flex;gap:.35rem;font-size:.8rem;align-items:flex-start}
+.pm-sk{color:var(--gray);font-weight:500;flex-shrink:0;min-width:75px}
+.pm-sv{color:var(--navy);font-weight:600}
+.pm-cp-section{margin-bottom:1.3rem}
+.pm-wa-cta{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:#25D366;color:#fff;border:none;padding:13px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.92rem;font-weight:700;cursor:pointer;transition:all .3s}
+.pm-wa-cta:hover{background:#1ebe5d;transform:translateY(-2px);box-shadow:0 8px 24px rgba(37,211,102,.35)}
+.pm-wa-cta svg{width:19px;height:19px;fill:#fff}
+.desc-cta-hint{display:block;color:var(--gold);font-size:.75rem;font-weight:600;margin-top:.5rem;letter-spacing:.3px}
+.prod-desc{cursor:pointer;transition:background .25s;border-radius:6px;padding:.3rem .2rem}
+.prod-desc:hover{background:rgba(184,146,44,.07)}
+@media(max-width:700px){
+  .pm-layout{grid-template-columns:1fr}
+  .pm-img-col{border-radius:16px 16px 0 0;min-height:220px}
+  .pm-info-col{padding:1.5rem}
+  .pm-specs-grid{grid-template-columns:1fr}
+  .lb-prev{left:-6px}.lb-next{right:-6px}
+}
 </style>
 </head>
 <body>
+
+<!-- ======= LIGHTBOX ======= -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+  <button class="lb-close-btn" onclick="closeLightbox()" aria-label="Fermer">✕</button>
+  <div class="lb-img-wrap" id="lbImgWrap">
+    <button class="lb-nav lb-prev" id="lbPrev" onclick="lbNav(-1,event)" aria-label="Précédent">‹</button>
+    <img id="lbImg" src="" alt="Aperçu produit">
+    <button class="lb-nav lb-next" id="lbNext" onclick="lbNav(1,event)" aria-label="Suivant">›</button>
+  </div>
+</div>
+
+<!-- ======= PRODUCT MODAL ======= -->
+<div class="prod-modal" id="prodModal" onclick="closeProdModal(event)">
+  <div class="pm-inner" id="pmInner">
+    <button class="pm-close-btn" onclick="closeProdModal()" aria-label="Fermer">✕</button>
+    <div class="pm-layout" id="pmContent"></div>
+  </div>
+</div>
 
 <!-- ======= ADMIN OVERLAY ======= -->
 <div class="adm-overlay" id="adminOverlay">
@@ -912,7 +990,7 @@ function renderProducts(){
     const colHtml = p.hasColors ? colorPickerHTML(p.id) : '';
     const waMsg = encodeURIComponent(`Bonjour CapiXpert Paris 👋\nJe souhaite des informations sur : ${p.name}`);
     return `<div class="prod-card fi" data-prod-id="${p.id}">
-      <div class="prod-img-wrap">${imgHtml}<div class="prod-pill">${p.badge}</div></div>
+      <div class="prod-img-wrap" data-imga="${p.imgA}" data-imgb="${p.imgB||''}" onclick="openLightbox(this)" role="button" aria-label="Agrandir l'image">${imgHtml}<div class="prod-pill">${p.badge}</div><div class="lb-icon">🔍</div></div>
       <div class="prod-body">
         <div class="prod-name">${p.name}</div>
         <div class="price-wrap">
@@ -921,7 +999,7 @@ function renderProducts(){
           <span class="disc-tag">${p.discount}</span>
         </div>
         ${durHtml}
-        <div class="prod-desc">${p.desc}</div>
+        <div class="prod-desc" onclick="openProdModal('${p.id}')" role="button" tabindex="0" aria-label="Voir la fiche complète">${p.desc}<span class="desc-cta-hint">📋 Voir la fiche détaillée →</span></div>
         ${colHtml}
         <button class="prod-btn" onclick="productWA(this)" data-prod-name="${p.name}">
           <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.856L.043 23.957l6.226-1.464A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.853 0-3.601-.498-5.113-1.371l-.368-.217-3.694.868.897-3.604-.24-.38A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
@@ -1198,6 +1276,172 @@ function saveHero(){
 }
 function saveData(){ localStorage.setItem('cx_data', JSON.stringify(data)); }
 function showMsg(id){ const el=document.getElementById(id); el.style.display='block'; setTimeout(()=>el.style.display='none',3000); }
+
+/* ============================================================
+   PRODUCT EXTENDED DATA
+   ============================================================ */
+const PROD_EXT = {
+  p1:{
+    fullDesc:`100% cheveux humains Remy Indiens — doux, confortables, rendu naturel invisible. La base en peau ultra-fine (0.03–0.04mm) est non réfléchissante et s'adapte parfaitement à la forme de votre tête. Aucun bruit inhabituel, tenue fiable au quotidien.<br><br>Vous pouvez découper, lisser, froisser et laver le produit pour créer votre propre style unique. La teinture du produit n'est cependant pas recommandée.`,
+    specs:[
+      {k:'Marque',v:'CapiXpert'},{k:'Cheveux',v:'Humains Remy Indiens'},{k:'Base',v:'PU — Peau ultra-fine'},{k:'Épaisseur',v:'0.03–0.04mm'},
+      {k:'Taille',v:'20×25cm (8×10 po)'},{k:'Nœud',v:'Boucle V'},{k:'Texture',v:'28mm ondulation'},{k:'Densité',v:'≥ 60% cheveux longs'},
+      {k:'Grade',v:'Grade A — Remy'},{k:'DIY',v:'Coupable & lavable'}
+    ]
+  },
+  p2:{
+    fullDesc:`Très adapté aux sportifs et au travail physique, grâce à un système de ventilation soigneusement conçu assurant confort et respirabilité optimale. Le centre en dentelle avec polyester transparent autour du périmètre garantit légèreté, durabilité et aspect naturel.<br><br>Ligne de cheveux naturelle et invisible, facile à entretenir. Résiste à la transpiration et aux activités intenses. Idéal pour une vie active sans aucun compromis sur l'apparence.`,
+    specs:[
+      {k:'Matériau',v:'Dentelle + Polyester'},{k:'Cheveux',v:'Remy Indiens'},{k:'Tailles',v:'6×8 à 8×10 pouces'},{k:'Longueur',v:'5–6 pouces'},
+      {k:'Ondulation',v:'30mm'},{k:'Densité',v:'130%'},{k:'Nœud',v:'Double nœud'},{k:'Origine',v:'Australie'},
+      {k:'Durée',v:'17 mois à 2 ans'},{k:'Sport',v:'Compatible natation'}
+    ]
+  },
+  p3:{
+    fullDesc:`Fabriqué à la main avec des cheveux indiens 100% naturels. Conçu avec une dentelle française haut de gamme, il offre un résultat ultra naturel, léger et confortable tout en laissant le cuir chevelu respirer.<br><br>Compatible avec le sport, la douche, la piscine et la plage. Peut être porté jour et nuit. Une maintenance est recommandée toutes les 3 à 4 semaines. Pour préserver sa qualité, évitez les produits agressifs, colorations et lisseurs.`,
+    specs:[
+      {k:'Fabrication',v:'Artisanale main'},{k:'Base',v:'Dentelle française'},{k:'Cheveux',v:'Indiens naturels'},{k:'Taille',v:'8×10 po (20×25cm)'},
+      {k:'Densité',v:'130%'},{k:'Nœuds',v:'Double nœud'},{k:'Poids',v:'55 à 75g'},{k:'Vagues',v:'4mm à 12mm'},
+      {k:'Durée',v:'12 à 18 mois'},{k:'Maintenance',v:'Toutes 3–4 sem.'}
+    ]
+  },
+  p4:{
+    fullDesc:`Toupet en PU ultra-fine 0.09mm avec cheveux humains indiens vierges — soyeux, doux et lisses, sans enchevêtrement, perte minimale. Longueur des cheveux 12.7–15.2cm (mesurée après lissage), style libre, densité moyenne 120–130%.<br><br>Convient à de nombreuses occasions : rendez-vous, dîner, voyage, natation, fitness, mariage. Personne ne saura que vous portez un système capillaire. Double nœud, résultat 100% indétectable.`,
+    specs:[
+      {k:'Base',v:'PU ultra-fine 0.09mm'},{k:'Cheveux',v:'Indiens vierges'},{k:'Taille',v:'17.8×22.9 ou 20.3×25.4cm'},{k:'Longueur',v:'12.7–15.2cm'},
+      {k:'Densité',v:'120–130%'},{k:'Nœud',v:'Double nœud'},{k:'Durée',v:'12 à 18 mois'},{k:'Occasions',v:'Sport, natation, mariage'},
+      {k:'Style',v:'Bouclés naturels'},{k:'Entretien',v:'Coupe libre'}
+    ]
+  },
+  p5:{
+    fullDesc:`<strong>Colle adhésive professionnelle :</strong> Formulée pour les cuirs chevelus gras, la transpiration abondante, les températures élevées et l'humidité. Sèche rapidement avec une finition claire et mate. 100% sans latex, sans toxines, hypoallergénique. Compatible dentelle et PU.<br><br><strong>Dissolvant à base d'eau (38ml) :</strong> Conception à pointe précise pour application exacte aux bords de la prothèse. Dissout facilement la colle sans irriter. Formule douce pour usage quotidien. Format compact adapté à domicile ou déplacement.`,
+    specs:[
+      {k:'Colle',v:'Séchage rapide'},{k:'Finition',v:'Transparente, mate'},{k:'Formule',v:'Sans latex, hypoallerg.'},{k:'Résistance',v:'Transpiration & chaleur'},
+      {k:'Dissolvant',v:'38ml — eau'},{k:'Application',v:'Pointe précise'},{k:'Compatible',v:'Dentelle & PU'},{k:'Nettoyage',v:'Coton tige / peigne'},
+      {k:'Format',v:'Bouteille compacte'},{k:'Usage',v:'Maison ou déplacement'}
+    ]
+  }
+};
+
+/* ============================================================
+   LIGHTBOX
+   ============================================================ */
+let lbImages = [];
+let lbIndex = 0;
+
+function openLightbox(wrap){
+  const imgA = wrap.dataset.imga;
+  const imgB = wrap.dataset.imgb;
+  lbImages = imgB ? [imgA, imgB] : [imgA];
+  lbIndex = 0;
+  lbShow();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function lbShow(){
+  const img = document.getElementById('lbImg');
+  const fallback = `https://picsum.photos/seed/prod${lbIndex+1}/800/800`;
+  img.src = lbImages[lbIndex] || fallback;
+  img.onerror = ()=>{ img.onerror=null; img.src=fallback; };
+  document.getElementById('lbPrev').style.display = lbImages.length>1?'flex':'none';
+  document.getElementById('lbNext').style.display = lbImages.length>1?'flex':'none';
+}
+
+function lbNav(dir, e){
+  e && e.stopPropagation();
+  lbIndex = (lbIndex + dir + lbImages.length) % lbImages.length;
+  lbShow();
+}
+
+function closeLightbox(e){
+  if(e && e.target !== document.getElementById('lightbox') && !e.target.classList.contains('lb-close-btn')) return;
+  if(!e) { document.getElementById('lightbox').classList.remove('open'); document.body.style.overflow=''; return; }
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+/* ============================================================
+   PRODUCT DETAIL MODAL
+   ============================================================ */
+const WA_SVG = `<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.856L.043 23.957l6.226-1.464A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.853 0-3.601-.498-5.113-1.371l-.368-.217-3.694.868.897-3.604-.24-.38A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z" fill="currentColor"/></svg>`;
+
+function openProdModal(prodId){
+  const p = data.products.find(x=>x.id===prodId);
+  const ext = PROD_EXT[prodId];
+  if(!p) return;
+  const l = lang;
+  const durHTML = p.duration ? `<div class="pm-dur-tag">⏱ ${T[l].prod_dur||'Durée :'} ${p.duration}</div>` : '';
+  const specsHTML = (ext?.specs||[]).map(s=>`<div class="pm-spec"><span class="pm-sk">${s.k}</span><span class="pm-sv">${s.v}</span></div>`).join('');
+  const colHTML = p.hasColors ? `<div class="pm-cp-section">
+    <div class="pm-section-lbl">${T[l].cp_lbl||'Couleur de cheveux'}</div>
+    <div class="cp-swatches pm-swatches">${swatchesHTML()}</div>
+    <div class="cp-chosen pm-chosen">${T[l].cp_sel||'Sélectionnée :'} <span class="pm-sel-name">1 — Noir Naturel</span></div>
+  </div>` : '';
+  const fallback = `https://picsum.photos/seed/${prodId}/700/700`;
+  document.getElementById('pmContent').innerHTML = `
+    <div class="pm-img-col">
+      <img src="${p.imgA}" alt="${p.name}" onerror="this.onerror=null;this.src='${fallback}'">
+    </div>
+    <div class="pm-info-col">
+      <div class="pm-badge-row"><span class="pm-badge-tag">${p.badge}</span></div>
+      <h2 class="pm-title">${p.name}</h2>
+      <div class="pm-price-row">
+        <span class="pm-old">${p.oldPrice}</span>
+        <span class="pm-new">${p.newPrice}</span>
+        <span class="pm-disc-tag">${p.discount}</span>
+      </div>
+      ${durHTML}
+      <div class="pm-section-lbl">Description</div>
+      <p class="pm-full-desc">${ext?.fullDesc||p.desc}</p>
+      ${specsHTML.length ? `<div class="pm-section-lbl">Caractéristiques</div><div class="pm-specs-grid">${specsHTML}</div>` : ''}
+      ${colHTML}
+      <button class="pm-wa-cta" onclick="modalWA('${prodId}')">${WA_SVG} ${T[l].prod_btn||'En savoir plus'} — ${p.newPrice}</button>
+    </div>`;
+  initModalSwatches();
+  document.getElementById('prodModal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeProdModal(e){
+  const modal = document.getElementById('prodModal');
+  const inner = document.getElementById('pmInner');
+  if(e && inner && inner.contains(e.target) && e.target !== modal) return;
+  modal.classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function initModalSwatches(){
+  const modal = document.getElementById('prodModal');
+  modal.querySelectorAll('.pm-swatches .swatch').forEach(sw=>{
+    sw.addEventListener('click',()=>{
+      modal.querySelectorAll('.pm-swatches .swatch').forEach(s=>s.classList.remove('sel'));
+      sw.classList.add('sel');
+      const nameEl = modal.querySelector('.pm-sel-name');
+      if(nameEl) nameEl.textContent = `${sw.dataset.code} — ${sw.dataset.name}`;
+    });
+  });
+}
+
+function modalWA(prodId){
+  const p = data.products.find(x=>x.id===prodId);
+  if(!p) return;
+  const modal = document.getElementById('prodModal');
+  const selSw = modal.querySelector('.pm-swatches .swatch.sel');
+  let colorPart = selSw ? `\nCouleur souhaitée : ${selSw.dataset.code} — ${selSw.dataset.name}` : '';
+  const text = `Bonjour CapiXpert Paris 👋\nJe souhaite des informations sur : *${p.name}* (${p.newPrice})${colorPart}\n\nMerci de me recontacter.`;
+  window.open('https://wa.me/33774037057?text='+encodeURIComponent(text),'_blank');
+}
+
+/* Keyboard: Escape closes modals */
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    closeLightbox();
+    closeProdModal();
+  }
+  if(e.key==='ArrowLeft') lbNav(-1,null);
+  if(e.key==='ArrowRight') lbNav(1,null);
+});
 
 /* ============================================================
    SMOOTH ANCHORS
