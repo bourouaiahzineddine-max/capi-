@@ -90,7 +90,7 @@ nav.scrolled{box-shadow:0 4px 30px rgba(0,0,0,.3)}
   min-height:100vh;position:relative;overflow:hidden;
   display:flex;align-items:center;justify-content:center;
   text-align:center;padding:90px 2rem 5rem;
-  background:linear-gradient(160deg,rgba(10,25,49,.9) 0%,rgba(10,25,49,.65) 100%),
+  background:linear-gradient(160deg,rgba(10,25,49,.65) 0%,rgba(10,25,49,.38) 100%),
              url('assets/hero.jpg') center/cover no-repeat;
   background-size:cover;
 }
@@ -181,18 +181,23 @@ section{padding:5.5rem 2rem}
 /* Color Picker */
 .cp-wrap{margin-bottom:1.1rem;padding:.9rem;background:var(--gray-l);border-radius:8px}
 .cp-lbl{font-size:.75rem;color:var(--navy);font-weight:600;margin-bottom:.55rem;letter-spacing:.3px}
-.cp-swatches{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.5rem}
-.swatch{width:20px;height:20px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .2s;flex-shrink:0;position:relative}
-.swatch:hover{transform:scale(1.25);border-color:rgba(184,146,44,.6)}
-.swatch.sel{border-color:var(--gold);transform:scale(1.25);box-shadow:0 0 0 2px rgba(184,146,44,.4)}
-/* White/light swatch border for visibility */
-.swatch.light-sw{border-color:#ddd}
+.cp-swatches{display:flex;flex-wrap:wrap;gap:.45rem;margin-bottom:.6rem}
+.swatch{
+  width:62px;height:52px;border-radius:8px;cursor:pointer;
+  border:2.5px solid transparent;transition:all .2s;flex-shrink:0;
+  background-image:url('assets/color-chart.jpg');
+  background-size:248px 412px;background-repeat:no-repeat;overflow:hidden;
+}
+.swatch:hover{border-color:rgba(184,146,44,.7);transform:scale(1.05)}
+.swatch.sel{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,146,44,.35);transform:scale(1.05)}
 .cp-chosen{font-size:.72rem;color:var(--navy);font-weight:600;letter-spacing:.2px}
 .cp-chosen span{color:var(--gold)}
 
 .prod-btn{display:flex;align-items:center;justify-content:center;gap:8px;background:transparent;border:2px solid var(--gold);color:var(--gold);padding:10px;border-radius:4px;text-decoration:none;font-size:.82rem;font-weight:700;letter-spacing:.4px;transition:all var(--transition);width:100%;font-family:'DM Sans',sans-serif}
 .prod-btn:hover{background:var(--gold);color:var(--navy)}
 .prod-btn svg{width:16px;height:16px;fill:currentColor;flex-shrink:0}
+.prod-fiche-btn{display:flex;align-items:center;justify-content:center;gap:.45rem;background:transparent;border:1.5px solid rgba(184,146,44,.4);color:var(--navy);padding:9px 12px;border-radius:6px;font-size:.82rem;font-weight:600;cursor:pointer;margin:.7rem 0 .5rem;transition:all .2s;width:100%;font-family:'DM Sans',sans-serif;letter-spacing:.2px}
+.prod-fiche-btn:hover{background:rgba(184,146,44,.08);border-color:var(--gold)}
 
 /* =========================================
    BEFORE / AFTER
@@ -404,9 +409,7 @@ footer{background:var(--dark);padding:4rem 2rem 2rem;border-top:1px solid rgba(1
 .pm-wa-cta{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:#25D366;color:#fff;border:none;padding:13px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.92rem;font-weight:700;cursor:pointer;transition:all .3s}
 .pm-wa-cta:hover{background:#1ebe5d;transform:translateY(-2px);box-shadow:0 8px 24px rgba(37,211,102,.35)}
 .pm-wa-cta svg{width:19px;height:19px;fill:#fff}
-.desc-cta-hint{display:block;color:var(--gold);font-size:.75rem;font-weight:600;margin-top:.5rem;letter-spacing:.3px}
-.prod-desc{cursor:pointer;transition:background .25s;border-radius:6px;padding:.3rem .2rem}
-.prod-desc:hover{background:rgba(184,146,44,.07)}
+.prod-desc{color:var(--gray);font-size:.82rem;line-height:1.7}
 @media(max-width:700px){
   .pm-layout{grid-template-columns:1fr}
   .pm-img-col{border-radius:16px 16px 0 0;min-height:220px}
@@ -743,31 +746,36 @@ footer{background:var(--dark);padding:4rem 2rem 2rem;border-top:1px solid rgba(1
 /* ============================================================
    HAIR COLOR PALETTE
    ============================================================ */
+/* Couleurs calées sur le color-chart.jpg (770×1280, 4 col × 5 lignes, titre ~100px) */
 const HAIR_COLORS = [
-  {c:'1',n:'Noir Naturel',h:'#0D0D0D'},
-  {c:'1B',n:'Noir Doux',h:'#1A1206'},
-  {c:'2',n:'Brun Très Foncé',h:'#2D1506'},
-  {c:'3',n:'Brun Foncé',h:'#3D200D'},
-  {c:'4',n:'Brun',h:'#6B3318'},
-  {c:'5',n:'Brun Moyen',h:'#844221'},
-  {c:'6',n:'Brun Châtain',h:'#A05025'},
-  {c:'8',n:'Brun Clair',h:'#C07040'},
-  {c:'10',n:'Brun Doré',h:'#C49040'},
-  {c:'12',n:'Blond Doré',h:'#D4A835'},
-  {c:'14',n:'Blond Miel',h:'#E0BB4A'},
-  {c:'22',n:'Blond Clair',h:'#F0D880',light:true},
-  {c:'60',n:'Blond Platine',h:'#F5ECC5',light:true},
-  {c:'33',n:'Auburn Foncé',h:'#8B1A0E'},
-  {c:'44',n:'Auburn',h:'#B02520'},
-  {c:'M2/3',n:'Poivre & Sel Foncé',h:'#4A4848'},
-  {c:'M11',n:'Poivre & Sel',h:'#808080'},
-  {c:'M51',n:'Gris Argenté',h:'#C0C0C0',light:true},
-  {c:'Gray',n:'Gris Naturel',h:'#9A9A9A'},
-  {c:'Silver',n:'Gris Blanc',h:'#E0E0E0',light:true},
+  {c:'1',    n:'Jet Black',              col:0,row:0},
+  {c:'1B',   n:'Off Black',              col:1,row:0},
+  {c:'2',    n:'Darkest Brown',          col:2,row:0},
+  {c:'3',    n:'Dark Brown',             col:3,row:0},
+  {c:'4',    n:'Medium Brown',           col:0,row:1},
+  {c:'5',    n:'Medium Light Brown',     col:1,row:1},
+  {c:'6',    n:'Light Brown',            col:2,row:1},
+  {c:'7',    n:'Very Light Brown',       col:3,row:1},
+  {c:'1B10', n:'Off Black & 10% White',  col:0,row:2},
+  {c:'1B20', n:'Off Black & 20% White',  col:1,row:2},
+  {c:'1B30', n:'Off Black & 30% White',  col:2,row:2},
+  {c:'1B40', n:'Off Black & 40% White',  col:3,row:2},
+  {c:'17',   n:'Dark Ash Blonde',        col:0,row:3},
+  {c:'18',   n:'Medium Blonde',          col:1,row:3},
+  {c:'20',   n:'Light Ash Blonde',       col:2,row:3},
+  {c:'22R',  n:'Beige Blonde',           col:3,row:3},
+  {c:'1B65', n:'Off Black & 65% White',  col:0,row:4},
+  {c:'1B80', n:'Off Black & 80% White',  col:1,row:4},
+  {c:'613',  n:'Platinum Blonde',        col:2,row:4},
+  {c:'60R',  n:'Silver White',           col:3,row:4},
 ];
 
 function swatchesHTML(){
-  return HAIR_COLORS.map((col,i)=>`<div class="swatch${i===0?' sel':''}${col.light?' light-sw':''}" style="background:${col.h}" data-code="${col.c}" data-name="${col.n}" title="${col.c} — ${col.n}" tabindex="0" role="button" aria-label="${col.n}"></div>`).join('');
+  return HAIR_COLORS.map((hc,i)=>{
+    const bx = -(hc.col * 62);
+    const by = -(32 + hc.row * 76);
+    return `<div class="swatch${i===0?' sel':''}" style="background-position:${bx}px ${by}px" data-code="${hc.c}" data-name="${hc.n}" title="${hc.c} — ${hc.n}" tabindex="0" role="button" aria-label="${hc.n}"></div>`;
+  }).join('');
 }
 
 function colorPickerHTML(prodId){
@@ -879,7 +887,7 @@ const T = {
     prob_stat:'Des hommes<br>avant 50 ans',
     prod_label:'NOS SOLUTIONS',prod_title:"Systèmes capillaires d'exception",
     prod_sub:'Chaque produit est sélectionné pour sa qualité premium et son rendu 100% naturel. Promotions -19%.',
-    prod_dur:'Durée :',prod_btn:'En savoir plus',
+    prod_dur:'Durée :',prod_btn:'En savoir plus',fiche_btn:'Voir la fiche complète',
     cp_lbl:'Couleur de cheveux :',cp_sel:'Sélectionnée :',
     ba_label:'AVANT / APRÈS',ba_title:'Résultats réels de nos clients',
     ba_sub:'Des transformations authentiques, réalisées à Paris et en Île-de-France.',
@@ -915,7 +923,7 @@ const T = {
     prob_stat:'Of men<br>before age 50',
     prod_label:'OUR SOLUTIONS',prod_title:'Premium hair systems',
     prod_sub:'Each product is selected for its premium quality and 100% natural look. -19% discount.',
-    prod_dur:'Duration:',prod_btn:'Learn more',
+    prod_dur:'Duration:',prod_btn:'Learn more',fiche_btn:'View full details',
     cp_lbl:'Hair color:',cp_sel:'Selected:',
     ba_label:'BEFORE / AFTER',ba_title:'Real results from our clients',
     ba_sub:'Authentic transformations, realized in Paris and Île-de-France.',
@@ -951,7 +959,7 @@ const T = {
     prob_stat:'De los hombres<br>antes de los 50',
     prod_label:'NUESTRAS SOLUCIONES',prod_title:'Sistemas capilares de excepción',
     prod_sub:'Cada producto se selecciona por su calidad premium y apariencia 100% natural. Descuentos -19%.',
-    prod_dur:'Duración:',prod_btn:'Saber más',
+    prod_dur:'Duración:',prod_btn:'Saber más',fiche_btn:'Ver ficha completa',
     cp_lbl:'Color de cabello:',cp_sel:'Seleccionado:',
     ba_label:'ANTES / DESPUÉS',ba_title:'Resultados reales de nuestros clientes',
     ba_sub:'Transformaciones auténticas en París e Île-de-France.',
@@ -989,8 +997,6 @@ function renderProducts(){
          <img class="prod-img-b" src="${p.imgB}" alt="${p.name} pose" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/${p.id}b/400/400'">`
       : `<img class="prod-img-a solo" src="${p.imgA}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/${p.id}/400/400'">`;
     const durHtml = p.duration ? `<div class="prod-duration">⏱ ${T[l].prod_dur} ${p.duration}</div>` : '';
-    const colHtml = p.hasColors ? colorPickerHTML(p.id) : '';
-    const waMsg = encodeURIComponent(`Bonjour CapiXpert Paris 👋\nJe souhaite des informations sur : ${p.name}`);
     return `<div class="prod-card fi" data-prod-id="${p.id}">
       <div class="prod-img-wrap" data-imga="${p.imgA}" data-imgb="${p.imgB||''}" onclick="openLightbox(this)" role="button" aria-label="Agrandir l'image">${imgHtml}<div class="prod-pill">${p.badge}</div><div class="lb-icon">🔍</div></div>
       <div class="prod-body">
@@ -1001,8 +1007,7 @@ function renderProducts(){
           <span class="disc-tag">${p.discount}</span>
         </div>
         ${durHtml}
-        <div class="prod-desc" onclick="openProdModal('${p.id}')" role="button" tabindex="0" aria-label="Voir la fiche complète">${p.desc}<span class="desc-cta-hint">📋 Voir la fiche détaillée →</span></div>
-        ${colHtml}
+        <button class="prod-fiche-btn" onclick="openProdModal('${p.id}')">📋 ${T[l].fiche_btn||'Voir la fiche complète'}</button>
         <button class="prod-btn" onclick="productWA(this)" data-prod-name="${p.name}">
           <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.856L.043 23.957l6.226-1.464A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.853 0-3.601-.498-5.113-1.371l-.368-.217-3.694.868.897-3.604-.24-.38A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
           <span>${T[l].prod_btn}</span>
@@ -1121,8 +1126,8 @@ function applyHeroBg(){
   const hero = document.getElementById('hero');
   const url = data.heroImg || DEFAULT.heroImg;
   const img = new Image();
-  img.onload = ()=>{ hero.style.backgroundImage = `linear-gradient(160deg,rgba(10,25,49,.9) 0%,rgba(10,25,49,.65) 100%),url('${url}')`; };
-  img.onerror = ()=>{ hero.style.backgroundImage = `linear-gradient(160deg,rgba(10,25,49,.9) 0%,rgba(10,25,49,.65) 100%),url('https://picsum.photos/seed/paris-hero/1400/800')`; };
+  img.onload = ()=>{ hero.style.backgroundImage = `linear-gradient(160deg,rgba(10,25,49,.65) 0%,rgba(10,25,49,.38) 100%),url('${url}')`; };
+  img.onerror = ()=>{ hero.style.backgroundImage = `linear-gradient(160deg,rgba(10,25,49,.65) 0%,rgba(10,25,49,.38) 100%),url('https://picsum.photos/seed/paris-hero/1400/800')`; };
   img.src = url;
 }
 
