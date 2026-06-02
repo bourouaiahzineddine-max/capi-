@@ -222,10 +222,16 @@ section{padding:5.5rem 2rem}
 .cp-body{display:none;margin-top:.2rem}
 .cp-body.open{display:block}
 .cp-chart-img{width:100%;border-radius:8px;display:block;margin-bottom:.8rem}
-.cp-pills{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.65rem}
-.cp-pill{background:rgba(10,25,49,.07);border:1.5px solid rgba(10,25,49,.18);color:var(--navy);padding:4px 11px;border-radius:20px;font-size:.72rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .18s;letter-spacing:.3px}
-.cp-pill:hover{border-color:var(--gold);color:var(--gold)}
-.cp-pill.sel{background:var(--gold);border-color:var(--gold);color:#fff}
+.cpsw-grid{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:.8rem}
+.cpsw-item{position:relative;cursor:pointer;flex-shrink:0;user-select:none}
+.cpsw-circle{width:56px;height:56px;border-radius:50%;overflow:hidden;background:#f0ede8;border:2.5px solid transparent;transition:border-color .2s;position:relative}
+.cpsw-circle img{width:100%;height:100%;object-fit:cover;object-position:bottom center;display:block}
+.cpsw-item.sel .cpsw-circle{border-color:var(--gold)}
+.cpsw-item.sel .cpsw-circle::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.38);color:#fff;font-size:1.15rem;font-weight:700;border-radius:50%}
+.cpsw-tip{display:none;position:absolute;bottom:calc(100% + 7px);left:50%;transform:translateX(-50%);background:#111;color:#fff;font-size:.68rem;font-weight:700;font-family:'DM Sans',sans-serif;padding:3px 9px;border-radius:4px;white-space:nowrap;pointer-events:none;z-index:20}
+.cpsw-tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:#111}
+.cpsw-item.sel .cpsw-tip{display:block}
+.cpsw-circle.no-img{display:flex;align-items:center;justify-content:center;font-size:.46rem;font-weight:700;color:var(--navy);background:var(--gray-l);text-align:center;padding:2px}
 .cp-confirm-btn{margin-top:.75rem;width:100%;background:#25D366;color:#fff;border:none;padding:9px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;transition:background .2s;display:flex;align-items:center;justify-content:center;gap:7px}
 .cp-confirm-btn:hover{background:#1ebe5d}
 .cp-confirm-btn svg{width:15px;height:15px;fill:#fff}
@@ -922,10 +928,16 @@ function swatchesHTML(){
     `<div class="swatch${i===0?' sel':''}" data-code="${hc.c}" data-name="${hc.n}" title="${hc.c} — ${hc.n}" tabindex="0" role="button" aria-label="${hc.n}"><div class="swatch-img-wrap"><img src="assets/${hc.f}" alt="${hc.n}" loading="lazy"></div><span class="swatch-name">#${hc.c}</span></div>`
   ).join('');
 }
-function pillsHTML(){
-  return HAIR_COLORS.map((hc,i)=>
-    `<button class="cp-pill${i===0?' sel':''}" data-code="${hc.c}" data-name="${hc.n}" type="button">#${hc.c}</button>`
-  ).join('');
+function swatchCirclesHTML(){
+  return HAIR_COLORS.map((hc,i)=>{
+    const inner = hc.f
+      ? `<img src="assets/${hc.f}" alt="#${hc.c}" loading="lazy">`
+      : `<span style="font-size:.46rem;font-weight:700;color:var(--navy)">#${hc.c}</span>`;
+    return `<div class="cpsw-item${i===0?' sel':''}" data-code="${hc.c}" data-name="${hc.n}">
+      <span class="cpsw-tip">#${hc.c}</span>
+      <div class="cpsw-circle${hc.f?'':' no-img'}">${inner}</div>
+    </div>`;
+  }).join('');
 }
 
 function colorPickerHTML(prodId){
@@ -1552,8 +1564,7 @@ function openProdModal(prodId){
       <svg class="cp-chev" viewBox="0 0 10 6" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M1 1l4 4 4-4"/></svg>
     </button>
     <div class="cp-body">
-      <div class="cp-pills pm-swatches">${pillsHTML()}</div>
-      <div class="cp-chosen pm-chosen">${T[l].cp_sel||'Sélectionnée :'} <span class="pm-sel-name">#${HAIR_COLORS[0].c}</span></div>
+      <div class="cpsw-grid pm-swatches">${swatchCirclesHTML()}</div>
       <button class="cp-confirm-btn" onclick="confirmColorWA('${prodId}')" type="button">
         <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.856L.043 23.957l6.226-1.464A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.853 0-3.601-.498-5.113-1.371l-.368-.217-3.694.868.897-3.604-.24-.38A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z" fill="currentColor"/></svg>
         Confirmer cette couleur sur WhatsApp
@@ -1595,12 +1606,10 @@ function closeProdModal(e){
 
 function initModalSwatches(){
   const modal = document.getElementById('prodModal');
-  modal.querySelectorAll('.pm-swatches .cp-pill').forEach(pill=>{
-    pill.addEventListener('click',()=>{
-      modal.querySelectorAll('.pm-swatches .cp-pill').forEach(p=>p.classList.remove('sel'));
-      pill.classList.add('sel');
-      const nameEl = modal.querySelector('.pm-sel-name');
-      if(nameEl) nameEl.textContent = `#${pill.dataset.code}`;
+  modal.querySelectorAll('.pm-swatches .cpsw-item').forEach(sw=>{
+    sw.addEventListener('click',()=>{
+      modal.querySelectorAll('.pm-swatches .cpsw-item').forEach(s=>s.classList.remove('sel'));
+      sw.classList.add('sel');
     });
   });
 }
@@ -1609,7 +1618,7 @@ function modalWA(prodId){
   const p = data.products.find(x=>x.id===prodId);
   if(!p) return;
   const modal = document.getElementById('prodModal');
-  const selSw = modal.querySelector('.pm-swatches .cp-pill.sel');
+  const selSw = modal.querySelector('.pm-swatches .cpsw-item.sel');
   let colorPart = selSw ? `\nCouleur souhaitée : #${selSw.dataset.code} — ${selSw.dataset.name}` : '';
   const text = `Bonjour CapiXpert Paris 👋\nJe souhaite des informations sur : *${p.name}* (${p.newPrice})${colorPart}\n\nMerci de me recontacter.`;
   window.open('https://wa.me/33774037057?text='+encodeURIComponent(text),'_blank');
@@ -1764,7 +1773,7 @@ function confirmColorWA(prodId){
   const p = data.products.find(x=>x.id===prodId);
   if(!p) return;
   const modal = document.getElementById('prodModal');
-  const selSw = modal.querySelector('.pm-swatches .cp-pill.sel');
+  const selSw = modal.querySelector('.pm-swatches .cpsw-item.sel');
   if(!selSw){ alert('Veuillez sélectionner une couleur.'); return; }
   const text = `Bonjour CapiXpert Paris 👋\n\nJe souhaite commander :\n*${p.name}* (${p.newPrice})\n\nCouleur choisie : *#${selSw.dataset.code} — ${selSw.dataset.name}*\n\nMerci de me contacter.`;
   window.open('https://wa.me/33774037057?text='+encodeURIComponent(text),'_blank');
