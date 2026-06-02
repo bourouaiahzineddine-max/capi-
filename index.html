@@ -260,6 +260,9 @@ section{padding:5.5rem 2rem}
 .lbef{background:rgba(255,255,255,.06);color:rgba(248,246,241,.5)}
 .laft{background:rgba(184,146,44,.15);color:var(--gold)}
 .ba-img-full img{width:100%;display:block;border-radius:10px 10px 0 0;object-fit:cover;aspect-ratio:1}
+.ba-img-zoom{position:relative;cursor:zoom-in;overflow:hidden}
+.ba-zoom-icon{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.5);color:#fff;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:.85rem;opacity:0;transition:opacity .2s;pointer-events:none}
+.ba-img-zoom:hover .ba-zoom-icon{opacity:1}
 .ba-label-row{display:flex;align-items:center;justify-content:center;gap:.8rem;padding:6px 10px;background:rgba(255,255,255,.04)}
 .ba-label-row .lbef,.ba-label-row .laft{background:none;padding:0}
 .ba-info{padding:.85rem 1rem;text-align:left}
@@ -1199,8 +1202,9 @@ function renderBA(){
     const imgSrc = b.combined || b.before || `${bfb}ba${i+10}/700/450`;
     const imgStyle = b.contain ? ' style="object-fit:contain;background:#0A1931"' : '';
     return `<div class="ba-card">
-      <div class="ba-img-full">
+      <div class="ba-img-full ba-img-zoom" onclick="openLightboxImg('${imgSrc}')">
         <img src="${imgSrc}" alt="Avant/Après ${b.name}" loading="lazy"${imgStyle} onerror="this.onerror=null;this.src='${bfb}ba${i+10}/700/450'">
+        <div class="ba-zoom-icon">🔍</div>
       </div>
       <div class="ba-label-row">
         <span class="lbef">AVANT</span>
@@ -1226,7 +1230,7 @@ function renderTestis(){
       <div class="testi-stars">★★★★★</div>
       <p class="testi-txt">"${t.text}"</p>
       <div class="testi-author">
-        <img src="${t.avatar}" alt="${t.name}" class="testi-av" loading="lazy" onerror="this.onerror=null;this.src='https://i.pravatar.cc/80'">
+        <img src="${t.avatar}" alt="${t.name}" class="testi-av" loading="lazy" onerror="this.onerror=null;this.src='https://i.pravatar.cc/80'" onclick="openLightboxImg('${t.avatar}')" style="cursor:zoom-in">
         <div>
           <div class="testi-name">${t.name}</div>
           <div class="testi-loc">📍 ${t.location}</div>
@@ -1529,6 +1533,11 @@ function closeLightbox(e){
   document.getElementById('lightbox').classList.remove('open');
   document.body.style.overflow='';
 }
+function openLightboxImg(src){
+  lbImages=[src]; lbIndex=0; lbShow();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow='hidden';
+}
 
 /* ============================================================
    PRODUCT DETAIL MODAL
@@ -1540,7 +1549,6 @@ function openProdModal(prodId){
   const ext = PROD_EXT[prodId];
   if(!p) return;
   const l = lang;
-  const durHTML = p.duration ? `<div class="pm-dur-tag">⏱ ${T[l].prod_dur||'Durée :'} ${p.duration}</div>` : '';
   const specsHTML = (ext?.specs||[]).map(s=>`<div class="pm-spec"><span class="pm-sk">${s.k}</span><span class="pm-sv">${s.v}</span></div>`).join('');
   const colHTML = p.hasColors ? `<div class="pm-cp-section">
     <button class="cp-toggle-btn" onclick="toggleCpSection(this)" type="button">
@@ -1571,11 +1579,10 @@ function openProdModal(prodId){
         <span class="pm-new">${p.newPrice}</span>
         <span class="pm-disc-tag">${p.discount}</span>
       </div>
-      ${durHTML}
+      ${colHTML}
       <div class="pm-section-lbl">Description</div>
       <p class="pm-full-desc">${ext?.fullDesc||p.desc}</p>
       ${specsHTML.length ? `<div class="pm-section-lbl">Caractéristiques</div><div class="pm-specs-grid">${specsHTML}</div>` : ''}
-      ${colHTML}
       <button class="pm-wa-cta" onclick="modalWA('${prodId}')">${WA_SVG} ${T[l].prod_btn||'En savoir plus'} — ${p.newPrice}</button>
     </div>`;
   initModalSwatches();
