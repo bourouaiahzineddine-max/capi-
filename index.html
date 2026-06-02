@@ -70,7 +70,15 @@ nav.scrolled{box-shadow:0 4px 30px rgba(0,0,0,.3)}
 .nav-links a{color:rgba(248,246,241,.78);text-decoration:none;font-size:.84rem;letter-spacing:.3px;transition:color var(--transition)}
 .nav-links a:hover{color:var(--gold)}
 .nav-right{display:flex;align-items:center;gap:1rem}
-.lang-sw{display:flex;gap:.3rem}
+.lang-drop{position:relative}
+.lang-cur{background:none;border:1px solid rgba(184,146,44,.32);color:rgba(248,246,241,.78);padding:4px 9px 4px 11px;border-radius:4px;font-size:.72rem;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:.8px;transition:all .22s;display:flex;align-items:center;gap:5px}
+.lang-cur:hover,.lang-drop.open .lang-cur{background:var(--gold);color:var(--navy);border-color:var(--gold)}
+.lang-chev{transition:transform .2s;flex-shrink:0}
+.lang-drop.open .lang-chev{transform:rotate(180deg)}
+.lang-opts{display:none;position:absolute;top:calc(100% + 5px);right:0;background:rgba(6,15,30,.98);border:1px solid rgba(184,146,44,.25);border-radius:6px;overflow:hidden;z-index:200;min-width:58px;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.lang-drop.open .lang-opts{display:block}
+.lang-opts button{display:block;width:100%;padding:7px 0;background:none;border:none;color:rgba(248,246,241,.7);font-size:.72rem;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:.8px;text-align:center;transition:background .15s,color .15s}
+.lang-opts button:hover,.lang-opts button.active-lang{background:var(--gold);color:var(--navy);font-weight:700}
 .lb{background:none;border:1px solid rgba(184,146,44,.32);color:rgba(248,246,241,.6);padding:3px 9px;border-radius:4px;font-size:.72rem;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:.8px;transition:all .22s}
 .lb.active,.lb:hover{background:var(--gold);color:var(--navy);border-color:var(--gold);font-weight:700}
 .btn-nav{background:var(--gold);color:var(--navy);padding:9px 20px;border-radius:4px;text-decoration:none;font-weight:700;font-size:.82rem;letter-spacing:.4px;transition:all var(--transition);white-space:nowrap;border:2px solid var(--gold)}
@@ -107,8 +115,22 @@ nav.scrolled{box-shadow:0 4px 30px rgba(0,0,0,.3)}
 .hs{text-align:center}
 .hs-num{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:var(--gold);line-height:1}
 .hs-lbl{font-size:.7rem;color:rgba(248,246,241,.6);letter-spacing:1.5px;text-transform:uppercase;margin-top:.3rem}
-.hero-domicile{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(184,146,44,.3);color:rgba(248,246,241,.8);padding:8px 18px;border-radius:30px;font-size:.8rem;margin-top:1.5rem;letter-spacing:.3px}
+.hero-domicile{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(184,146,44,.3);color:rgba(248,246,241,.8);padding:8px 18px;border-radius:30px;font-size:.8rem;margin-top:1.5rem;letter-spacing:.3px;cursor:pointer;transition:all .2s}
+.hero-domicile:hover{background:rgba(184,146,44,.15);border-color:rgba(184,146,44,.5)}
 .hero-domicile span{color:var(--gold);font-weight:600}
+.dom-popup{display:none;position:fixed;inset:0;z-index:9990;background:rgba(6,15,30,.78);align-items:center;justify-content:center;padding:1rem}
+.dom-popup.open{display:flex;animation:lbFade .22s ease}
+.dom-box{background:var(--navy);border:1px solid rgba(184,146,44,.32);border-radius:14px;padding:2rem;max-width:420px;width:100%;position:relative;box-shadow:0 24px 70px rgba(0,0,0,.55)}
+.dom-box h3{color:var(--gold);font-family:'Playfair Display',serif;font-size:1.18rem;margin-bottom:.5rem}
+.dom-box p{color:rgba(248,246,241,.62);font-size:.85rem;margin-bottom:1.2rem;line-height:1.6}
+.dom-input{width:100%;padding:11px 14px;background:rgba(255,255,255,.07);border:1px solid rgba(184,146,44,.28);border-radius:7px;color:var(--off);font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;transition:border-color .2s}
+.dom-input:focus{border-color:var(--gold)}
+.dom-input::placeholder{color:rgba(248,246,241,.3)}
+.dom-send{width:100%;margin-top:.9rem;background:#25D366;color:#fff;border:none;padding:12px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;transition:background .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.dom-send:hover{background:#1ebe5d}
+.dom-send svg{width:17px;height:17px;fill:#fff}
+.dom-close{position:absolute;top:12px;right:12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.55);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.dom-close:hover{background:rgba(255,255,255,.15);color:#fff}
 
 /* =========================================
    SHARED LAYOUT
@@ -182,16 +204,25 @@ section{padding:5.5rem 2rem}
 /* Color Picker */
 .cp-wrap{margin-bottom:1.1rem;padding:.9rem;background:var(--gray-l);border-radius:8px}
 .cp-lbl{font-size:.75rem;color:var(--navy);font-weight:600;margin-bottom:.55rem;letter-spacing:.3px}
-.cp-swatches{display:flex;flex-wrap:wrap;gap:.45rem;margin-bottom:.6rem}
+.cp-swatches{display:flex;flex-wrap:wrap;gap:.55rem;margin-bottom:.6rem}
 .swatch{
-  width:84px;cursor:pointer;border-radius:8px;overflow:hidden;
-  border:2.5px solid transparent;transition:all .2s;flex-shrink:0;
-  background:#f5f0e8;
+  width:68px;cursor:pointer;display:flex;flex-direction:column;align-items:center;
+  gap:3px;transition:transform .2s;flex-shrink:0;background:none;border:none;padding:2px;
 }
-.swatch:hover{border-color:rgba(184,146,44,.7);transform:scale(1.05)}
-.swatch.sel{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,146,44,.35)}
-.swatch img{width:100%;display:block}
-.cp-chosen{font-size:.72rem;color:var(--navy);font-weight:600;letter-spacing:.2px}
+.swatch:hover{transform:scale(1.07)}
+.swatch img{width:68px;height:auto;display:block;border-radius:5px;transition:box-shadow .2s}
+.swatch.sel img{box-shadow:0 0 0 2.5px var(--gold),0 0 0 5px rgba(184,146,44,.25)}
+.swatch-name{font-size:.54rem;color:var(--navy);font-weight:500;line-height:1.3;text-align:center;max-width:68px;display:block}
+.cp-toggle-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(184,146,44,.1);border:1px solid rgba(184,146,44,.3);color:var(--gold);padding:7px 14px;border-radius:6px;font-size:.78rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:.6rem;transition:all .2s;width:100%;justify-content:space-between}
+.cp-toggle-btn:hover{background:rgba(184,146,44,.18)}
+.cp-toggle-btn .cp-chev{transition:transform .2s;flex-shrink:0}
+.cp-toggle-btn.open .cp-chev{transform:rotate(180deg)}
+.cp-body{display:none;margin-top:.2rem}
+.cp-body.open{display:block}
+.cp-confirm-btn{margin-top:.75rem;width:100%;background:#25D366;color:#fff;border:none;padding:9px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;transition:background .2s;display:flex;align-items:center;justify-content:center;gap:7px}
+.cp-confirm-btn:hover{background:#1ebe5d}
+.cp-confirm-btn svg{width:15px;height:15px;fill:#fff}
+.cp-chosen{font-size:.72rem;color:var(--navy);font-weight:600;letter-spacing:.2px;margin-top:.5rem}
 .cp-chosen span{color:var(--gold)}
 
 .prod-btn{display:flex;align-items:center;justify-content:center;gap:8px;background:transparent;border:2px solid var(--gold);color:var(--gold);padding:10px;border-radius:4px;text-decoration:none;font-size:.82rem;font-weight:700;letter-spacing:.4px;transition:all var(--transition);width:100%;font-family:'DM Sans',sans-serif}
@@ -204,9 +235,11 @@ section{padding:5.5rem 2rem}
 #ba{background:var(--navy);text-align:center}
 .ba-hdr{margin-bottom:2.8rem}
 .ba-sub-txt{color:rgba(248,246,241,.58);font-size:.92rem;margin-top:.5rem}
-.ba-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.6rem}
-.ba-card{background:rgba(255,255,255,.04);border:1px solid rgba(184,146,44,.18);border-radius:12px;overflow:hidden;transition:all var(--transition)}
-.ba-card:hover{border-color:rgba(184,146,44,.5);transform:translateY(-5px)}
+.ba-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:1.6rem;padding-bottom:.5rem;scrollbar-width:none;cursor:grab;-webkit-overflow-scrolling:touch}
+.ba-grid::-webkit-scrollbar{display:none}
+.ba-grid.dragging{cursor:grabbing;user-select:none;scroll-snap-type:none}
+.ba-card{flex:0 0 min(340px,80vw);background:rgba(255,255,255,.04);border:1px solid rgba(184,146,44,.18);border-radius:12px;overflow:hidden;transition:border-color var(--transition);scroll-snap-align:start}
+.ba-card:hover{border-color:rgba(184,146,44,.5)}
 .ba-imgs{display:grid;grid-template-columns:1fr 1fr;position:relative}
 .ba-imgs img{width:100%;aspect-ratio:1;object-fit:cover}
 .ba-sep{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:30px;height:30px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.58rem;font-weight:800;color:var(--navy);z-index:2;box-shadow:0 0 0 3px rgba(10,25,49,.5)}
@@ -226,10 +259,12 @@ section{padding:5.5rem 2rem}
    ========================================= */
 #testi{background:var(--off)}
 .testi-hdr{text-align:center;margin-bottom:2.8rem}
-.testi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1.6rem}
-.testi-card{background:#fff;border-radius:12px;padding:1.7rem;box-shadow:var(--shadow-sm);border:1px solid rgba(10,25,49,.05);transition:all var(--transition);position:relative}
+.testi-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:1.6rem;padding-bottom:.5rem;scrollbar-width:none;cursor:grab;-webkit-overflow-scrolling:touch}
+.testi-grid::-webkit-scrollbar{display:none}
+.testi-grid.dragging{cursor:grabbing;user-select:none;scroll-snap-type:none}
+.testi-card{flex:0 0 min(320px,80vw);background:#fff;border-radius:12px;padding:1.7rem;box-shadow:var(--shadow-sm);border:1px solid rgba(10,25,49,.05);transition:box-shadow var(--transition);position:relative;scroll-snap-align:start}
 .testi-card::before{content:'"';font-family:'Playfair Display',serif;font-size:5rem;color:var(--gold);opacity:.16;position:absolute;top:.2rem;left:1.1rem;line-height:1;pointer-events:none}
-.testi-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-md)}
+.testi-card:hover{box-shadow:var(--shadow-md)}
 .testi-stars{color:var(--gold);font-size:.9rem;letter-spacing:2px;margin-bottom:.8rem}
 .testi-txt{color:#555;font-size:.86rem;line-height:1.78;margin-bottom:1.3rem;font-style:italic}
 .testi-author{display:flex;align-items:center;gap:.85rem}
@@ -549,12 +584,18 @@ footer{background:var(--dark);padding:4rem 2rem 2rem;border-top:1px solid rgba(1
     <li><a href="#contact" data-i18n="nav_book">Prendre RDV</a></li>
   </ul>
   <div class="nav-right">
-    <div class="lang-sw">
-      <button class="lb active" onclick="setLang('fr')">FR</button>
-      <button class="lb" onclick="setLang('en')">EN</button>
-      <button class="lb" onclick="setLang('es')">ES</button>
-    </div>
     <a href="https://wa.me/33774037057" target="_blank" class="btn-nav" data-i18n="nav_cta">Prendre rendez-vous</a>
+  </div>
+  <div class="lang-drop" id="langDrop">
+    <button class="lang-cur" id="langCurBtn" onclick="toggleLangDrop(event)" aria-label="Changer de langue">
+      <span id="langCurTxt">FR</span>
+      <svg class="lang-chev" viewBox="0 0 10 6" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M1 1l4 4 4-4"/></svg>
+    </button>
+    <div class="lang-opts" id="langOpts">
+      <button onclick="setLang('fr');closeLangDrop()">FR</button>
+      <button onclick="setLang('en');closeLangDrop()">EN</button>
+      <button onclick="setLang('es');closeLangDrop()">ES</button>
+    </div>
   </div>
   <button class="burger" id="burgerBtn" onclick="toggleMob()" aria-label="Menu">
     <span></span><span></span><span></span>
@@ -586,7 +627,7 @@ footer{background:var(--dark);padding:4rem 2rem 2rem;border-top:1px solid rgba(1
       <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.856L.043 23.957l6.226-1.464A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.853 0-3.601-.498-5.113-1.371l-.368-.217-3.694.868.897-3.604-.24-.38A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
       <span data-i18n="hero_cta">Réserver mon rendez-vous</span>
     </a>
-    <div class="hero-domicile">🏠 <span data-i18n="domicile_txt">Service à domicile disponible</span> — Paris &amp; Île-de-France</div>
+    <div class="hero-domicile" onclick="openDomicileInput()" role="button" tabindex="0" aria-label="Service à domicile — cliquez pour renseigner votre adresse">🏠 <span data-i18n="domicile_txt">Service à domicile disponible</span> — Paris &amp; Île-de-France</div>
     <div class="hero-stats">
       <div class="hs"><div class="hs-num">500+</div><div class="hs-lbl" data-i18n="stat1">Clients Satisfaits</div></div>
       <div class="hs"><div class="hs-num">10+</div><div class="hs-lbl" data-i18n="stat2">Années d'Expertise</div></div>
@@ -714,7 +755,7 @@ footer{background:var(--dark);padding:4rem 2rem 2rem;border-top:1px solid rgba(1
         </div>
       </div>
       <div class="con-form fi d2">
-        <div class="form-ttl" data-i18n="form_ttl">Réservez votre consultation</div>
+        <div class="form-ttl" data-i18n="form_ttl">Réservez maintenant</div>
         <div class="form-stl" data-i18n="form_stl">Remplissez ce formulaire, nous vous répondrons sur WhatsApp.</div>
         <div class="fg"><label data-i18n="form_name">Votre prénom *</label><input type="text" id="fname" placeholder="Ex: Alexandre" required></div>
         <div class="fg"><label data-i18n="form_phone">Votre téléphone *</label><input type="tel" id="fphone" placeholder="+33 6 XX XX XX XX" required></div>
@@ -729,6 +770,10 @@ footer{background:var(--dark);padding:4rem 2rem 2rem;border-top:1px solid rgba(1
             <option>Kit Colle + Dissolvant — 34.98€</option>
             <option data-i18n="form_other">Autre / Je ne sais pas encore</option>
           </select>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem">
+          <div class="fg"><label data-i18n="form_date">Date souhaitée</label><input type="date" id="fdate"></div>
+          <div class="fg"><label data-i18n="form_time">Heure souhaitée</label><input type="time" id="ftime" min="09:00" max="20:00"></div>
         </div>
         <div class="fg"><label data-i18n="form_msg">Votre message</label><textarea id="fmsg" placeholder="Décrivez votre situation, vos questions..."></textarea></div>
         <button class="form-sub" onclick="sendWA()">
@@ -760,12 +805,12 @@ footer{background:var(--dark);padding:4rem 2rem 2rem;border-top:1px solid rgba(1
           <a href="https://www.facebook.com/share/1HfBsCoWRu/?mibextid=wwXIfr" class="soc" aria-label="Facebook" target="_blank" rel="noopener">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
           </a>
-          <a href="https://www.instagram.com/capixpert?igsh=aXc3YmM4ODJ4MG4w&utm_source=qr" class="soc" aria-label="Instagram" target="_blank" rel="noopener">
+          <span class="soc" aria-label="Instagram" style="cursor:default">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-          </a>
-          <a href="https://www.tiktok.com/@capixpert_?_r=1&_t=ZN-96pjBPIBLio" class="soc" aria-label="TikTok" target="_blank" rel="noopener">
+          </span>
+          <span class="soc" aria-label="TikTok" style="cursor:default">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
-          </a>
+          </span>
           <a href="https://wa.me/33774037057" class="soc" aria-label="WhatsApp" target="_blank" rel="noopener">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.856L.043 23.957l6.226-1.464A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.853 0-3.601-.498-5.113-1.371l-.368-.217-3.694.868.897-3.604-.24-.38A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
           </a>
@@ -786,8 +831,8 @@ footer{background:var(--dark);padding:4rem 2rem 2rem;border-top:1px solid rgba(1
         <ul class="foot-links">
           <li><a href="https://wa.me/33774037057" target="_blank">WhatsApp</a></li>
           <li><a href="https://www.facebook.com/share/1HfBsCoWRu/?mibextid=wwXIfr" target="_blank">Facebook</a></li>
-          <li><a href="https://www.instagram.com/capixpert" target="_blank">Instagram</a></li>
-          <li><a href="https://www.tiktok.com/@capixpert_" target="_blank">TikTok</a></li>
+          <li><span style="color:rgba(248,246,241,.28);font-size:.86rem">Instagram</span></li>
+          <li><span style="color:rgba(248,246,241,.28);font-size:.86rem">TikTok</span></li>
           <li><a href="#" data-i18n="foot_zone">Paris &amp; Île-de-France</a></li>
           <li><a href="#" data-i18n="foot_hours">7j/7 : 9h – 20h</a></li>
         </ul>
@@ -799,6 +844,20 @@ footer{background:var(--dark);padding:4rem 2rem 2rem;border-top:1px solid rgba(1
     </div>
   </div>
 </footer>
+
+<!-- ======= DOMICILE POPUP ======= -->
+<div class="dom-popup" id="domPopup" onclick="closeDomicileInput(event)">
+  <div class="dom-box">
+    <button class="dom-close" onclick="closeDomicileInput()" aria-label="Fermer">✕</button>
+    <h3>🏠 Service à domicile</h3>
+    <p>Entrez votre adresse et nous vous contacterons pour organiser votre déplacement.</p>
+    <input class="dom-input" type="text" id="domAddr" placeholder="Ex: 15 rue de la Paix, Paris 75001">
+    <button class="dom-send" onclick="sendDomicileWA()">
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.856L.043 23.957l6.226-1.464A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.853 0-3.601-.498-5.113-1.371l-.368-.217-3.694.868.897-3.604-.24-.38A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+      Envoyer sur WhatsApp
+    </button>
+  </div>
+</div>
 
 <!-- ======= FLOATING WHATSAPP ======= -->
 <div class="wa-float">
@@ -837,7 +896,7 @@ const HAIR_COLORS = [
 
 function swatchesHTML(){
   return HAIR_COLORS.map((hc,i)=>
-    `<div class="swatch${i===0?' sel':''}" data-code="${hc.c}" data-name="${hc.n}" title="${hc.c} — ${hc.n}" tabindex="0" role="button" aria-label="${hc.n}"><img src="assets/${hc.f}" alt="${hc.n}" loading="lazy"></div>`
+    `<div class="swatch${i===0?' sel':''}" data-code="${hc.c}" data-name="${hc.n}" title="${hc.c} — ${hc.n}" tabindex="0" role="button" aria-label="${hc.n}"><img src="assets/${hc.f}" alt="${hc.n}" loading="lazy"><span class="swatch-name">${hc.n}</span></div>`
   ).join('');
 }
 
@@ -959,9 +1018,10 @@ const T = {
     con_lead:"Service professionnel en Île-de-France. Résultats garantis. Consultation personnalisée sur-mesure.",
     con_i1:'Paris & Île-de-France',con_i2:'7j/7, 9h – 20h',con_i3:'Réponse sous 30 minutes',con_i4:'Discrétion absolue garantie',
     dom_title:'Service à domicile disponible',dom_sub:'Déplacement sur tout Paris et l\'Île-de-France',
-    form_ttl:'Réservez votre consultation',form_stl:'Remplissez ce formulaire, nous vous répondrons sur WhatsApp.',
+    form_ttl:'Réservez maintenant',form_stl:'Remplissez ce formulaire, nous vous répondrons sur WhatsApp.',
     form_name:'Votre prénom *',form_phone:'Votre téléphone *',form_prod:'Produit d\'intérêt (optionnel)',
     form_sel:'-- Sélectionnez --',form_other:'Autre / Je ne sais pas encore',
+    form_date:'Date souhaitée',form_time:'Heure souhaitée',
     form_msg:'Votre message',form_btn:'Envoyer sur WhatsApp',
     wa_bubble:'Prenez RDV maintenant !',
     foot_desc:'Spécialistes en compléments capillaires sur-mesure pour hommes. Service à domicile en Paris et Île-de-France. Discrétion garantie.',
@@ -995,9 +1055,10 @@ const T = {
     con_lead:'Professional service in Île-de-France. Guaranteed results. Personalized consultation.',
     con_i1:'Paris & Île-de-France',con_i2:'7 days/week, 9am – 8pm',con_i3:'Response within 30 minutes',con_i4:'Absolute discretion guaranteed',
     dom_title:'Home service available',dom_sub:'We travel across Paris and Île-de-France',
-    form_ttl:'Reserve your consultation',form_stl:'Fill out this form and we will reply via WhatsApp.',
+    form_ttl:'Book now',form_stl:'Fill out this form and we will reply via WhatsApp.',
     form_name:'Your first name *',form_phone:'Your phone number *',form_prod:'Product of interest (optional)',
     form_sel:'-- Select --',form_other:'Other / Not sure yet',
+    form_date:'Preferred date',form_time:'Preferred time',
     form_msg:'Your message',form_btn:'Send on WhatsApp',
     wa_bubble:'Book now!',
     foot_desc:'Specialists in custom hair systems for men. Home service in Paris and Île-de-France. Guaranteed discretion.',
@@ -1031,9 +1092,10 @@ const T = {
     con_lead:'Servicio profesional en Île-de-France. Resultados garantizados. Consulta personalizada.',
     con_i1:'París e Île-de-France',con_i2:'7 días/semana, 9h – 20h',con_i3:'Respuesta en 30 minutos',con_i4:'Discreción absoluta garantizada',
     dom_title:'Servicio a domicilio disponible',dom_sub:'Nos desplazamos por todo París e Île-de-France',
-    form_ttl:'Reserve su consulta',form_stl:'Complete este formulario y le responderemos por WhatsApp.',
+    form_ttl:'Reserve ahora',form_stl:'Complete este formulario y le responderemos por WhatsApp.',
     form_name:'Su nombre *',form_phone:'Su teléfono *',form_prod:'Producto de interés (opcional)',
     form_sel:'-- Seleccione --',form_other:'Otro / Aún no lo sé',
+    form_date:'Fecha preferida',form_time:'Hora preferida',
     form_msg:'Su mensaje',form_btn:'Enviar por WhatsApp',
     wa_bubble:'¡Reserve ahora!',
     foot_desc:'Especialistas en sistemas capilares a medida. Servicio a domicilio en París e Île-de-France. Discreción garantizada.',
@@ -1069,7 +1131,6 @@ function renderProducts(){
           <span class="new-price">${p.newPrice}</span>
           <span class="disc-tag">${p.discount}</span>
         </div>
-        ${durHtml}
       </div>
     </div>`;
   }).join('');
@@ -1109,7 +1170,7 @@ function renderBA(){
   const bfb = 'https://picsum.photos/seed/';
   g.innerHTML = data.beforeAfter.map((b,i)=>{
     const imgSrc = b.combined || b.before || `${bfb}ba${i+10}/700/450`;
-    return `<div class="ba-card fi">
+    return `<div class="ba-card">
       <div class="ba-img-full">
         <img src="${imgSrc}" alt="Avant/Après ${b.name}" loading="lazy" onerror="this.onerror=null;this.src='${bfb}ba${i+10}/700/450'">
       </div>
@@ -1124,7 +1185,7 @@ function renderBA(){
       </div>
     </div>`;
   }).join('');
-  observeFi();
+  initSlider(g);
 }
 
 /* ============================================================
@@ -1133,7 +1194,7 @@ function renderBA(){
 function renderTestis(){
   const g = document.getElementById('testiGrid');
   g.innerHTML = data.testimonials.map(t=>`
-    <div class="testi-card fi">
+    <div class="testi-card">
       <div class="testi-stars">★★★★★</div>
       <p class="testi-txt">"${t.text}"</p>
       <div class="testi-author">
@@ -1145,7 +1206,7 @@ function renderTestis(){
         </div>
       </div>
     </div>`).join('');
-  observeFi();
+  initSlider(g);
 }
 
 /* ============================================================
@@ -1165,6 +1226,11 @@ function setLang(l){
   });
   document.querySelectorAll('.lb').forEach(b=>{
     b.classList.toggle('active', b.textContent === l.toUpperCase());
+  });
+  const langCurTxt = document.getElementById('langCurTxt');
+  if(langCurTxt) langCurTxt.textContent = l.toUpperCase();
+  document.querySelectorAll('.lang-opts button').forEach(b=>{
+    b.classList.toggle('active-lang', b.textContent.trim() === l.toUpperCase());
   });
   document.querySelectorAll('.cp-lbl').forEach(el=>el.textContent = T[l].cp_lbl||T.fr.cp_lbl);
   document.querySelectorAll('.prod-btn span').forEach(el=>el.textContent = T[l].prod_btn);
@@ -1212,6 +1278,8 @@ function sendWA(){
   const name = document.getElementById('fname').value.trim();
   const phone = document.getElementById('fphone').value.trim();
   const prod = document.getElementById('fprod').value;
+  const fdate = document.getElementById('fdate')?.value || '';
+  const ftime = document.getElementById('ftime')?.value || '';
   const msg = document.getElementById('fmsg').value.trim();
   if(!name || !phone){
     alert(lang==='fr'?'Veuillez remplir votre prénom et votre téléphone.':lang==='en'?'Please fill in your name and phone number.':'Por favor complete su nombre y teléfono.');
@@ -1223,6 +1291,10 @@ function sendWA(){
     ? `Hello CapiXpert Paris 👋\n\nMy name is *${name}*.\nMy number: ${phone}.`
     : `Hola CapiXpert París 👋\n\nMe llamo *${name}*.\nMi número: ${phone}.`;
   if(prod) text += `\n${lang==='fr'?'Produit':lang==='en'?'Product':'Producto'}: ${prod}`;
+  if(fdate||ftime){
+    const dateLbl = lang==='fr'?'Date souhaitée':lang==='en'?'Preferred date':'Fecha preferida';
+    text += `\n📅 ${dateLbl}: ${fdate||'—'}${ftime?' à '+ftime:''}`;
+  }
   if(msg) text += `\n\n${msg}`;
   text += `\n\n${lang==='fr'?'Je souhaite prendre rendez-vous.':lang==='en'?'I would like to book an appointment.':'Me gustaría reservar una cita.'}`;
   window.open('https://wa.me/33774037057?text='+encodeURIComponent(text), '_blank');
@@ -1443,9 +1515,21 @@ function openProdModal(prodId){
   const durHTML = p.duration ? `<div class="pm-dur-tag">⏱ ${T[l].prod_dur||'Durée :'} ${p.duration}</div>` : '';
   const specsHTML = (ext?.specs||[]).map(s=>`<div class="pm-spec"><span class="pm-sk">${s.k}</span><span class="pm-sv">${s.v}</span></div>`).join('');
   const colHTML = p.hasColors ? `<div class="pm-cp-section">
-    <div class="pm-section-lbl">${T[l].cp_lbl||'Couleur de cheveux'}</div>
-    <div class="cp-swatches pm-swatches">${swatchesHTML()}</div>
-    <div class="cp-chosen pm-chosen">${T[l].cp_sel||'Sélectionnée :'} <span class="pm-sel-name">1 — Noir Naturel</span></div>
+    <button class="cp-toggle-btn" onclick="toggleCpSection(this)" type="button">
+      <span style="display:flex;align-items:center;gap:6px">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M6 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+        ${T[l].cp_lbl||'Couleurs de cheveux'}
+      </span>
+      <svg class="cp-chev" viewBox="0 0 10 6" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M1 1l4 4 4-4"/></svg>
+    </button>
+    <div class="cp-body">
+      <div class="cp-swatches pm-swatches">${swatchesHTML()}</div>
+      <div class="cp-chosen pm-chosen">${T[l].cp_sel||'Sélectionnée :'} <span class="pm-sel-name">Jet Black</span></div>
+      <button class="cp-confirm-btn" onclick="confirmColorWA('${prodId}')" type="button">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.856L.043 23.957l6.226-1.464A11.942 11.942 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.853 0-3.601-.498-5.113-1.371l-.368-.217-3.694.868.897-3.604-.24-.38A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z" fill="currentColor"/></svg>
+        Confirmer cette couleur sur WhatsApp
+      </button>
+    </div>
   </div>` : '';
   const fallback = `https://picsum.photos/seed/${prodId}/700/700`;
   document.getElementById('pmContent').innerHTML = `
@@ -1499,6 +1583,85 @@ function modalWA(prodId){
   const selSw = modal.querySelector('.pm-swatches .swatch.sel');
   let colorPart = selSw ? `\nCouleur souhaitée : ${selSw.dataset.code} — ${selSw.dataset.name}` : '';
   const text = `Bonjour CapiXpert Paris 👋\nJe souhaite des informations sur : *${p.name}* (${p.newPrice})${colorPart}\n\nMerci de me recontacter.`;
+  window.open('https://wa.me/33774037057?text='+encodeURIComponent(text),'_blank');
+}
+
+/* ============================================================
+   LANGUAGE DROPDOWN
+   ============================================================ */
+function toggleLangDrop(e){
+  e.stopPropagation();
+  document.getElementById('langDrop').classList.toggle('open');
+}
+function closeLangDrop(){
+  const d = document.getElementById('langDrop');
+  if(d) d.classList.remove('open');
+}
+document.addEventListener('click', ()=>closeLangDrop());
+
+/* ============================================================
+   SLIDERS (drag-to-scroll)
+   ============================================================ */
+function initSlider(el){
+  if(!el || el._sliderInit) return;
+  el._sliderInit = true;
+  let startX=0, scrollLeft=0, isDragging=false;
+  el.addEventListener('mousedown', e=>{
+    isDragging=true;
+    startX = e.pageX - el.offsetLeft;
+    scrollLeft = el.scrollLeft;
+    el.classList.add('dragging');
+  });
+  el.addEventListener('mousemove', e=>{
+    if(!isDragging) return;
+    e.preventDefault();
+    el.scrollLeft = scrollLeft - (e.pageX - el.offsetLeft - startX) * 1.5;
+  });
+  ['mouseup','mouseleave'].forEach(ev=>el.addEventListener(ev,()=>{
+    isDragging=false; el.classList.remove('dragging');
+  }));
+}
+
+/* ============================================================
+   SERVICE À DOMICILE POPUP
+   ============================================================ */
+function openDomicileInput(){
+  document.getElementById('domPopup').classList.add('open');
+  document.body.style.overflow='hidden';
+  setTimeout(()=>{ const i=document.getElementById('domAddr'); if(i)i.focus(); },220);
+}
+function closeDomicileInput(e){
+  const popup = document.getElementById('domPopup');
+  if(e){
+    const box = popup.querySelector('.dom-box');
+    if(box && box.contains(e.target) && e.target!==popup) return;
+  }
+  popup.classList.remove('open');
+  document.body.style.overflow='';
+}
+function sendDomicileWA(){
+  const addr = document.getElementById('domAddr').value.trim();
+  if(!addr){ alert('Veuillez entrer votre adresse.'); return; }
+  const text = `Bonjour CapiXpert Paris 👋\n\nJe souhaite bénéficier du *service à domicile*.\nMon adresse : *${addr}*\n\nMerci de me contacter pour organiser le déplacement.`;
+  window.open('https://wa.me/33774037057?text='+encodeURIComponent(text),'_blank');
+  closeDomicileInput();
+}
+
+/* ============================================================
+   COLOR PICKER TOGGLE & CONFIRM
+   ============================================================ */
+function toggleCpSection(btn){
+  btn.classList.toggle('open');
+  const body = btn.nextElementSibling;
+  if(body) body.classList.toggle('open');
+}
+function confirmColorWA(prodId){
+  const p = data.products.find(x=>x.id===prodId);
+  if(!p) return;
+  const modal = document.getElementById('prodModal');
+  const selSw = modal.querySelector('.pm-swatches .swatch.sel');
+  if(!selSw){ alert('Veuillez sélectionner une couleur.'); return; }
+  const text = `Bonjour CapiXpert Paris 👋\n\nJe souhaite commander :\n*${p.name}* (${p.newPrice})\n\nCouleur choisie : *${selSw.dataset.code} — ${selSw.dataset.name}*\n\nMerci de me contacter.`;
   window.open('https://wa.me/33774037057?text='+encodeURIComponent(text),'_blank');
 }
 
