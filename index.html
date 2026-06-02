@@ -211,8 +211,8 @@ section{padding:5.5rem 2rem}
   gap:3px;transition:transform .2s;flex-shrink:0;background:none;border:none;padding:2px;
 }
 .swatch:hover{transform:scale(1.07)}
-.swatch-img-wrap{width:68px;overflow:hidden;border-radius:5px;background:#f0ede8;flex-shrink:0}
-.swatch-img-wrap img{width:100%;height:auto;display:block;transform:scale(1.1);transform-origin:center}
+.swatch-img-wrap{width:68px;height:54px;overflow:hidden;border-radius:5px;background:#f0ede8;flex-shrink:0}
+.swatch-img-wrap img{width:100%;height:100%;display:block;object-fit:cover;object-position:top center}
 .swatch.sel .swatch-img-wrap{outline:2.5px solid var(--gold);outline-offset:2px;box-shadow:0 0 0 5px rgba(184,146,44,.22)}
 .swatch-name{font-size:.54rem;color:var(--navy);font-weight:500;line-height:1.3;text-align:center;max-width:68px;display:block}
 .cp-toggle-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(184,146,44,.1);border:1px solid rgba(184,146,44,.3);color:var(--gold);padding:7px 14px;border-radius:6px;font-size:.78rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:.6rem;transition:all .2s;width:100%;justify-content:space-between}
@@ -609,11 +609,6 @@ footer{background:var(--dark);padding:4rem 2rem 2rem;border-top:1px solid rgba(1
   <a href="#testi" onclick="closeMob()" data-i18n="nav_reviews">Avis Clients</a>
   <a href="#contact" onclick="closeMob()" data-i18n="nav_book">Prendre RDV</a>
   <a href="https://wa.me/33774037057" target="_blank" class="mob-cta" data-i18n="nav_cta">Prendre rendez-vous</a>
-  <div class="mob-lang">
-    <button class="lb active" onclick="setLang('fr');closeMob()">FR</button>
-    <button class="lb" onclick="setLang('en');closeMob()">EN</button>
-    <button class="lb" onclick="setLang('es');closeMob()">ES</button>
-  </div>
 </div>
 
 <!-- ======= HERO ======= -->
@@ -954,10 +949,10 @@ const DEFAULT = {
     }
   ],
   beforeAfter:[
-    {combined:'assets/ba1-combined.jpg',name:'Jean-Pierre',location:'Paris 8e'},
-    {combined:'assets/ba2-combined.jpg',name:'François',location:'Neuilly-sur-Seine'},
-    {combined:'assets/ba3-combined.jpg',name:'Nicolas',location:'Paris 16e'},
     {combined:'assets/ba4-combined.jpg',name:'Julien',location:'Versailles'},
+    {combined:'assets/ba1-combined.jpg',name:'Jean-Pierre',location:'Paris 8e'},
+    {combined:'assets/ba2-combined.jpg',name:'François',location:'Neuilly-sur-Seine',contain:true},
+    {combined:'assets/ba3-combined.jpg',name:'Nicolas',location:'Paris 16e'},
   ],
   testimonials:[
     {
@@ -1169,9 +1164,10 @@ function renderBA(){
   const bfb = 'https://picsum.photos/seed/';
   g.innerHTML = data.beforeAfter.map((b,i)=>{
     const imgSrc = b.combined || b.before || `${bfb}ba${i+10}/700/450`;
+    const imgStyle = b.contain ? ' style="object-fit:contain;background:#0A1931"' : '';
     return `<div class="ba-card">
       <div class="ba-img-full">
-        <img src="${imgSrc}" alt="Avant/Après ${b.name}" loading="lazy" onerror="this.onerror=null;this.src='${bfb}ba${i+10}/700/450'">
+        <img src="${imgSrc}" alt="Avant/Après ${b.name}" loading="lazy"${imgStyle} onerror="this.onerror=null;this.src='${bfb}ba${i+10}/700/450'">
       </div>
       <div class="ba-label-row">
         <span class="lbef">AVANT</span>
