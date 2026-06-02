@@ -222,16 +222,15 @@ section{padding:5.5rem 2rem}
 .cp-body{display:none;margin-top:.2rem}
 .cp-body.open{display:block}
 .cp-chart-img{width:100%;border-radius:8px;display:block;margin-bottom:.8rem}
-.cpsw-grid{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:.8rem}
+.cpsw-grid{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:.8rem}
 .cpsw-item{position:relative;cursor:pointer;flex-shrink:0;user-select:none}
-.cpsw-circle{width:56px;height:56px;border-radius:50%;overflow:hidden;background:#f0ede8;border:2.5px solid transparent;transition:border-color .2s;position:relative}
-.cpsw-circle img{width:100%;height:100%;object-fit:cover;object-position:bottom center;display:block}
-.cpsw-item.sel .cpsw-circle{border-color:var(--gold)}
-.cpsw-item.sel .cpsw-circle::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.38);color:#fff;font-size:1.15rem;font-weight:700;border-radius:50%}
+.cpsw-circle{width:50px;height:50px;border-radius:50%;overflow:hidden;background:#fff;border:2.5px solid rgba(10,25,49,.1);transition:border-color .2s;position:relative;box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.cpsw-circle img{width:100%;height:100%;object-fit:cover;object-position:center center;display:block}
+.cpsw-item.sel .cpsw-circle{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,146,44,.25)}
+.cpsw-item.sel .cpsw-circle::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.38);color:#fff;font-size:1rem;font-weight:700;border-radius:50%}
 .cpsw-tip{display:none;position:absolute;bottom:calc(100% + 7px);left:50%;transform:translateX(-50%);background:#111;color:#fff;font-size:.68rem;font-weight:700;font-family:'DM Sans',sans-serif;padding:3px 9px;border-radius:4px;white-space:nowrap;pointer-events:none;z-index:20}
 .cpsw-tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:#111}
 .cpsw-item.sel .cpsw-tip{display:block}
-.cpsw-circle.no-img{display:flex;align-items:center;justify-content:center;font-size:.46rem;font-weight:700;color:var(--navy);background:var(--gray-l);text-align:center;padding:2px}
 .cp-confirm-btn{margin-top:.75rem;width:100%;background:#25D366;color:#fff;border:none;padding:9px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;transition:background .2s;display:flex;align-items:center;justify-content:center;gap:7px}
 .cp-confirm-btn:hover{background:#1ebe5d}
 .cp-confirm-btn svg{width:15px;height:15px;fill:#fff}
@@ -892,35 +891,26 @@ footer{background:var(--dark);padding:4rem 2rem 2rem;border-top:1px solid rgba(1
    HAIR COLOR PALETTE
    ============================================================ */
 const HAIR_COLORS = [
-  {c:'1',    n:'Noir Intense',              f:'sw_1.jpg'},
-  {c:'1A',   n:'Noir Profond',              f:''},
-  {c:'1B',   n:'Noir Naturel',              f:'sw_1b.jpg'},
-  {c:'2',    n:'Brun Très Foncé',           f:'sw_2.jpg'},
-  {c:'3',    n:'Brun Foncé',                f:'sw_3.jpg'},
-  {c:'4',    n:'Brun Moyen',                f:'sw_4.jpg'},
-  {c:'5',    n:'Brun Moyen Clair',          f:'sw_5.jpg'},
-  {c:'6',    n:'Brun Clair',                f:'sw_6.jpg'},
-  {c:'7',    n:'Brun Très Clair',           f:'sw_7.jpg'},
-  {c:'220',  n:'Châtain Moyen',             f:''},
-  {c:'250',  n:'Châtain Doré',              f:''},
-  {c:'320',  n:'Brun Auburn Foncé',         f:''},
-  {c:'350',  n:'Brun Auburn',               f:''},
-  {c:'430',  n:'Brun Cuivré',               f:''},
-  {c:'1B10', n:'Noir & 10% Blanc',          f:'sw_1b10.jpg'},
-  {c:'1B20', n:'Noir & 20% Blanc',          f:'sw_1b20.jpg'},
-  {c:'1B30', n:'Noir & 30% Blanc',          f:'sw_1b30.jpg'},
-  {c:'1B40', n:'Noir & 40% Blanc',          f:'sw_1b40.jpg'},
-  {c:'1B50', n:'Noir & 50% Blanc',          f:''},
-  {c:'565',  n:'Cendré Poivre & Sel',       f:''},
-  {c:'17',   n:'Blond Cendré Foncé',        f:'sw_17.jpg'},
-  {c:'18',   n:'Blond Moyen',               f:'sw_18.jpg'},
-  {c:'20',   n:'Blond Clair Cendré',        f:'sw_20.jpg'},
-  {c:'22R',  n:'Blond Beige',               f:'sw_22r.jpg'},
-  {c:'620',  n:'Blond Brun Clair',          f:''},
-  {c:'1B65', n:'Noir & 65% Blanc',          f:'sw_1b65.jpg'},
-  {c:'1B80', n:'Noir & 80% Blanc',          f:'sw_1b80.jpg'},
-  {c:'613',  n:'Blond Platine',             f:'sw_613.jpg'},
-  {c:'60R',  n:'Blanc Argenté',             f:'sw_60r.jpg'},
+  {c:'1',    n:'Noir Intense',         f:'sc_1.jpg'},
+  {c:'1B',   n:'Noir Naturel',         f:'sc_1B.jpg'},
+  {c:'2',    n:'Brun Très Foncé',      f:'sc_2.jpg'},
+  {c:'3',    n:'Brun Foncé',           f:'sc_3.jpg'},
+  {c:'4',    n:'Brun Moyen',           f:'sc_4.jpg'},
+  {c:'5',    n:'Brun Moyen Clair',     f:'sc_5.jpg'},
+  {c:'6',    n:'Brun Clair',           f:'sc_6.jpg'},
+  {c:'7',    n:'Brun Très Clair',      f:'sc_7.jpg'},
+  {c:'1B10', n:'Noir & 10% Blanc',     f:'sc_1B10.jpg'},
+  {c:'1B20', n:'Noir & 20% Blanc',     f:'sc_1B20.jpg'},
+  {c:'1B30', n:'Noir & 30% Blanc',     f:'sc_1B30.jpg'},
+  {c:'1B40', n:'Noir & 40% Blanc',     f:'sc_1B40.jpg'},
+  {c:'17',   n:'Blond Cendré Foncé',   f:'sc_17.jpg'},
+  {c:'18',   n:'Blond Moyen',          f:'sc_18.jpg'},
+  {c:'20',   n:'Blond Clair Cendré',   f:'sc_20.jpg'},
+  {c:'22R',  n:'Blond Beige',          f:'sc_22R.jpg'},
+  {c:'1B65', n:'Noir & 65% Blanc',     f:'sc_1B65.jpg'},
+  {c:'1B80', n:'Noir & 80% Blanc',     f:'sc_1B80.jpg'},
+  {c:'613',  n:'Blond Platine',        f:'sc_613.jpg'},
+  {c:'60R',  n:'Blanc Argenté',        f:'sc_60R.jpg'},
 ];
 
 function swatchesHTML(){
@@ -929,15 +919,12 @@ function swatchesHTML(){
   ).join('');
 }
 function swatchCirclesHTML(){
-  return HAIR_COLORS.map((hc,i)=>{
-    const inner = hc.f
-      ? `<img src="assets/${hc.f}" alt="#${hc.c}" loading="lazy">`
-      : `<span style="font-size:.46rem;font-weight:700;color:var(--navy)">#${hc.c}</span>`;
-    return `<div class="cpsw-item${i===0?' sel':''}" data-code="${hc.c}" data-name="${hc.n}">
+  return HAIR_COLORS.map((hc,i)=>
+    `<div class="cpsw-item${i===0?' sel':''}" data-code="${hc.c}" data-name="${hc.n}">
       <span class="cpsw-tip">#${hc.c}</span>
-      <div class="cpsw-circle${hc.f?'':' no-img'}">${inner}</div>
-    </div>`;
-  }).join('');
+      <div class="cpsw-circle"><img src="assets/${hc.f}" alt="#${hc.c}" loading="lazy"></div>
+    </div>`
+  ).join('');
 }
 
 function colorPickerHTML(prodId){
