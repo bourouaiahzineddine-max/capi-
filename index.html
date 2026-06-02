@@ -872,6 +872,7 @@ footer{background:var(--dark);padding:4rem 2rem 2rem;border-top:1px solid rgba(1
    ============================================================ */
 const HAIR_COLORS = [
   {c:'1',    n:'Noir Intense',              f:'sw_1.jpg'},
+  {c:'1A',   n:'Noir Profond',              f:''},
   {c:'1B',   n:'Noir Naturel',              f:'sw_1b.jpg'},
   {c:'2',    n:'Brun Très Foncé',           f:'sw_2.jpg'},
   {c:'3',    n:'Brun Foncé',                f:'sw_3.jpg'},
@@ -879,14 +880,22 @@ const HAIR_COLORS = [
   {c:'5',    n:'Brun Moyen Clair',          f:'sw_5.jpg'},
   {c:'6',    n:'Brun Clair',                f:'sw_6.jpg'},
   {c:'7',    n:'Brun Très Clair',           f:'sw_7.jpg'},
+  {c:'220',  n:'Châtain Moyen',             f:''},
+  {c:'250',  n:'Châtain Doré',              f:''},
+  {c:'320',  n:'Brun Auburn Foncé',         f:''},
+  {c:'350',  n:'Brun Auburn',               f:''},
+  {c:'430',  n:'Brun Cuivré',               f:''},
   {c:'1B10', n:'Noir & 10% Blanc',          f:'sw_1b10.jpg'},
   {c:'1B20', n:'Noir & 20% Blanc',          f:'sw_1b20.jpg'},
   {c:'1B30', n:'Noir & 30% Blanc',          f:'sw_1b30.jpg'},
   {c:'1B40', n:'Noir & 40% Blanc',          f:'sw_1b40.jpg'},
+  {c:'1B50', n:'Noir & 50% Blanc',          f:''},
+  {c:'565',  n:'Cendré Poivre & Sel',       f:''},
   {c:'17',   n:'Blond Cendré Foncé',        f:'sw_17.jpg'},
   {c:'18',   n:'Blond Moyen',               f:'sw_18.jpg'},
   {c:'20',   n:'Blond Clair Cendré',        f:'sw_20.jpg'},
   {c:'22R',  n:'Blond Beige',               f:'sw_22r.jpg'},
+  {c:'620',  n:'Blond Brun Clair',          f:''},
   {c:'1B65', n:'Noir & 65% Blanc',          f:'sw_1b65.jpg'},
   {c:'1B80', n:'Noir & 80% Blanc',          f:'sw_1b80.jpg'},
   {c:'613',  n:'Blond Platine',             f:'sw_613.jpg'},
@@ -1528,7 +1537,6 @@ function openProdModal(prodId){
       <svg class="cp-chev" viewBox="0 0 10 6" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M1 1l4 4 4-4"/></svg>
     </button>
     <div class="cp-body">
-      <img src="assets/sw-chart.jpg" class="cp-chart-img" alt="Couleurs de cheveux" loading="lazy">
       <div class="cp-pills pm-swatches">${pillsHTML()}</div>
       <div class="cp-chosen pm-chosen">${T[l].cp_sel||'Sélectionnée :'} <span class="pm-sel-name">#${HAIR_COLORS[0].c}</span></div>
       <button class="cp-confirm-btn" onclick="confirmColorWA('${prodId}')" type="button">
