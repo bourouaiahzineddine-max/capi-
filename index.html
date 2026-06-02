@@ -245,7 +245,7 @@ section{padding:5.5rem 2rem}
 .ba-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:1.6rem;padding-bottom:.5rem;scrollbar-width:none;cursor:grab;-webkit-overflow-scrolling:touch}
 .ba-grid::-webkit-scrollbar{display:none}
 .ba-grid.dragging{cursor:grabbing;user-select:none;scroll-snap-type:none}
-.ba-card{flex:0 0 min(340px,80vw);background:rgba(255,255,255,.04);border:1px solid rgba(184,146,44,.18);border-radius:12px;overflow:hidden;transition:border-color var(--transition);scroll-snap-align:start}
+.ba-card{flex:0 0 100%;background:rgba(255,255,255,.04);border:1px solid rgba(184,146,44,.18);border-radius:12px;overflow:hidden;transition:border-color var(--transition);scroll-snap-align:start}
 .ba-card:hover{border-color:rgba(184,146,44,.5)}
 .ba-imgs{display:grid;grid-template-columns:1fr 1fr;position:relative}
 .ba-imgs img{width:100%;aspect-ratio:1;object-fit:cover}
@@ -269,7 +269,7 @@ section{padding:5.5rem 2rem}
 .testi-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:1.6rem;padding-bottom:.5rem;scrollbar-width:none;cursor:grab;-webkit-overflow-scrolling:touch}
 .testi-grid::-webkit-scrollbar{display:none}
 .testi-grid.dragging{cursor:grabbing;user-select:none;scroll-snap-type:none}
-.testi-card{flex:0 0 min(320px,80vw);background:#fff;border-radius:12px;padding:1.7rem;box-shadow:var(--shadow-sm);border:1px solid rgba(10,25,49,.05);transition:box-shadow var(--transition);position:relative;scroll-snap-align:start}
+.testi-card{flex:0 0 100%;background:#fff;border-radius:12px;padding:1.7rem;box-shadow:var(--shadow-sm);border:1px solid rgba(10,25,49,.05);transition:box-shadow var(--transition);position:relative;scroll-snap-align:start}
 .testi-card::before{content:'"';font-family:'Playfair Display',serif;font-size:5rem;color:var(--gold);opacity:.16;position:absolute;top:.2rem;left:1.1rem;line-height:1;pointer-events:none}
 .testi-card:hover{box-shadow:var(--shadow-md)}
 .testi-stars{color:var(--gold);font-size:.9rem;letter-spacing:2px;margin-bottom:.8rem}
@@ -283,10 +283,10 @@ section{padding:5.5rem 2rem}
 /* =========================================
    CAROUSEL — ARROWS + DOTS
    ========================================= */
-.carousel-outer{position:relative}
-.car-btn{position:absolute;top:50%;transform:translateY(-50%);z-index:10;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.92);border:1.5px solid rgba(184,146,44,.35);color:var(--navy);font-size:1.5rem;font-weight:300;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,.13);transition:all .2s;line-height:1;padding:0;font-family:inherit}
+.carousel-wrap{display:flex;align-items:center;gap:.5rem}
+.carousel-outer{flex:1;overflow:hidden;min-width:0}
+.car-btn{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.92);border:1.5px solid rgba(184,146,44,.35);color:var(--navy);font-size:1.5rem;font-weight:300;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,.13);transition:all .2s;line-height:1;padding:0;font-family:inherit}
 .car-btn:hover{background:var(--gold);color:#fff;border-color:var(--gold)}
-.car-prev{left:4px}.car-next{right:4px}
 #ba .car-btn,#avantages .car-btn{background:rgba(10,25,49,.75);color:var(--off);border-color:rgba(184,146,44,.4)}
 #ba .car-btn:hover,#avantages .car-btn:hover{background:var(--gold);color:#fff}
 .car-dots{display:flex;justify-content:center;gap:7px;margin-top:1.3rem}
@@ -482,7 +482,7 @@ footer{background:var(--dark);padding:4rem 2rem 2rem;border-top:1px solid rgba(1
 .av-grid::-webkit-scrollbar{display:none}
 .av-grid.dragging{cursor:grabbing;user-select:none;scroll-snap-type:none}
 .av-item{
-  flex:0 0 min(280px,78vw);scroll-snap-align:start;
+  flex:0 0 100%;scroll-snap-align:start;
   display:flex;flex-direction:column;align-items:center;text-align:center;
   padding:2rem 1.4rem;
   border-right:1px solid rgba(184,146,44,.14);
@@ -1657,29 +1657,32 @@ function initCarousel(trackEl){
   const count = cards.length;
   if(count < 1) return;
 
-  // Wrap in outer
-  const outer = document.createElement('div');
-  outer.className = 'carousel-outer';
-  trackEl.parentNode.insertBefore(outer, trackEl);
-  outer.appendChild(trackEl);
+  // Structure: .carousel-wrap [ prev | .carousel-outer > track | next ]
+  const wrap = document.createElement('div');
+  wrap.className = 'carousel-wrap';
+  trackEl.parentNode.insertBefore(wrap, trackEl);
 
-  // Arrows
   const prev = document.createElement('button');
   prev.className = 'car-btn car-prev';
   prev.setAttribute('aria-label','Précédent');
   prev.innerHTML = '&#8249;';
-  outer.appendChild(prev);
+  wrap.appendChild(prev);
+
+  const outer = document.createElement('div');
+  outer.className = 'carousel-outer';
+  outer.appendChild(trackEl);
+  wrap.appendChild(outer);
 
   const next = document.createElement('button');
   next.className = 'car-btn car-next';
   next.setAttribute('aria-label','Suivant');
   next.innerHTML = '&#8250;';
-  outer.appendChild(next);
+  wrap.appendChild(next);
 
-  // Dots
+  // Dots below wrap
   const dotsWrap = document.createElement('div');
   dotsWrap.className = 'car-dots';
-  outer.after(dotsWrap);
+  wrap.after(dotsWrap);
   let cur = 0;
   const dots = Array.from({length: count}, (_, i) => {
     const d = document.createElement('button');
@@ -1699,7 +1702,6 @@ function initCarousel(trackEl){
   prev.addEventListener('click', () => goTo(cur - 1));
   next.addEventListener('click', () => goTo(cur + 1));
 
-  // Sync dots on manual scroll / drag
   let scrollTm;
   trackEl.addEventListener('scroll', () => {
     clearTimeout(scrollTm);
@@ -1714,16 +1716,14 @@ function initCarousel(trackEl){
     }, 60);
   });
 
-  // Auto-advance every 5 s
   let auto = setInterval(() => goTo(cur+1), 5000);
   const pause  = () => clearInterval(auto);
   const resume = () => { auto = setInterval(() => goTo(cur+1), 5000); };
-  outer.addEventListener('mouseenter', pause);
-  outer.addEventListener('mouseleave', resume);
-  outer.addEventListener('touchstart', pause, {passive:true});
-  outer.addEventListener('touchend',   resume, {passive:true});
+  wrap.addEventListener('mouseenter', pause);
+  wrap.addEventListener('mouseleave', resume);
+  wrap.addEventListener('touchstart', pause, {passive:true});
+  wrap.addEventListener('touchend',   resume, {passive:true});
 
-  // Drag support
   initSlider(trackEl);
 }
 
