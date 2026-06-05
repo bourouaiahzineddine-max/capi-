@@ -1011,7 +1011,7 @@ const DEFAULT = {
     {
       id:'p3', badge:'EXCLUSIF',
       name:'Complément Full Lace Afro',
-      imgA:'assets/prod3.jpg', imgB:'assets/prod3_a.jpg',
+      imgA:'assets/prod3.jpg', imgB:'assets/prod3_a.jpg', imgC:'assets/prod3_c.jpg',
       oldPrice:'488€', newPrice:'395€', discount:'-19%',
       duration:'12 à 18 mois', hasColors:true,
       desc:'Fabriqué à la main avec cheveux indiens 100% naturels. Dentelle française haut de gamme — ultra léger et respirant. Compatible sport, piscine, douche, plage. Peut être porté jour et nuit. Densité 130%, double nœud. Taille 8×10 pouces. Vagues : 4mm à 12mm selon votre texture.'
@@ -1046,15 +1046,15 @@ const DEFAULT = {
     },
     {
       avatar:'https://i.pravatar.cc/80?img=51',name:'Zinou',location:'Client vérifié',source:'Facebook',
-      text:'Un immense merci pour votre travail exceptionnel. Grâce à vous, j\'ai réellement l\'impression de commencer une nouvelle vie. Le résultat est au-delà de tout ce que j\'espérais : naturel, impressionnant et réalisé avec un très grand professionnalisme. Je recommande vivement CapiXpert à toute personne souffrant de calvitie.'
+      text:'Un immense merci pour votre travail exceptionnel 🙏✨ Grâce à vous, j\'ai réellement l\'impression de commencer une nouvelle vie 😊 Le résultat est au-delà de tout ce que j\'espérais : naturel, impressionnant et réalisé avec un très grand professionnalisme 👏💯 J\'ai également beaucoup apprécié l\'ambiance chaleureuse et conviviale ainsi que votre accompagnement attentif tout au long du processus 🤝🌟 On se sent immédiatement en confiance entre les mains d\'un véritable expert passionné par son métier 👨‍⚕️✨ Je recommande vivement ce spécialiste à toute personne souffrant de calvitie ou de perte de cheveux 💇‍♂️🔥 C\'est une expérience qui peut véritablement changer une vie ❤️ Si seulement j\'avais fait votre connaissance il y a quelques années 😍🙏'
     },
     {
       avatar:'https://i.pravatar.cc/80?img=47',name:'Alex',location:'Cliente vérifiée',source:'Facebook',
-      text:'Mon compagnon souffrait d\'une perte de cheveux héréditaire malgré son jeune âge. Après avoir pris rendez-vous, les résultats ont dépassé toutes nos attentes. Je suis profondément heureuse de le voir aujourd\'hui épanoui, plus confiant et retrouver pleinement son estime de soi. Un immense merci !'
+      text:'Mon compagnon souffrait d\'une perte de cheveux héréditaire malgré son jeune âge, à peine dans la vingtaine. Après avoir pris rendez-vous avec ce spécialiste extrêmement professionnel, les résultats ont dépassé toutes nos attentes. 🤩 Je suis profondément heureuse de le voir aujourd\'hui épanoui, plus confiant et retrouver pleinement son estime de soi. Le changement est remarquable et le résultat très naturel. 👌👌 Un immense merci pour votre professionnalisme, votre expertise et votre accompagnement. Nous reviendrons avec grand plaisir très bientôt. 😍'
     },
     {
       avatar:'https://i.pravatar.cc/80?img=33',name:'Amir',location:'Client vérifié',source:'Facebook',
-      text:'Mon premier rendez-vous a été exceptionnel. Je suis entièrement satisfait du service offert par ce spécialiste très professionnel, qui maîtrise parfaitement son domaine. Je recommande vivement de prendre rendez-vous. Un immense merci, vous avez véritablement changé ma vie.'
+      text:'Mon premier rendez-vous a été exceptionnel. Je suis entièrement satisfait et très heureux du service offert par ce spécialiste très professionnel, qui maîtrise parfaitement son domaine et sait exactement ce qu\'il fait. Je recommande vivement de prendre rendez-vous avec lui. Un immense merci, vous avez véritablement changé ma vie 🥰'
     },
     {
       avatar:'https://i.pravatar.cc/80?img=52',name:'Thomas',location:'Client vérifié',source:'Facebook',
@@ -1091,6 +1091,7 @@ data.products.forEach((p,i)=>{
   // Always sync images + video from DEFAULT (ensures updates are reflected)
   p.imgA     = d.imgA;
   p.imgB     = d.imgB;
+  p.imgC     = d.imgC  || null;
   p.imgVideo = d.imgVideo || null;
 });
 
@@ -1229,11 +1230,13 @@ function renderProducts(){
       slides.push(`<div class="pg-slide"><video src="${p.imgVideo}" autoplay loop playsinline></video></div>`);
     if(p.imgB && p.imgB.trim())
       slides.push(`<div class="pg-slide"><img src="${p.imgB}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/${p.id}b/400/400'"></div>`);
+    if(p.imgC && p.imgC.trim())
+      slides.push(`<div class="pg-slide"><img src="${p.imgC}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/${p.id}c/400/400'"></div>`);
     const dotsHtml = slides.length > 1
       ? `<div class="pg-dots">${slides.map((_,i)=>`<button class="pg-dot${i===0?' act':''}" aria-label="Slide ${i+1}"></button>`).join('')}</div>`
       : '';
     return `<div class="prod-card fi" data-prod-id="${p.id}">
-      <div class="prod-img-wrap" data-imga="${p.imgA}" data-imgb="${p.imgB||''}" data-video="${p.imgVideo||''}" onclick="openLightbox(this)">
+      <div class="prod-img-wrap" data-imga="${p.imgA}" data-imgb="${p.imgB||''}" data-imgc="${p.imgC||''}" data-video="${p.imgVideo||''}" onclick="openLightbox(this)">
         <div class="prod-gallery">${slides.join('')}</div>
         ${dotsHtml}
         <div class="prod-pill">${p.badge}</div>
@@ -1647,10 +1650,12 @@ let lbIndex = 0;
 function openLightbox(wrap){
   const imgA = wrap.dataset.imga;
   const imgB = wrap.dataset.imgb;
+  const imgC = wrap.dataset.imgc;
   const vid  = wrap.dataset.video;
   const items = [imgA];
   if(vid)  items.push('video:'+vid);
   if(imgB) items.push(imgB);
+  if(imgC) items.push(imgC);
   lbImages = items.filter(Boolean);
   lbIndex = 0;
   lbShow();
@@ -1730,6 +1735,7 @@ function openProdModal(prodId){
   modalSlides.push(`<div class="pm-gal-slide"><img src="${p.imgA}" alt="${p.name}" onerror="this.onerror=null;this.src='${fallback}'"></div>`);
   if(p.imgVideo) modalSlides.push(`<div class="pm-gal-slide"><video src="${p.imgVideo}" autoplay loop playsinline controls></video></div>`);
   if(p.imgB && p.imgB.trim()) modalSlides.push(`<div class="pm-gal-slide"><img src="${p.imgB}" alt="${p.name}" onerror="this.onerror=null;this.src='${fallback}'"></div>`);
+  if(p.imgC && p.imgC.trim()) modalSlides.push(`<div class="pm-gal-slide"><img src="${p.imgC}" alt="${p.name}" onerror="this.onerror=null;this.src='${fallback}'"></div>`);
   const modalDotsHtml = modalSlides.length > 1
     ? `<div class="pm-gal-dots">${modalSlides.map((_,i)=>`<button class="pm-gal-dot${i===0?' act':''}" aria-label="Slide ${i+1}"></button>`).join('')}</div>`
     : '';
