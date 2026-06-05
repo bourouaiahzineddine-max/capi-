@@ -289,6 +289,22 @@ section{padding:5.5rem 2rem}
 .testi-name{font-weight:700;color:var(--navy);font-size:.88rem;font-family:'DM Sans',sans-serif}
 .testi-loc{color:var(--gray);font-size:.76rem;margin-top:.1rem}
 .testi-src{color:var(--gold);font-size:.68rem;letter-spacing:.5px;margin-top:.15rem;font-weight:500}
+.testi-card{cursor:pointer}
+.testi-card:hover .testi-txt{color:#333}
+.testi-read-hint{font-size:.7rem;color:var(--gold);opacity:.7;margin-top:.5rem;text-align:right;font-weight:500}
+/* Review reader modal */
+.testi-modal-overlay{display:none;position:fixed;inset:0;z-index:99990;background:rgba(6,15,30,.92);align-items:center;justify-content:center;padding:1.5rem;overflow-y:auto}
+.testi-modal-overlay.open{display:flex;animation:lbFade .25s ease}
+.testi-modal-card{background:#fff;border-radius:16px;padding:2.4rem 2.2rem 2rem;max-width:560px;width:100%;max-height:88vh;overflow-y:auto;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.45);animation:pmSlide .3s ease}
+.testi-mc-close{position:absolute;top:13px;right:13px;background:rgba(10,25,49,.07);border:1px solid rgba(10,25,49,.12);color:var(--navy);width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:.95rem;display:flex;align-items:center;justify-content:center;transition:all .25s;font-family:'DM Sans',sans-serif}
+.testi-mc-close:hover{background:var(--navy);color:#fff}
+.testi-mc-stars{color:var(--gold);font-size:1.05rem;letter-spacing:3px;margin-bottom:1.1rem}
+.testi-mc-txt{color:#444;font-size:.95rem;line-height:1.92;font-style:italic;margin-bottom:1.4rem;white-space:pre-line}
+.testi-mc-author{display:flex;align-items:center;gap:.9rem;padding-top:1rem;border-top:1px solid rgba(10,25,49,.08)}
+.testi-mc-av{width:52px;height:52px;border-radius:50%;object-fit:cover;border:2.5px solid var(--gold);flex-shrink:0}
+.testi-mc-name{font-weight:700;color:var(--navy);font-size:.92rem;font-family:'DM Sans',sans-serif}
+.testi-mc-loc{color:var(--gray);font-size:.77rem;margin-top:.1rem}
+.testi-mc-src{color:var(--gold);font-size:.7rem;letter-spacing:.5px;margin-top:.15rem;font-weight:600}
 
 /* =========================================
    CAROUSEL — ARROWS + DOTS
@@ -540,6 +556,23 @@ footer{background:var(--dark);padding:4rem 2rem 2rem;border-top:1px solid rgba(1
     <img id="lbImg" src="" alt="Aperçu produit">
     <video id="lbVid" autoplay loop playsinline controls style="display:none;max-width:90vw;max-height:80vh;border-radius:10px;object-fit:contain"></video>
     <button class="lb-nav lb-next" id="lbNext" onclick="lbNav(1,event)" aria-label="Suivant">›</button>
+  </div>
+</div>
+
+<!-- ======= REVIEW READER MODAL ======= -->
+<div class="testi-modal-overlay" id="testiModal" onclick="closeTestiModal(event)">
+  <div class="testi-modal-card">
+    <button class="testi-mc-close" onclick="closeTestiModal()" aria-label="Fermer">✕</button>
+    <div class="testi-mc-stars" id="tmStars">★★★★★</div>
+    <p class="testi-mc-txt" id="tmTxt"></p>
+    <div class="testi-mc-author">
+      <img class="testi-mc-av" id="tmAv" src="" alt="">
+      <div>
+        <div class="testi-mc-name" id="tmName"></div>
+        <div class="testi-mc-loc" id="tmLoc"></div>
+        <div class="testi-mc-src" id="tmSrc"></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1008,6 +1041,10 @@ const DEFAULT = {
   ],
   testimonials:[
     {
+      avatar:'https://i.pravatar.cc/80?img=12',name:'Claude',location:'Client vérifié',source:'Google',
+      text:'Bonjour, j\'ai eu affaire à Zinédine de l\'institut prothèse capiXpert, en espace d\'une heure et demie deux heures tout a été fait, je suis satisfait. Moi, j\'ai les cheveux blancs et il m\'a fait la coupe que je lui ai envoyé une photo de quelqu\'un qui était sur Facebook et il m\'a fait la même chose identique. Bravo ça vaut le coup, et si capiXpert vous dit qu\'ils peuvent le faire c\'est qu\'ils peuvent le faire, encore bravo. On dirait que c\'est mes cheveux, je ne crois pas du tout aux pubs sur Facebook mais là c\'est la réalité, croyez-moi, encore bravo !'
+    },
+    {
       avatar:'https://i.pravatar.cc/80?img=51',name:'Zinou',location:'Client vérifié',source:'Facebook',
       text:'Un immense merci pour votre travail exceptionnel. Grâce à vous, j\'ai réellement l\'impression de commencer une nouvelle vie. Le résultat est au-delà de tout ce que j\'espérais : naturel, impressionnant et réalisé avec un très grand professionnalisme. Je recommande vivement CapiXpert à toute personne souffrant de calvitie.'
     },
@@ -1022,6 +1059,22 @@ const DEFAULT = {
     {
       avatar:'https://i.pravatar.cc/80?img=52',name:'Thomas',location:'Client vérifié',source:'Facebook',
       text:'Après des années à hésiter, j\'ai sauté le pas. Le résultat est bluffant, je me sens 10 ans plus jeune. Discret, professionnel, résultat 100% naturel. Mon entourage ne sait pas que j\'ai une prothèse.'
+    },
+    {
+      avatar:'https://i.pravatar.cc/80?img=68',name:'Mohammed',location:'Client vérifié — Aubervilliers',source:'Google',
+      text:'Je suis client depuis bientôt un an et je ne regrette absolument pas. Zinédine prend le temps d\'écouter, il connaît son métier sur le bout des doigts. Le résultat est vraiment bluffant — mes collègues pensent que j\'ai simplement changé de coiffure. Le service à domicile est un vrai plus, zéro déplacement en salon. Je recommande sans hésitation.'
+    },
+    {
+      avatar:'https://i.pravatar.cc/80?img=57',name:'Sofiane',location:'Client vérifié — Créteil',source:'Google',
+      text:'Honnêtement, j\'étais sceptique avant de prendre rendez-vous. J\'avais peur que ça se voit, que ce soit inconfortable ou que ça tombe. Mais là, aucun des trois ! C\'est léger, naturel, et ça tient parfaitement. Ma femme ne savait même pas que j\'avais posé une prothèse avant que je lui dise. Bravo à toute l\'équipe, c\'est du travail sérieux.'
+    },
+    {
+      avatar:'https://i.pravatar.cc/80?img=15',name:'David',location:'Client vérifié — Paris 15e',source:'Google',
+      text:'Service impeccable du début à la fin. La prise en charge à domicile est vraiment pratique pour nous qui avons un emploi du temps chargé. Le résultat est naturel, soigné, et la pose ne prend pas longtemps du tout. J\'aurais dû faire ça bien plus tôt. Zinédine est très à l\'écoute et sait exactement ce qu\'il fait.'
+    },
+    {
+      avatar:'https://i.pravatar.cc/80?img=64',name:'Karim',location:'Client vérifié — Montreuil',source:'Google',
+      text:'J\'ai des cheveux afro et je cherchais depuis longtemps une solution adaptée à ma texture. CapiXpert Paris a su répondre parfaitement à mes attentes. La prothèse est sur-mesure, les cheveux sont de qualité, et le rendu final est bluffant. Je me sens enfin moi-même à nouveau. Un grand merci à Zinédine pour sa patience et son expertise.'
     }
   ],
   heroImg:'assets/hero.jpg'
@@ -1293,12 +1346,13 @@ function renderBA(){
    ============================================================ */
 function renderTestis(){
   const g = document.getElementById('testiGrid');
-  g.innerHTML = data.testimonials.map(t=>`
-    <div class="testi-card">
+  g.innerHTML = data.testimonials.map((t,i)=>`
+    <div class="testi-card" onclick="openTestiModal(${i})" title="Lire l'avis complet">
       <div class="testi-stars">★★★★★</div>
       <p class="testi-txt">"${t.text}"</p>
+      <div class="testi-read-hint">Lire la suite →</div>
       <div class="testi-author">
-        <img src="${t.avatar}" alt="${t.name}" class="testi-av" loading="lazy" onerror="this.onerror=null;this.src='https://i.pravatar.cc/80'" onclick="openLightboxImg('${t.avatar}')" style="cursor:zoom-in">
+        <img src="${t.avatar}" alt="${t.name}" class="testi-av" loading="lazy" onerror="this.onerror=null;this.src='https://i.pravatar.cc/80'">
         <div>
           <div class="testi-name">${t.name}</div>
           <div class="testi-loc">📍 ${t.location}</div>
@@ -1307,6 +1361,26 @@ function renderTestis(){
       </div>
     </div>`).join('');
   initCarousel(g);
+}
+
+function openTestiModal(idx){
+  const t = data.testimonials[idx];
+  if(!t) return;
+  document.getElementById('tmTxt').textContent = '“' + t.text + '”';
+  const av = document.getElementById('tmAv');
+  av.src = t.avatar; av.alt = t.name;
+  av.onerror = ()=>{ av.onerror=null; av.src='https://i.pravatar.cc/80'; };
+  document.getElementById('tmName').textContent = t.name;
+  document.getElementById('tmLoc').textContent = '📍 ' + t.location;
+  document.getElementById('tmSrc').textContent = '✓ ' + t.source;
+  document.getElementById('testiModal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeTestiModal(e){
+  if(e && !e.target.classList.contains('testi-modal-overlay') && !e.target.classList.contains('testi-mc-close')) return;
+  document.getElementById('testiModal').classList.remove('open');
+  document.body.style.overflow='';
 }
 
 /* ============================================================
@@ -1899,6 +1973,7 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){
     closeLightbox();
     closeProdModal();
+    closeTestiModal();
   }
   if(e.key==='ArrowLeft') lbNav(-1,null);
   if(e.key==='ArrowRight') lbNav(1,null);
