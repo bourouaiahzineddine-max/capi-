@@ -182,12 +182,14 @@ section{padding:5.5rem 2rem}
 .prod-card:hover{transform:translateY(-8px);box-shadow:var(--shadow-lg)}
 
 .prod-img-wrap{position:relative;overflow:hidden;aspect-ratio:1}
-.prod-img-a,.prod-img-b{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .45s}
-.prod-img-b{opacity:0}
-.prod-card:hover .prod-img-a{opacity:0}
-.prod-card:hover .prod-img-b{opacity:1}
-/* If only one image */
-.prod-img-a.solo{position:static;width:100%;height:100%}
+.prod-gallery{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;height:100%;scrollbar-width:none;-webkit-overflow-scrolling:touch;cursor:grab}
+.prod-gallery::-webkit-scrollbar{display:none}
+.prod-gallery.dragging{cursor:grabbing}
+.pg-slide{flex:0 0 100%;scroll-snap-align:start;overflow:hidden}
+.pg-slide img,.pg-slide video{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.pg-dots{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:5}
+.pg-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.55);border:none;padding:0;cursor:pointer;transition:all .2s;flex-shrink:0}
+.pg-dot.act{background:#fff;transform:scale(1.25)}
 
 .prod-pill{position:absolute;top:12px;left:12px;background:var(--navy);color:var(--gold);padding:4px 11px;border-radius:20px;font-size:.64rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;z-index:2}
 
@@ -482,7 +484,7 @@ footer{background:var(--dark);padding:4rem 2rem 2rem;border-top:1px solid rgba(1
    ========================================= */
 #avantages{
   background:linear-gradient(135deg,var(--dark) 0%,#0d2040 100%);
-  padding:3.5rem 0;
+  padding:2rem 0;
   border-top:2px solid rgba(184,146,44,.2);
   border-bottom:2px solid rgba(184,146,44,.2);
 }
@@ -492,22 +494,22 @@ footer{background:var(--dark);padding:4rem 2rem 2rem;border-top:1px solid rgba(1
 .av-item{
   flex:0 0 100%;scroll-snap-align:start;
   display:flex;flex-direction:column;align-items:center;text-align:center;
-  padding:2rem 1.4rem;
+  padding:1.2rem 1.2rem;
   border-right:1px solid rgba(184,146,44,.14);
   transition:background var(--transition);
 }
 .av-item:last-child{border-right:none}
 .av-item:hover{background:rgba(184,146,44,.05)}
 .av-icon{
-  width:58px;height:58px;background:rgba(184,146,44,.12);
+  width:48px;height:48px;background:rgba(184,146,44,.12);
   border:1.5px solid rgba(184,146,44,.38);border-radius:50%;
   display:flex;align-items:center;justify-content:center;
-  font-size:1.5rem;margin-bottom:1.1rem;flex-shrink:0;
+  font-size:1.25rem;margin-bottom:.8rem;flex-shrink:0;
   transition:all .3s;
 }
 .av-item:hover .av-icon{background:rgba(184,146,44,.22);border-color:var(--gold)}
-.av-title{color:var(--off);font-family:'Playfair Display',serif;font-size:.98rem;font-weight:600;margin-bottom:.55rem;line-height:1.3}
-.av-desc{color:rgba(248,246,241,.5);font-size:.8rem;line-height:1.7}
+.av-title{color:var(--off);font-family:'Playfair Display',serif;font-size:.88rem;font-weight:600;margin-bottom:.4rem;line-height:1.3}
+.av-desc{color:rgba(248,246,241,.5);font-size:.76rem;line-height:1.6}
 @media(max-width:700px){
   .pm-layout{grid-template-columns:1fr}
   .pm-img-col{border-radius:16px 16px 0 0;min-height:220px}
@@ -1154,16 +1156,24 @@ function renderProducts(){
   const g = document.getElementById('productsGrid');
   const l = lang;
   g.innerHTML = data.products.map(p=>{
-    const hasB = p.imgB && p.imgB.trim();
-    const imgHtml = hasB
-      ? `<img class="prod-img-a" src="${p.imgA}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/${p.id}a/400/400'">
-         <img class="prod-img-b" src="${p.imgB}" alt="${p.name} pose" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/${p.id}b/400/400'">`
-      : `<img class="prod-img-a solo" src="${p.imgA}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/${p.id}/400/400'">`;
-    const durHtml = p.duration ? `<div class="prod-duration">⏱ ${T[l].prod_dur} ${p.duration}</div>` : '';
+    const slides = [];
+    slides.push(`<div class="pg-slide"><img src="${p.imgA}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/${p.id}a/400/400'"></div>`);
+    if(p.imgB && p.imgB.trim())
+      slides.push(`<div class="pg-slide"><img src="${p.imgB}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/${p.id}b/400/400'"></div>`);
+    if(p.imgVideo)
+      slides.push(`<div class="pg-slide"><video src="${p.imgVideo}" autoplay muted loop playsinline></video></div>`);
+    const dotsHtml = slides.length > 1
+      ? `<div class="pg-dots">${slides.map((_,i)=>`<button class="pg-dot${i===0?' act':''}" aria-label="Slide ${i+1}"></button>`).join('')}</div>`
+      : '';
     return `<div class="prod-card fi" data-prod-id="${p.id}">
-      <div class="prod-img-wrap" data-imga="${p.imgA}" data-imgb="${p.imgB||''}" onclick="openLightbox(this)" role="button" aria-label="Agrandir l'image">${imgHtml}<div class="prod-pill">${p.badge}</div><div class="lb-icon">🔍</div></div>
+      <div class="prod-img-wrap" data-imga="${p.imgA}" data-imgb="${p.imgB||''}" onclick="openLightbox(this)">
+        <div class="prod-gallery">${slides.join('')}</div>
+        ${dotsHtml}
+        <div class="prod-pill">${p.badge}</div>
+        <div class="lb-icon">🔍</div>
+      </div>
       <div class="prod-body">
-        <div class="prod-name" onclick="openProdModal('${p.id}')" role="button" tabindex="0" aria-label="Voir la fiche ${p.name}">${p.name}</div>
+        <div class="prod-name" onclick="openProdModal('${p.id}')" role="button" tabindex="0">${p.name}</div>
         <div class="price-wrap">
           <span class="old-price">${p.oldPrice}</span>
           <span class="new-price">${p.newPrice}</span>
@@ -1173,6 +1183,42 @@ function renderProducts(){
     </div>`;
   }).join('');
   observeFi();
+  initProdGalleries();
+}
+
+function initProdGalleries(){
+  document.querySelectorAll('.prod-gallery').forEach(gal=>{
+    const slides = Array.from(gal.children);
+    if(slides.length <= 1) return;
+    const wrap = gal.closest('.prod-img-wrap');
+    const dots = Array.from(wrap.querySelectorAll('.pg-dot'));
+    let cur=0, moved=false;
+
+    function goTo(idx){
+      cur=((idx%slides.length)+slides.length)%slides.length;
+      gal.scrollTo({left:slides[cur].offsetLeft,behavior:'smooth'});
+      dots.forEach((d,i)=>d.classList.toggle('act',i===cur));
+    }
+    dots.forEach((d,i)=>d.addEventListener('click',e=>{e.stopPropagation();goTo(i);}));
+
+    let stm;
+    gal.addEventListener('scroll',()=>{
+      clearTimeout(stm);
+      stm=setTimeout(()=>{
+        let best=0,minD=Infinity;
+        slides.forEach((s,i)=>{const d=Math.abs(s.offsetLeft-gal.scrollLeft);if(d<minD){minD=d;best=i;}});
+        cur=best; dots.forEach((d,i)=>d.classList.toggle('act',i===cur));
+      },60);
+    });
+
+    // Mouse drag
+    let startX=0,scrollLeft=0,dragging=false;
+    gal.addEventListener('mousedown',e=>{dragging=true;moved=false;startX=e.pageX-gal.offsetLeft;scrollLeft=gal.scrollLeft;gal.classList.add('dragging');});
+    gal.addEventListener('mousemove',e=>{if(!dragging)return;e.preventDefault();const dx=e.pageX-gal.offsetLeft-startX;if(Math.abs(dx)>4)moved=true;gal.scrollLeft=scrollLeft-dx*1.4;});
+    ['mouseup','mouseleave'].forEach(ev=>gal.addEventListener(ev,()=>{dragging=false;gal.classList.remove('dragging');}));
+    // Prevent lightbox when swiped
+    wrap.addEventListener('click',e=>{if(moved){moved=false;e.stopPropagation();}},true);
+  });
 }
 
 function productWA(btn){
