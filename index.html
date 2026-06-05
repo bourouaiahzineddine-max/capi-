@@ -259,7 +259,7 @@ section{padding:5.5rem 2rem}
 .ba-labs span{padding:5px 8px;font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
 .lbef{background:rgba(255,255,255,.06);color:rgba(248,246,241,.5)}
 .laft{background:rgba(184,146,44,.15);color:var(--gold)}
-.ba-img-full img{width:100%;display:block;border-radius:10px 10px 0 0;object-fit:cover;aspect-ratio:1}
+.ba-img-full img{width:100%;display:block;border-radius:10px 10px 0 0;object-fit:cover;aspect-ratio:4/5}
 .ba-img-zoom{position:relative;cursor:zoom-in;overflow:hidden}
 .ba-zoom-icon{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.5);color:#fff;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:.85rem;opacity:0;transition:opacity .2s;pointer-events:none}
 .ba-img-zoom:hover .ba-zoom-icon{opacity:1}
@@ -456,6 +456,10 @@ footer{background:var(--dark);padding:4rem 2rem 2rem;border-top:1px solid rgba(1
 .pm-close-btn:hover{background:var(--navy);color:#fff}
 .pm-layout{display:grid;grid-template-columns:1fr 1.1fr;min-height:440px}
 .pm-img-col{position:relative;overflow:hidden;border-radius:16px 0 0 16px;background:#f0ede8}
+.pm-vid-col video{display:none}
+.pm-vid-col .pm-vid-thumb:hover{opacity:.92}
+.pm-play-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.55);color:#fff;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3rem;cursor:pointer;pointer-events:none;transition:opacity .2s}
+.pm-vid-col:hover .pm-play-icon{opacity:.85}
 .pm-img-col img{width:100%;height:100%;object-fit:cover;min-height:320px}
 .pm-info-col{padding:2.2rem 2rem;overflow-y:auto}
 .pm-badge-row{margin-bottom:.7rem}
@@ -946,7 +950,7 @@ const DEFAULT = {
     {
       id:'p1', badge:'BEST-SELLER',
       name:'Complément Capillaire Ultra HD',
-      imgA:'assets/prod1b.jpg', imgB:'assets/prod1a.jpg',
+      imgA:'assets/prod1_a.jpg', imgB:'assets/prod1_b.jpg',
       oldPrice:'364€', newPrice:'295€', discount:'-19%',
       duration:'4 à 6 mois', hasColors:true,
       desc:'100% cheveux humains Remy Indiens, doux et naturels. Base en peau ultra-fine 0.03–0.04mm — non réfléchissante, s\'adapte parfaitement à votre tête (taille 20×25cm). Confort absolu, invisible même au toucher. Boucle V 28mm. Peut être coupé, lissé et lavé selon votre style.'
@@ -954,7 +958,7 @@ const DEFAULT = {
     {
       id:'p2', badge:'POPULAIRE',
       name:'Complément Capillaire Australia',
-      imgA:'assets/prod2.jpg', imgB:null,
+      imgA:'assets/prod2_a.jpg', imgB:'assets/prod2_b.jpg', imgVideo:'assets/video_prod2b.mp4',
       oldPrice:'593€', newPrice:'480€', discount:'-19%',
       duration:'17 mois à 2 ans', hasColors:true,
       desc:'Idéal pour les sportifs et actifs. Centre en dentelle avec polyester transparent — respirant, durable et ultra-naturel. Cheveux humains Remy indiens, densité 130%, ondulation 30mm. Résistant à la transpiration. Nœud double. Tailles disponibles : 6×8 à 8×10 pouces.'
@@ -1567,10 +1571,17 @@ function openProdModal(prodId){
     </div>
   </div>` : '';
   const fallback = `https://picsum.photos/seed/${prodId}/700/700`;
+  const mediaCol = p.imgVideo
+    ? `<div class="pm-img-col pm-vid-col">
+        <video src="${p.imgVideo}" autoplay muted loop playsinline style="width:100%;height:100%;object-fit:cover;display:block"></video>
+        <img src="${p.imgA}" alt="${p.name}" class="pm-vid-thumb" onclick="this.style.display='none';this.previousElementSibling.style.display='block'" onerror="this.onerror=null;this.src='${fallback}'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;cursor:pointer">
+        <div class="pm-play-icon" onclick="this.previousElementSibling.click()">▶</div>
+       </div>`
+    : `<div class="pm-img-col">
+        <img src="${p.imgA}" alt="${p.name}" onerror="this.onerror=null;this.src='${fallback}'">
+       </div>`;
   document.getElementById('pmContent').innerHTML = `
-    <div class="pm-img-col">
-      <img src="${p.imgA}" alt="${p.name}" onerror="this.onerror=null;this.src='${fallback}'">
-    </div>
+    ${mediaCol}
     <div class="pm-info-col">
       <div class="pm-badge-row"><span class="pm-badge-tag">${p.badge}</span></div>
       <h2 class="pm-title">${p.name}</h2>
