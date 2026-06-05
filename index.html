@@ -456,10 +456,6 @@ footer{background:var(--dark);padding:4rem 2rem 2rem;border-top:1px solid rgba(1
 .pm-close-btn:hover{background:var(--navy);color:#fff}
 .pm-layout{display:grid;grid-template-columns:1fr 1.1fr;min-height:440px}
 .pm-img-col{position:relative;overflow:hidden;border-radius:16px 0 0 16px;background:#f0ede8}
-.pm-vid-col video{display:none}
-.pm-vid-col .pm-vid-thumb:hover{opacity:.92}
-.pm-play-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.55);color:#fff;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3rem;cursor:pointer;pointer-events:none;transition:opacity .2s}
-.pm-vid-col:hover .pm-play-icon{opacity:.85}
 .pm-img-col img{width:100%;height:100%;object-fit:cover;min-height:320px}
 .pm-info-col{padding:2.2rem 2rem;overflow-y:auto}
 .pm-badge-row{margin-bottom:.7rem}
@@ -1020,6 +1016,14 @@ const DEFAULT = {
    ============================================================ */
 let lang = localStorage.getItem('cx_lang') || 'fr';
 let data = JSON.parse(localStorage.getItem('cx_data') || 'null') || JSON.parse(JSON.stringify(DEFAULT));
+// Sync new/updated fields from DEFAULT into cached localStorage data
+data.products.forEach((p,i)=>{
+  const d = DEFAULT.products[i]; if(!d) return;
+  // Always sync images + video from DEFAULT (ensures updates are reflected)
+  p.imgA     = d.imgA;
+  p.imgB     = d.imgB;
+  p.imgVideo = d.imgVideo || null;
+});
 
 /* ============================================================
    TRANSLATIONS
@@ -1572,10 +1576,8 @@ function openProdModal(prodId){
   </div>` : '';
   const fallback = `https://picsum.photos/seed/${prodId}/700/700`;
   const mediaCol = p.imgVideo
-    ? `<div class="pm-img-col pm-vid-col">
-        <video src="${p.imgVideo}" autoplay muted loop playsinline style="width:100%;height:100%;object-fit:cover;display:block"></video>
-        <img src="${p.imgA}" alt="${p.name}" class="pm-vid-thumb" onclick="this.style.display='none';this.previousElementSibling.style.display='block'" onerror="this.onerror=null;this.src='${fallback}'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;cursor:pointer">
-        <div class="pm-play-icon" onclick="this.previousElementSibling.click()">▶</div>
+    ? `<div class="pm-img-col">
+        <video src="${p.imgVideo}" autoplay muted loop playsinline controls style="width:100%;height:100%;object-fit:cover;display:block;min-height:320px"></video>
        </div>`
     : `<div class="pm-img-col">
         <img src="${p.imgA}" alt="${p.name}" onerror="this.onerror=null;this.src='${fallback}'">
