@@ -457,8 +457,19 @@ footer{background:var(--dark);padding:4rem 2rem 2rem;border-top:1px solid rgba(1
 .pm-close-btn{position:absolute;top:14px;right:14px;background:rgba(10,25,49,.08);border:1px solid rgba(10,25,49,.12);color:var(--navy);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;z-index:2;transition:all .3s;font-family:'DM Sans',sans-serif}
 .pm-close-btn:hover{background:var(--navy);color:#fff}
 .pm-layout{display:grid;grid-template-columns:1fr 1.1fr;min-height:440px}
-.pm-img-col{position:relative;overflow:hidden;border-radius:16px 0 0 16px;background:#f0ede8}
+.pm-back-bar{padding:.8rem 1.2rem .2rem;border-bottom:1px solid rgba(10,25,49,.08)}
+.pm-back-btn{background:none;border:none;color:var(--navy);font-size:.88rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:5px;padding:4px 0;opacity:.65;transition:opacity .2s;font-family:'DM Sans',sans-serif}
+.pm-back-btn:hover{opacity:1}
+.pm-img-col{position:relative;border-radius:16px 0 0 16px;background:#f0ede8;display:flex;flex-direction:column;overflow:hidden}
 .pm-img-col img{width:100%;height:100%;object-fit:cover;min-height:320px}
+.pm-gal{flex:1;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;min-height:320px;cursor:grab}
+.pm-gal::-webkit-scrollbar{display:none}
+.pm-gal.dragging{cursor:grabbing}
+.pm-gal-slide{flex:0 0 100%;scroll-snap-align:start;overflow:hidden}
+.pm-gal-slide img,.pm-gal-slide video{width:100%;height:100%;object-fit:cover;display:block;min-height:320px}
+.pm-gal-dots{display:flex;justify-content:center;gap:6px;padding:.45rem 0;background:#f0ede8;flex-shrink:0}
+.pm-gal-dot{width:7px;height:7px;border-radius:50%;background:rgba(10,25,49,.2);border:none;cursor:pointer;transition:all .2s;flex-shrink:0;padding:0}
+.pm-gal-dot.act{background:var(--navy);transform:scale(1.3)}
 .pm-info-col{padding:2.2rem 2rem;overflow-y:auto}
 .pm-badge-row{margin-bottom:.7rem}
 .pm-badge-tag{display:inline-block;background:var(--navy);color:var(--gold);padding:3px 11px;border-radius:20px;font-size:.65rem;font-weight:700;letter-spacing:1px;text-transform:uppercase}
@@ -527,6 +538,7 @@ footer{background:var(--dark);padding:4rem 2rem 2rem;border-top:1px solid rgba(1
   <div class="lb-img-wrap" id="lbImgWrap">
     <button class="lb-nav lb-prev" id="lbPrev" onclick="lbNav(-1,event)" aria-label="Précédent">‹</button>
     <img id="lbImg" src="" alt="Aperçu produit">
+    <video id="lbVid" autoplay muted loop playsinline controls style="display:none;max-width:90vw;max-height:80vh;border-radius:10px;object-fit:contain"></video>
     <button class="lb-nav lb-next" id="lbNext" onclick="lbNav(1,event)" aria-label="Suivant">›</button>
   </div>
 </div>
@@ -534,7 +546,9 @@ footer{background:var(--dark);padding:4rem 2rem 2rem;border-top:1px solid rgba(1
 <!-- ======= PRODUCT MODAL ======= -->
 <div class="prod-modal" id="prodModal" onclick="closeProdModal(event)">
   <div class="pm-inner" id="pmInner">
-    <button class="pm-close-btn" onclick="closeProdModal()" aria-label="Fermer">✕</button>
+    <div class="pm-back-bar">
+      <button class="pm-back-btn" onclick="closeProdModal()">&#8592; Retour</button>
+    </div>
     <div class="pm-layout" id="pmContent"></div>
   </div>
 </div>
@@ -1158,15 +1172,15 @@ function renderProducts(){
   g.innerHTML = data.products.map(p=>{
     const slides = [];
     slides.push(`<div class="pg-slide"><img src="${p.imgA}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/${p.id}a/400/400'"></div>`);
-    if(p.imgB && p.imgB.trim())
-      slides.push(`<div class="pg-slide"><img src="${p.imgB}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/${p.id}b/400/400'"></div>`);
     if(p.imgVideo)
       slides.push(`<div class="pg-slide"><video src="${p.imgVideo}" autoplay muted loop playsinline></video></div>`);
+    if(p.imgB && p.imgB.trim())
+      slides.push(`<div class="pg-slide"><img src="${p.imgB}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/${p.id}b/400/400'"></div>`);
     const dotsHtml = slides.length > 1
       ? `<div class="pg-dots">${slides.map((_,i)=>`<button class="pg-dot${i===0?' act':''}" aria-label="Slide ${i+1}"></button>`).join('')}</div>`
       : '';
     return `<div class="prod-card fi" data-prod-id="${p.id}">
-      <div class="prod-img-wrap" data-imga="${p.imgA}" data-imgb="${p.imgB||''}" onclick="openLightbox(this)">
+      <div class="prod-img-wrap" data-imga="${p.imgA}" data-imgb="${p.imgB||''}" data-video="${p.imgVideo||''}" onclick="openLightbox(this)">
         <div class="prod-gallery">${slides.join('')}</div>
         ${dotsHtml}
         <div class="prod-pill">${p.badge}</div>
@@ -1559,7 +1573,11 @@ let lbIndex = 0;
 function openLightbox(wrap){
   const imgA = wrap.dataset.imga;
   const imgB = wrap.dataset.imgb;
-  lbImages = imgB ? [imgA, imgB] : [imgA];
+  const vid  = wrap.dataset.video;
+  const items = [imgA];
+  if(vid)  items.push('video:'+vid);
+  if(imgB) items.push(imgB);
+  lbImages = items.filter(Boolean);
   lbIndex = 0;
   lbShow();
   document.getElementById('lightbox').classList.add('open');
@@ -1568,9 +1586,21 @@ function openLightbox(wrap){
 
 function lbShow(){
   const img = document.getElementById('lbImg');
-  const fallback = `https://picsum.photos/seed/prod${lbIndex+1}/800/800`;
-  img.src = lbImages[lbIndex] || fallback;
-  img.onerror = ()=>{ img.onerror=null; img.src=fallback; };
+  const vid = document.getElementById('lbVid');
+  const cur = lbImages[lbIndex] || '';
+  const isVid = cur.startsWith('video:');
+  if(isVid){
+    vid.src = cur.slice(6);
+    vid.style.display = 'block';
+    img.style.display = 'none';
+  } else {
+    const fallback = `https://picsum.photos/seed/prod${lbIndex+1}/800/800`;
+    img.src = cur || fallback;
+    img.onerror = ()=>{ img.onerror=null; img.src=fallback; };
+    img.style.display = 'block';
+    vid.style.display = 'none';
+    vid.pause(); vid.src='';
+  }
   document.getElementById('lbPrev').style.display = lbImages.length>1?'flex':'none';
   document.getElementById('lbNext').style.display = lbImages.length>1?'flex':'none';
 }
@@ -1583,7 +1613,8 @@ function lbNav(dir, e){
 
 function closeLightbox(e){
   if(e && e.target !== document.getElementById('lightbox') && !e.target.classList.contains('lb-close-btn')) return;
-  if(!e) { document.getElementById('lightbox').classList.remove('open'); document.body.style.overflow=''; return; }
+  const vid = document.getElementById('lbVid');
+  if(vid){vid.pause();vid.src='';}
   document.getElementById('lightbox').classList.remove('open');
   document.body.style.overflow='';
 }
@@ -1621,13 +1652,14 @@ function openProdModal(prodId){
     </div>
   </div>` : '';
   const fallback = `https://picsum.photos/seed/${prodId}/700/700`;
-  const mediaCol = p.imgVideo
-    ? `<div class="pm-img-col">
-        <video src="${p.imgVideo}" autoplay muted loop playsinline controls style="width:100%;height:100%;object-fit:cover;display:block;min-height:320px"></video>
-       </div>`
-    : `<div class="pm-img-col">
-        <img src="${p.imgA}" alt="${p.name}" onerror="this.onerror=null;this.src='${fallback}'">
-       </div>`;
+  const modalSlides = [];
+  modalSlides.push(`<div class="pm-gal-slide"><img src="${p.imgA}" alt="${p.name}" onerror="this.onerror=null;this.src='${fallback}'"></div>`);
+  if(p.imgVideo) modalSlides.push(`<div class="pm-gal-slide"><video src="${p.imgVideo}" autoplay muted loop playsinline controls></video></div>`);
+  if(p.imgB && p.imgB.trim()) modalSlides.push(`<div class="pm-gal-slide"><img src="${p.imgB}" alt="${p.name}" onerror="this.onerror=null;this.src='${fallback}'"></div>`);
+  const modalDotsHtml = modalSlides.length > 1
+    ? `<div class="pm-gal-dots">${modalSlides.map((_,i)=>`<button class="pm-gal-dot${i===0?' act':''}" aria-label="Slide ${i+1}"></button>`).join('')}</div>`
+    : '';
+  const mediaCol = `<div class="pm-img-col"><div class="pm-gal" id="pmGal">${modalSlides.join('')}</div>${modalDotsHtml}</div>`;
   document.getElementById('pmContent').innerHTML = `
     ${mediaCol}
     <div class="pm-info-col">
@@ -1645,6 +1677,7 @@ function openProdModal(prodId){
       <button class="pm-wa-cta" onclick="modalWA('${prodId}')">${WA_SVG} ${T[l].prod_btn||'En savoir plus'} — ${p.newPrice}</button>
     </div>`;
   initModalSwatches();
+  initPmGallery();
   document.getElementById('prodModal').classList.add('open');
   document.body.style.overflow='hidden';
 }
@@ -1665,6 +1698,35 @@ function initModalSwatches(){
       sw.classList.add('sel');
     });
   });
+}
+
+function initPmGallery(){
+  const gal = document.getElementById('pmGal');
+  if(!gal) return;
+  const slides = Array.from(gal.children);
+  if(slides.length <= 1) return;
+  const col = gal.closest('.pm-img-col');
+  const dots = Array.from(col.querySelectorAll('.pm-gal-dot'));
+  let cur=0;
+  function goTo(idx){
+    cur=((idx%slides.length)+slides.length)%slides.length;
+    gal.scrollTo({left:slides[cur].offsetLeft,behavior:'smooth'});
+    dots.forEach((d,i)=>d.classList.toggle('act',i===cur));
+  }
+  dots.forEach((d,i)=>d.addEventListener('click',e=>{e.stopPropagation();goTo(i);}));
+  let stm;
+  gal.addEventListener('scroll',()=>{
+    clearTimeout(stm);
+    stm=setTimeout(()=>{
+      let best=0,minD=Infinity;
+      slides.forEach((s,i)=>{const d=Math.abs(s.offsetLeft-gal.scrollLeft);if(d<minD){minD=d;best=i;}});
+      cur=best; dots.forEach((d,i)=>d.classList.toggle('act',i===cur));
+    },60);
+  });
+  let startX=0,scrollLeft=0,dragging=false;
+  gal.addEventListener('mousedown',e=>{dragging=true;startX=e.pageX-gal.offsetLeft;scrollLeft=gal.scrollLeft;gal.classList.add('dragging');});
+  gal.addEventListener('mousemove',e=>{if(!dragging)return;e.preventDefault();const dx=e.pageX-gal.offsetLeft-startX;gal.scrollLeft=scrollLeft-dx*1.4;});
+  ['mouseup','mouseleave'].forEach(ev=>gal.addEventListener(ev,()=>{dragging=false;gal.classList.remove('dragging');}));
 }
 
 function modalWA(prodId){
