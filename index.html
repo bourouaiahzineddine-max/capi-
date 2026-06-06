@@ -261,15 +261,16 @@ section{padding:5.5rem 2rem}
 .ba-labs span{padding:5px 8px;font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
 .lbef{background:rgba(255,255,255,.06);color:rgba(248,246,241,.5)}
 .laft{background:rgba(184,146,44,.15);color:var(--gold)}
-.ba-img-full img{width:100%;display:block;border-radius:10px 10px 0 0;object-fit:cover;aspect-ratio:4/5}
+.ba-img-full img{width:100%;height:420px;display:block;border-radius:10px 10px 0 0;object-fit:contain;background:#0c1c33}
 .ba-img-zoom{position:relative;cursor:zoom-in;overflow:hidden}
-.ba-zoom-icon{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.5);color:#fff;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:.85rem;opacity:0;transition:opacity .2s;pointer-events:none}
+.ba-zoom-icon{position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,.6);color:#fff;border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:.95rem;opacity:0;transition:opacity .2s;pointer-events:none}
 .ba-img-zoom:hover .ba-zoom-icon{opacity:1}
-.ba-label-row{display:flex;align-items:center;justify-content:center;gap:.8rem;padding:6px 10px;background:rgba(255,255,255,.04)}
-.ba-label-row .lbef,.ba-label-row .laft{background:none;padding:0}
-.ba-info{padding:.85rem 1rem;text-align:left}
-.ba-name{color:var(--off);font-weight:600;font-size:.88rem}
-.ba-loc{color:var(--gold);font-size:.76rem;margin-top:.15rem}
+.ba-label-row{display:flex;align-items:center;justify-content:center;gap:1.2rem;padding:10px 14px;background:rgba(255,255,255,.06);border-top:1px solid rgba(184,146,44,.15)}
+.ba-label-row .lbef{background:none;padding:0;font-size:.8rem;font-weight:800;letter-spacing:1.8px;color:rgba(248,246,241,.65)}
+.ba-label-row .laft{background:none;padding:0;font-size:.8rem;font-weight:800;letter-spacing:1.8px;color:var(--gold)}
+.ba-info{padding:1rem 1.1rem;text-align:left}
+.ba-name{color:var(--off);font-weight:700;font-size:.94rem}
+.ba-loc{color:var(--gold);font-size:.79rem;margin-top:.2rem}
 
 /* =========================================
    TESTIMONIALS
@@ -1010,7 +1011,7 @@ const DEFAULT = {
     {
       id:'p3', badge:'EXCLUSIF',
       name:'Complément Full Lace Afro',
-      imgA:'assets/prod3.jpg', imgB:'assets/prod3_a.jpg', imgC:'assets/prod3_c.jpg',
+      imgA:'assets/prod3_a.jpg', imgB:'assets/prod3.jpg', imgC:'assets/prod3_c.jpg',
       oldPrice:'488€', newPrice:'395€', discount:'-19%',
       duration:'12 à 18 mois', hasColors:true,
       desc:'Fabriqué à la main avec cheveux indiens 100% naturels. Dentelle française haut de gamme — ultra léger et respirant. Compatible sport, piscine, douche, plage. Peut être porté jour et nuit. Densité 130%, double nœud. Taille 8×10 pouces. Vagues : 4mm à 12mm selon votre texture.'
@@ -1035,8 +1036,11 @@ const DEFAULT = {
   beforeAfter:[
     {combined:'assets/ba-francois-new.jpg',name:'François',location:'Neuilly-sur-Seine'},
     {combined:'assets/ba4-combined.jpg',name:'Julien',location:'Versailles'},
-    {combined:'assets/ba1-combined.jpg',name:'Jean-Pierre',location:'Paris 8e'},
     {combined:'assets/ba3-combined.jpg',name:'Nicolas',location:'Paris 16e'},
+    {combined:'assets/ba-silverhair.jpg',name:'Robert',location:'Paris 15e'},
+    {combined:'assets/ba-adrien.jpg',name:'Thomas',location:'Paris 12e'},
+    {combined:'assets/ba-karim.jpg',name:'Karim',location:'Bobigny'},
+    {combined:'assets/ba-claude-ba.jpg',name:'Claude',location:'Drancy'},
   ],
   testimonials:[
     {
@@ -1093,6 +1097,8 @@ data.products.forEach((p,i)=>{
   p.imgC     = d.imgC  || null;
   p.imgVideo = d.imgVideo || null;
 });
+// Always sync beforeAfter from DEFAULT
+data.beforeAfter = DEFAULT.beforeAfter.map(d=>({...d}));
 
 /* ============================================================
    TRANSLATIONS
