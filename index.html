@@ -1866,77 +1866,46 @@ const PROD_EXT = {
     ]
   },
   p5:{
-    fullDesc:`<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:.85rem">
-  ${['✦ Sans Toxines','✦ Hypoallergénique','✦ Séchage Rapide','💧 Base Eau — Très Doux'].map(b=>`<span style="background:linear-gradient(135deg,#B8922C,#d4a843);color:#fff;font-size:.72rem;font-weight:700;padding:4px 10px;border-radius:20px;letter-spacing:.6px">${b}</span>`).join('')}
+    fullDesc:`<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.2rem">
+  ${['✦ Sans Toxines','✦ Hypoallergénique','✦ Séchage Rapide','✦ Base Eau — Très Doux'].map(b=>`<span style="background:rgba(184,146,44,.12);color:#7a6020;font-size:.72rem;font-weight:700;padding:4px 10px;border-radius:20px;letter-spacing:.5px">${b}</span>`).join('')}
 </div>
+<p style="color:#444;font-size:.9rem;line-height:1.8;margin-bottom:1.4rem">Le duo essentiel pour une fixation parfaite &amp; un retrait sans effort — formulé pour les hommes actifs qui exigent une tenue irréprochable au quotidien.</p>
 
-<div style="text-align:center;margin-bottom:.9rem;padding:.55rem .8rem;background:linear-gradient(135deg,#0A1931,#1a2f50);border-radius:10px">
-  <div style="color:#B8922C;font-size:1rem;font-weight:800;letter-spacing:2px;text-transform:uppercase">Capixpert</div>
-  <div style="color:#9aa8bb;font-size:.7rem;letter-spacing:1px;margin-top:2px">Formule Pro · Testée Cliniquement</div>
-</div>
+<div style="display:grid;gap:.85rem;margin-bottom:1.4rem">
 
-<div style="color:#0A1931;font-size:.92rem;font-weight:600;margin-bottom:.9rem;line-height:1.55;text-align:center">Le duo essentiel pour une fixation parfaite &amp; un retrait sans effort.</div>
-
-<div style="border:1px solid rgba(184,146,44,.25);border-radius:12px;overflow:hidden;margin-bottom:.8rem">
-  <div style="background:linear-gradient(135deg,#0A1931,#1a2f50);padding:.45rem .85rem">
-    <span style="color:#B8922C;font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase">Produit 01 · Fixation</span>
-  </div>
-  <div style="padding:.85rem">
-    <div style="display:flex;align-items:center;gap:.7rem;margin-bottom:.6rem">
-      <span style="font-size:1.5rem">🔶</span>
-      <div>
-        <div style="font-weight:800;color:#0A1931;font-size:.9rem;line-height:1.2">Colle Adhésive Professionnelle</div>
-        <div style="color:#B8922C;font-size:.71rem;font-style:italic;margin-top:2px">Formule haute résistance · Finition invisible</div>
-      </div>
+  <div style="border-left:3px solid #B8922C;padding:.7rem 1rem;background:#fafaf8;border-radius:0 8px 8px 0">
+    <div style="font-weight:700;color:#0A1931;font-size:.82rem;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.8px">Produit 01 · Fixation — Colle Adhésive Professionnelle</div>
+    <div style="color:#B8922C;font-size:.71rem;font-style:italic;margin-bottom:.5rem">Formule haute résistance · Finition invisible</div>
+    <div style="color:#555;font-size:.84rem;line-height:1.75;margin-bottom:.6rem">Formulée spécialement pour les cuirs chevelus gras, la transpiration abondante, les températures élevées et l'humidité intense. Sèche rapidement avec une finition claire et mate — totalement invisible sous la prothèse. 100% sans latex, sans toxines, hypoallergénique et compatible avec tous les types de bases dentelle et PU.</div>
+    <div style="background:#fff8e1;border:1px solid rgba(184,146,44,.3);border-radius:8px;padding:.55rem .85rem;font-size:.8rem;color:#6b5000;margin-bottom:.6rem">💪 <strong>Tient Face à Tout</strong> — Sport intensif, sudation, chaleur, humidité — cette colle ne lâche pas. Conçue pour les hommes actifs qui exigent une tenue irréprochable 24h/24.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.35rem .8rem;margin-bottom:.6rem">
+      ${[['Séchage','Rapide'],['Finition','Transparente, mate'],['Formule','Sans latex · Sans toxines'],['Résistance','Transpiration & chaleur'],['Compatible','Dentelle & PU'],['Peau','Hypoallergénique']].map(([k,v])=>`<div style="font-size:.8rem;display:flex;gap:5px;align-items:flex-start"><span style="color:#888;flex-shrink:0;min-width:72px">${k}</span><span style="font-weight:600;color:#0A1931">${v}</span></div>`).join('')}
     </div>
-    <div style="color:#555;font-size:.83rem;line-height:1.75;margin-bottom:.65rem">Formulée spécialement pour les cuirs chevelus gras, la transpiration abondante, les températures élevées et l'humidité intense. Sèche rapidement avec une finition claire et mate — totalement invisible sous la prothèse. 100% sans latex, sans toxines, hypoallergénique et compatible avec tous les types de bases dentelle et PU.</div>
-    <div style="background:#fff8e1;border:1px solid rgba(184,146,44,.3);border-radius:8px;padding:.5rem .8rem;font-size:.8rem;color:#6b5000;margin-bottom:.65rem;line-height:1.55">💪 <strong>Tient Face à Tout</strong> — Sport intensif, sudation, chaleur, humidité — cette colle ne lâche pas. Conçue pour les hommes actifs qui exigent une tenue irréprochable 24h/24.</div>
-    <div style="font-weight:700;color:#0A1931;font-size:.72rem;text-transform:uppercase;letter-spacing:.8px;margin-bottom:.35rem">Caractéristiques</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:.65rem">
-      ${[['Séchage','Rapide'],['Finition','Transparente, mate'],['Formule','Sans latex · Sans toxines'],['Résistance','Transpiration & chaleur'],['Compatible','Dentelle & PU'],['Peau','Hypoallergénique']].map(([k,v])=>`<div style="background:#f8f6f1;padding:.38rem .55rem;border-radius:6px;font-size:.75rem"><span style="color:#999;font-size:.68rem">${k}</span><br><strong style="color:#0A1931">${v}</strong></div>`).join('')}
-    </div>
-    <div style="font-weight:700;color:#0A1931;font-size:.72rem;text-transform:uppercase;letter-spacing:.8px;margin-bottom:.3rem">Compatible avec</div>
     <div style="display:flex;flex-wrap:wrap;gap:5px">
-      ${['✓ Dentelle française','✓ Base PU','✓ Peaux grasses','✓ Sport intense','✓ Piscine'].map(c=>`<span style="background:#e8f5e9;color:#2e7d32;font-size:.75rem;font-weight:600;padding:3px 9px;border-radius:12px">${c}</span>`).join('')}
+      ${['✓ Dentelle française','✓ Base PU','✓ Peaux grasses','✓ Sport intense','✓ Piscine'].map(c=>`<span style="background:rgba(39,174,96,.1);color:#1a7a42;font-size:.78rem;font-weight:600;padding:3px 9px;border-radius:12px">${c}</span>`).join('')}
     </div>
   </div>
-</div>
 
-<div style="border:1px solid rgba(184,146,44,.25);border-radius:12px;overflow:hidden;margin-bottom:.8rem">
-  <div style="background:linear-gradient(135deg,#0A1931,#1a2f50);padding:.45rem .85rem">
-    <span style="color:#B8922C;font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase">Produit 02 · Retrait</span>
-  </div>
-  <div style="padding:.85rem">
-    <div style="display:flex;align-items:center;gap:.7rem;margin-bottom:.6rem">
-      <span style="font-size:1.5rem">💧</span>
-      <div>
-        <div style="font-weight:800;color:#0A1931;font-size:.9rem;line-height:1.2">Dissolvant Ultra Doux — 38ml</div>
-        <div style="color:#B8922C;font-size:.71rem;font-style:italic;margin-top:2px">Base eau · Pointe précise · Format voyage</div>
-      </div>
+  <div style="border-left:3px solid #B8922C;padding:.7rem 1rem;background:#fafaf8;border-radius:0 8px 8px 0">
+    <div style="font-weight:700;color:#0A1931;font-size:.82rem;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.8px">Produit 02 · Retrait — Dissolvant Ultra Doux 38ml</div>
+    <div style="color:#B8922C;font-size:.71rem;font-style:italic;margin-bottom:.5rem">Base eau · Pointe précise · Format voyage</div>
+    <div style="color:#555;font-size:.84rem;line-height:1.75;margin-bottom:.6rem">Dissolvant à base d'eau pure, formulé pour préserver votre peau et vos cheveux. Sa conception à pointe précise permet une application chirurgicale exactement aux bords de la prothèse. Dissout facilement la colle sans irriter le cuir chevelu — formule douce pour usage quotidien, même peaux sensibles.</div>
+    <div style="background:#fff8e1;border:1px solid rgba(184,146,44,.3);border-radius:8px;padding:.55rem .85rem;font-size:.8rem;color:#6b5000;margin-bottom:.6rem">🌿 <strong>Extrêmement doux</strong> — préserve le film hydrolipidique, zéro irritation même après un usage répété. Sans alcool, sans solvant agressif.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.35rem .8rem;margin-bottom:.6rem">
+      ${[['Contenance','38 ml'],['Base','100% Eau · Ultra douce'],['Application','Pointe précise'],['Irritation','Zéro — Peau sensible OK'],['Nettoyage','Coton tige / peigne'],['Format','Bouteille compacte'],['Usage','Maison ou déplacement']].map(([k,v])=>`<div style="font-size:.8rem;display:flex;gap:5px;align-items:flex-start"><span style="color:#888;flex-shrink:0;min-width:72px">${k}</span><span style="font-weight:600;color:#0A1931">${v}</span></div>`).join('')}
     </div>
-    <div style="color:#555;font-size:.83rem;line-height:1.75;margin-bottom:.65rem">Dissolvant à base d'eau pure, formulé pour préserver votre peau et vos cheveux. Sa conception à pointe précise permet une application chirurgicale exactement aux bords de la prothèse — sans débordement, sans gaspillage. Dissout facilement la colle sans irriter le cuir chevelu. Formule douce adaptée à un usage quotidien, même pour les peaux sensibles.</div>
-    <div style="background:#e8f5e9;border:1px solid rgba(46,125,50,.2);border-radius:8px;padding:.5rem .8rem;font-size:.8rem;color:#2e5c30;margin-bottom:.65rem;line-height:1.55">🌿 <strong>Extrêmement doux</strong> — contrairement aux dissolvants agressifs à base d'alcool ou de solvants chimiques, cette formule eau préserve le film hydrolipidique de votre peau. Zéro irritation, même après un usage répété.</div>
-    <div style="font-weight:700;color:#0A1931;font-size:.72rem;text-transform:uppercase;letter-spacing:.8px;margin-bottom:.35rem">Caractéristiques</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:.65rem">
-      ${[['Contenance','38 ml'],['Base','100% Eau · Ultra douce'],['Application','Pointe précise'],['Irritation','Zéro — Peau sensible OK'],['Nettoyage','Coton tige / peigne'],['Format','Bouteille compacte'],['Usage','Maison ou déplacement']].map(([k,v])=>`<div style="background:#f8f6f1;padding:.38rem .55rem;border-radius:6px;font-size:.75rem"><span style="color:#999;font-size:.68rem">${k}</span><br><strong style="color:#0A1931">${v}</strong></div>`).join('')}
-    </div>
-    <div style="font-weight:700;color:#0A1931;font-size:.72rem;text-transform:uppercase;letter-spacing:.8px;margin-bottom:.3rem">Avantages clés</div>
     <div style="display:flex;flex-wrap:wrap;gap:5px">
-      ${['💧 Base Eau','✓ Sans irritation','✓ Usage quotidien','✓ Format voyage','✓ Peaux sensibles'].map(c=>`<span style="background:#e3f2fd;color:#1565c0;font-size:.75rem;font-weight:600;padding:3px 9px;border-radius:12px">${c}</span>`).join('')}
+      ${['💧 Base Eau','✓ Sans irritation','✓ Usage quotidien','✓ Format voyage','✓ Peaux sensibles'].map(c=>`<span style="background:rgba(39,174,96,.1);color:#1a7a42;font-size:.78rem;font-weight:600;padding:3px 9px;border-radius:12px">${c}</span>`).join('')}
     </div>
   </div>
+
 </div>
 
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.4rem;margin-bottom:.75rem">
-  ${[['⚡','Rapide','Séchage colle'],['🚫','0% Latex','Formule colle'],['💧','38 ml','Dissolvant'],['💧','Base Eau','Douceur max'],['✓','Dentelle & PU','Compatibilité']].map(([ic,tit,sub])=>`<div style="background:#f8f6f1;border:1px solid rgba(184,146,44,.15);border-radius:10px;padding:.55rem .4rem;text-align:center"><div style="font-size:.95rem">${ic}</div><div style="font-weight:700;color:#0A1931;font-size:.73rem;margin-top:2px">${tit}</div><div style="color:#888;font-size:.66rem;margin-top:1px">${sub}</div></div>`).join('')}
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1.2rem">
+  ${[['⚡','Rapide','Séchage colle'],['🚫','0% Latex','Formule colle'],['💧','38 ml','Dissolvant'],['💧','Base Eau','Douceur max'],['✓','Dentelle & PU','Compatibilité'],['🌿','Zéro Irritation','Dissolv. doux']].map(([ic,tit,sub])=>`<div style="background:#f8f6f1;border:1px solid rgba(184,146,44,.15);border-radius:10px;padding:.6rem .8rem;text-align:center"><div style="font-size:1.1rem">${ic}</div><div style="font-weight:700;color:#0A1931;font-size:.78rem">${tit}</div><div style="color:#777;font-size:.72rem;margin-top:2px">${sub}</div></div>`).join('')}
 </div>
 
-<div style="background:#fafaf8;border-radius:8px;padding:.6rem .8rem;text-align:center">
-  <div style="color:#666;font-size:.74rem;margin-bottom:.35rem">© Capixpert Paris · Kit Fixation Professionnel · Tous droits réservés</div>
-  <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:.4rem">
-    ${['Sans Latex','Hypoallergénique','Base Eau','Paris, France'].map(t=>`<span style="color:#B8922C;font-size:.69rem;font-weight:700">${t}</span>`).join('<span style="color:#ddd;font-size:.7rem">|</span>')}
-  </div>
-</div>`,
+<div style="text-align:center;color:#aaa;font-size:.72rem;letter-spacing:.8px;padding-top:.5rem;border-top:1px solid #f0ede8">© Capixpert Paris · Kit Fixation Professionnel · Sans Latex · Hypoallergénique · Base Eau · Paris, France</div>`,
     specs:[]
   }
 };
