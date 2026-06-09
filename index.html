@@ -995,7 +995,7 @@ const DEFAULT = {
     {
       id:'p1', badge:'BEST-SELLER',
       name:'Complément Capillaire Ultra HD',
-      imgA:'assets/prod1_a.jpg', imgB:'assets/prod1_b.jpg',
+      imgA:'assets/prod1_a.jpg', imgB:'assets/prod1_b.jpg', imgVideo:'assets/video_prod1a.mp4', imgVideo2:'assets/video_prod1b.mp4',
       oldPrice:'364€', newPrice:'295€', discount:'-19%',
       duration:'4 à 6 mois', hasColors:true,
       desc:'100% cheveux humains Remy Indiens, doux et naturels. Base en peau ultra-fine 0.03–0.04mm — non réfléchissante, s\'adapte parfaitement à votre tête (taille 20×25cm). Confort absolu, invisible même au toucher. Boucle V 28mm. Peut être coupé, lissé et lavé selon votre style.'
@@ -1092,10 +1092,11 @@ let data = JSON.parse(localStorage.getItem('cx_data') || 'null') || JSON.parse(J
 data.products.forEach((p,i)=>{
   const d = DEFAULT.products[i]; if(!d) return;
   // Always sync images + video from DEFAULT (ensures updates are reflected)
-  p.imgA     = d.imgA;
-  p.imgB     = d.imgB;
-  p.imgC     = d.imgC  || null;
-  p.imgVideo = d.imgVideo || null;
+  p.imgA      = d.imgA;
+  p.imgB      = d.imgB;
+  p.imgC      = d.imgC      || null;
+  p.imgVideo  = d.imgVideo  || null;
+  p.imgVideo2 = d.imgVideo2 || null;
 });
 // Always sync beforeAfter from DEFAULT
 data.beforeAfter = DEFAULT.beforeAfter.map(d=>({...d}));
@@ -1232,7 +1233,9 @@ function renderProducts(){
     const slides = [];
     slides.push(`<div class="pg-slide"><img src="${p.imgA}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/${p.id}a/400/400'"></div>`);
     if(p.imgVideo)
-      slides.push(`<div class="pg-slide"><video src="${p.imgVideo}" autoplay loop playsinline></video></div>`);
+      slides.push(`<div class="pg-slide"><video src="${p.imgVideo}" loop playsinline></video></div>`);
+    if(p.imgVideo2)
+      slides.push(`<div class="pg-slide"><video src="${p.imgVideo2}" loop playsinline></video></div>`);
     if(p.imgB && p.imgB.trim())
       slides.push(`<div class="pg-slide"><img src="${p.imgB}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/${p.id}b/400/400'"></div>`);
     if(p.imgC && p.imgC.trim())
@@ -1241,7 +1244,7 @@ function renderProducts(){
       ? `<div class="pg-dots">${slides.map((_,i)=>`<button class="pg-dot${i===0?' act':''}" aria-label="Slide ${i+1}"></button>`).join('')}</div>`
       : '';
     return `<div class="prod-card fi" data-prod-id="${p.id}">
-      <div class="prod-img-wrap" data-imga="${p.imgA}" data-imgb="${p.imgB||''}" data-imgc="${p.imgC||''}" data-video="${p.imgVideo||''}" onclick="openLightbox(this)">
+      <div class="prod-img-wrap" data-imga="${p.imgA}" data-imgb="${p.imgB||''}" data-imgc="${p.imgC||''}" data-video="${p.imgVideo||''}" data-video2="${p.imgVideo2||''}" onclick="openLightbox(this)">
         <div class="prod-gallery">${slides.join('')}</div>
         ${dotsHtml}
         <div class="prod-pill">${p.badge}</div>
@@ -1269,10 +1272,20 @@ function initProdGalleries(){
     const dots = Array.from(wrap.querySelectorAll('.pg-dot'));
     let cur=0, moved=false;
 
+    function syncVids(){
+      slides.forEach((s,i)=>{
+        const v=s.querySelector('video');
+        if(!v) return;
+        if(i===cur){ v.play().catch(()=>{}); }
+        else { v.pause(); }
+      });
+    }
+
     function goTo(idx){
       cur=((idx%slides.length)+slides.length)%slides.length;
       gal.scrollTo({left:slides[cur].offsetLeft,behavior:'smooth'});
       dots.forEach((d,i)=>d.classList.toggle('act',i===cur));
+      syncVids();
     }
     dots.forEach((d,i)=>d.addEventListener('click',e=>{e.stopPropagation();goTo(i);}));
 
@@ -1283,6 +1296,7 @@ function initProdGalleries(){
         let best=0,minD=Infinity;
         slides.forEach((s,i)=>{const d=Math.abs(s.offsetLeft-gal.scrollLeft);if(d<minD){minD=d;best=i;}});
         cur=best; dots.forEach((d,i)=>d.classList.toggle('act',i===cur));
+        syncVids();
       },60);
     });
 
@@ -1294,6 +1308,15 @@ function initProdGalleries(){
     // Prevent lightbox when swiped
     wrap.addEventListener('click',e=>{if(moved){moved=false;e.stopPropagation();}},true);
   });
+
+  // Pause card videos when card scrolls out of viewport
+  const cardObs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting)
+        e.target.querySelectorAll('.prod-gallery video').forEach(v=>v.pause());
+    });
+  },{threshold:0.25});
+  document.querySelectorAll('.prod-card').forEach(c=>cardObs.observe(c));
 }
 
 function productWA(btn){
@@ -1667,14 +1690,14 @@ const PROD_EXT = {
   <span style="background:rgba(184,146,44,.12);color:#7a6020;font-size:.72rem;font-weight:700;padding:4px 10px;border-radius:20px;letter-spacing:.5px">🌬️ Ventilation Optimale</span>
   <span style="background:rgba(184,146,44,.12);color:#7a6020;font-size:.72rem;font-weight:700;padding:4px 10px;border-radius:20px;letter-spacing:.5px">⏳ Jusqu'à 2 ans</span>
 </div>
-<p style="color:#444;font-size:.9rem;line-height:1.8;margin-bottom:1.4rem">Très adapté aux sportifs et au travail physique, grâce à un système de ventilation soigneusement conçu assurant confort et respirabilité optimale. Le centre en dentelle avec polyester transparent autour du périmètre garantit légèreté, durabilité et aspect naturel. Ligne de cheveux naturelle et invisible, facile à entretenir. Résiste à la transpiration et aux activités les plus intenses.</p>
+<p style="color:#444;font-size:.9rem;line-height:1.8;margin-bottom:1.4rem">Très adapté aux sportifs et au travail physique, grâce à un système de ventilation soigneusement conçu assurant confort et respirabilité optimale. Le centre en dentelle avec maille souple autour du périmètre garantit légèreté, durabilité et aspect naturel. Ligne de cheveux naturelle et invisible, facile à entretenir. Résiste à la transpiration et aux activités les plus intenses.</p>
 
 <div style="display:grid;gap:.85rem;margin-bottom:1.4rem">
 
   <div style="border-left:3px solid #B8922C;padding:.7rem 1rem;background:#fafaf8;border-radius:0 8px 8px 0">
     <div style="font-weight:700;color:#0A1931;font-size:.82rem;margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.8px">📋 Caractéristiques Techniques</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:.35rem .8rem">
-      ${[['Matériau','Dentelle + Polyester transparent'],['Cheveux','Remy Indiens 100% Naturels'],['Tailles','6×8 à 8×10 pouces'],['Longueur','5 à 6 pouces'],['Ondulation','30 mm'],['Densité','130%'],['Nœud','Double nœud'],['Origine','🇦🇺 Australie'],['Durée de vie','17 mois à 2 ans'],['Sport','✦ Compatible natation']].map(([k,v])=>`<div style="font-size:.8rem;display:flex;gap:5px;align-items:flex-start"><span style="color:#888;flex-shrink:0;min-width:72px">${k}</span><span style="font-weight:600;color:#0A1931">${v}</span></div>`).join('')}
+      ${[['Matériau','Dentelle + Maille souple'],['Cheveux','Remy Indiens 100% Naturels'],['Tailles','6×8 à 8×10 pouces'],['Longueur','5 à 6 pouces'],['Ondulation','30 mm'],['Densité','130%'],['Nœud','Double nœud'],['Origine','🇦🇺 Australie'],['Durée de vie','17 mois à 2 ans'],['Sport','✦ Compatible natation']].map(([k,v])=>`<div style="font-size:.8rem;display:flex;gap:5px;align-items:flex-start"><span style="color:#888;flex-shrink:0;min-width:72px">${k}</span><span style="font-weight:600;color:#0A1931">${v}</span></div>`).join('')}
     </div>
   </div>
 
@@ -1921,8 +1944,10 @@ function openLightbox(wrap){
   const imgB = wrap.dataset.imgb;
   const imgC = wrap.dataset.imgc;
   const vid  = wrap.dataset.video;
+  const vid2 = wrap.dataset.video2;
   const items = [imgA];
   if(vid)  items.push('video:'+vid);
+  if(vid2) items.push('video:'+vid2);
   if(imgB) items.push(imgB);
   if(imgC) items.push(imgC);
   lbImages = items.filter(Boolean);
@@ -2002,7 +2027,8 @@ function openProdModal(prodId){
   const fallback = `https://picsum.photos/seed/${prodId}/700/700`;
   const modalSlides = [];
   modalSlides.push(`<div class="pm-gal-slide"><img src="${p.imgA}" alt="${p.name}" onerror="this.onerror=null;this.src='${fallback}'"></div>`);
-  if(p.imgVideo) modalSlides.push(`<div class="pm-gal-slide"><video src="${p.imgVideo}" autoplay loop playsinline controls></video></div>`);
+  if(p.imgVideo)  modalSlides.push(`<div class="pm-gal-slide"><video src="${p.imgVideo}"  loop playsinline controls></video></div>`);
+  if(p.imgVideo2) modalSlides.push(`<div class="pm-gal-slide"><video src="${p.imgVideo2}" loop playsinline controls></video></div>`);
   if(p.imgB && p.imgB.trim()) modalSlides.push(`<div class="pm-gal-slide"><img src="${p.imgB}" alt="${p.name}" onerror="this.onerror=null;this.src='${fallback}'"></div>`);
   if(p.imgC && p.imgC.trim()) modalSlides.push(`<div class="pm-gal-slide"><img src="${p.imgC}" alt="${p.name}" onerror="this.onerror=null;this.src='${fallback}'"></div>`);
   const modalDotsHtml = modalSlides.length > 1
@@ -2035,6 +2061,7 @@ function closeProdModal(e){
   const modal = document.getElementById('prodModal');
   const inner = document.getElementById('pmInner');
   if(e && inner && inner.contains(e.target) && e.target !== modal) return;
+  modal.querySelectorAll('video').forEach(v=>{ v.pause(); });
   modal.classList.remove('open');
   document.body.style.overflow='';
 }
@@ -2057,10 +2084,21 @@ function initPmGallery(){
   const col = gal.closest('.pm-img-col');
   const dots = Array.from(col.querySelectorAll('.pm-gal-dot'));
   let cur=0;
+
+  function syncVids(){
+    slides.forEach((s,i)=>{
+      const v=s.querySelector('video');
+      if(!v) return;
+      if(i===cur){ v.play().catch(()=>{}); }
+      else { v.pause(); }
+    });
+  }
+
   function goTo(idx){
     cur=((idx%slides.length)+slides.length)%slides.length;
     gal.scrollTo({left:slides[cur].offsetLeft,behavior:'smooth'});
     dots.forEach((d,i)=>d.classList.toggle('act',i===cur));
+    syncVids();
   }
   dots.forEach((d,i)=>d.addEventListener('click',e=>{e.stopPropagation();goTo(i);}));
   let stm;
@@ -2070,6 +2108,7 @@ function initPmGallery(){
       let best=0,minD=Infinity;
       slides.forEach((s,i)=>{const d=Math.abs(s.offsetLeft-gal.scrollLeft);if(d<minD){minD=d;best=i;}});
       cur=best; dots.forEach((d,i)=>d.classList.toggle('act',i===cur));
+      syncVids();
     },60);
   });
   let startX=0,scrollLeft=0,dragging=false;
