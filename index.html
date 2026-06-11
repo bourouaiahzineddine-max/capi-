@@ -995,7 +995,7 @@ const DEFAULT = {
     {
       id:'p1', badge:'BEST-SELLER',
       name:'Complément Capillaire Ultra HD',
-      imgA:'assets/prod1_a.jpg', imgB:'assets/prod1_b.jpg', imgVideo:'assets/video_prod1a.mp4', imgVideo2:'assets/video_prod1b.mp4',
+      imgA:'assets/prod1_a.jpg', imgB:'assets/prod1_b.jpg', imgVideo:'assets/video_prod1a.mp4', imgVideo2:'assets/video_prod1b.mp4', imgVideo3:'assets/video_prod1c.mp4',
       oldPrice:'364€', newPrice:'295€', discount:'-19%',
       duration:'4 à 6 mois', hasColors:true,
       desc:'100% cheveux humains Remy Indiens, doux et naturels. Base en peau ultra-fine 0.03–0.04mm — non réfléchissante, s\'adapte parfaitement à votre tête (taille 20×25cm). Confort absolu, invisible même au toucher. Boucle V 28mm. Peut être coupé, lissé et lavé selon votre style.'
@@ -1097,6 +1097,7 @@ data.products.forEach((p,i)=>{
   p.imgC      = d.imgC      || null;
   p.imgVideo  = d.imgVideo  || null;
   p.imgVideo2 = d.imgVideo2 || null;
+  p.imgVideo3 = d.imgVideo3 || null;
 });
 // Always sync beforeAfter from DEFAULT
 data.beforeAfter = DEFAULT.beforeAfter.map(d=>({...d}));
@@ -1236,6 +1237,8 @@ function renderProducts(){
       slides.push(`<div class="pg-slide"><video src="${p.imgVideo}" loop playsinline></video></div>`);
     if(p.imgVideo2)
       slides.push(`<div class="pg-slide"><video src="${p.imgVideo2}" loop playsinline></video></div>`);
+    if(p.imgVideo3)
+      slides.push(`<div class="pg-slide"><video src="${p.imgVideo3}" loop playsinline></video></div>`);
     if(p.imgB && p.imgB.trim())
       slides.push(`<div class="pg-slide"><img src="${p.imgB}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='https://picsum.photos/seed/${p.id}b/400/400'"></div>`);
     if(p.imgC && p.imgC.trim())
@@ -1244,7 +1247,7 @@ function renderProducts(){
       ? `<div class="pg-dots">${slides.map((_,i)=>`<button class="pg-dot${i===0?' act':''}" aria-label="Slide ${i+1}"></button>`).join('')}</div>`
       : '';
     return `<div class="prod-card fi" data-prod-id="${p.id}">
-      <div class="prod-img-wrap" data-imga="${p.imgA}" data-imgb="${p.imgB||''}" data-imgc="${p.imgC||''}" data-video="${p.imgVideo||''}" data-video2="${p.imgVideo2||''}" onclick="openLightbox(this)">
+      <div class="prod-img-wrap" data-imga="${p.imgA}" data-imgb="${p.imgB||''}" data-imgc="${p.imgC||''}" data-video="${p.imgVideo||''}" data-video2="${p.imgVideo2||''}" data-video3="${p.imgVideo3||''}" onclick="openLightbox(this)">
         <div class="prod-gallery">${slides.join('')}</div>
         ${dotsHtml}
         <div class="prod-pill">${p.badge}</div>
@@ -1945,9 +1948,11 @@ function openLightbox(wrap){
   const imgC = wrap.dataset.imgc;
   const vid  = wrap.dataset.video;
   const vid2 = wrap.dataset.video2;
+  const vid3 = wrap.dataset.video3;
   const items = [imgA];
   if(vid)  items.push('video:'+vid);
   if(vid2) items.push('video:'+vid2);
+  if(vid3) items.push('video:'+vid3);
   if(imgB) items.push(imgB);
   if(imgC) items.push(imgC);
   lbImages = items.filter(Boolean);
@@ -2029,6 +2034,7 @@ function openProdModal(prodId){
   modalSlides.push(`<div class="pm-gal-slide"><img src="${p.imgA}" alt="${p.name}" onerror="this.onerror=null;this.src='${fallback}'"></div>`);
   if(p.imgVideo)  modalSlides.push(`<div class="pm-gal-slide"><video src="${p.imgVideo}"  loop playsinline controls></video></div>`);
   if(p.imgVideo2) modalSlides.push(`<div class="pm-gal-slide"><video src="${p.imgVideo2}" loop playsinline controls></video></div>`);
+  if(p.imgVideo3) modalSlides.push(`<div class="pm-gal-slide"><video src="${p.imgVideo3}" loop playsinline controls></video></div>`);
   if(p.imgB && p.imgB.trim()) modalSlides.push(`<div class="pm-gal-slide"><img src="${p.imgB}" alt="${p.name}" onerror="this.onerror=null;this.src='${fallback}'"></div>`);
   if(p.imgC && p.imgC.trim()) modalSlides.push(`<div class="pm-gal-slide"><img src="${p.imgC}" alt="${p.name}" onerror="this.onerror=null;this.src='${fallback}'"></div>`);
   const modalDotsHtml = modalSlides.length > 1
