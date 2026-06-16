@@ -292,6 +292,34 @@ section{padding:5.5rem 2rem}
 .testi-loc{color:var(--gray);font-size:.76rem;margin-top:.1rem}
 .testi-src{color:var(--gold);font-size:.68rem;letter-spacing:.5px;margin-top:.15rem;font-weight:500}
 .testi-read-hint{font-size:.7rem;color:var(--gold);opacity:.75;margin-top:.4rem;text-align:right;font-weight:600;flex-shrink:0}
+/* Review form CTA */
+.rv-cta-wrap{text-align:center;margin-top:2.2rem}
+.rv-cta-btn{display:inline-flex;align-items:center;gap:.5rem;background:var(--gold);color:#fff;border:none;padding:.85rem 2.2rem;border-radius:30px;font-size:.9rem;font-weight:700;letter-spacing:.4px;cursor:pointer;transition:all var(--transition);font-family:'DM Sans',sans-serif;box-shadow:0 4px 16px rgba(184,146,44,.35)}
+.rv-cta-btn:hover{background:#9a7a25;transform:translateY(-2px);box-shadow:0 6px 20px rgba(184,146,44,.45)}
+/* Review form modal */
+.rv-overlay{position:fixed;inset:0;background:rgba(6,15,30,.88);backdrop-filter:blur(5px);z-index:99995;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .25s}
+.rv-overlay.open{opacity:1;pointer-events:all}
+.rv-card{background:#fff;border-radius:22px;padding:2.4rem 2.2rem 2rem;width:100%;max-width:500px;max-height:92vh;overflow-y:auto;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.35);animation:pmSlide .3s ease}
+.rv-x{position:absolute;top:1rem;right:1rem;background:rgba(10,25,49,.07);border:1px solid rgba(10,25,49,.12);color:var(--navy);width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:.95rem;display:flex;align-items:center;justify-content:center;transition:all .2s;font-family:'DM Sans',sans-serif;flex-shrink:0}
+.rv-x:hover{background:var(--navy);color:#fff}
+.rv-head{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:700;color:var(--navy);margin-bottom:.3rem}
+.rv-sub{color:#888;font-size:.82rem;line-height:1.55;margin-bottom:1.6rem}
+.rv-lbl{font-size:.78rem;font-weight:700;color:var(--navy);letter-spacing:.5px;margin-bottom:.3rem;margin-top:1rem}
+.rv-req{color:#c0392b}
+.rv-stars-row{display:flex;gap:.2rem;margin-bottom:.2rem}
+.rv-s{background:none;border:none;font-size:2.2rem;color:#ddd;cursor:pointer;padding:0;line-height:1;transition:color .12s,transform .1s}
+.rv-s:hover,.rv-s.on{color:var(--gold)}
+.rv-s:hover{transform:scale(1.15)}
+.rv-input,.rv-ta{width:100%;border:1.5px solid #e5e2dc;border-radius:10px;padding:.65rem .95rem;font-size:.88rem;font-family:'DM Sans',sans-serif;color:#333;outline:none;transition:border-color .2s;box-sizing:border-box;background:#fafaf8}
+.rv-input:focus,.rv-ta:focus{border-color:var(--gold);background:#fff}
+.rv-ta{resize:vertical;min-height:90px}
+.rv-err{color:#c0392b;font-size:.8rem;margin-top:.5rem;min-height:1.1em}
+.rv-submit{width:100%;margin-top:1.3rem;background:var(--navy);color:#fff;border:none;padding:.95rem;border-radius:12px;font-size:.92rem;font-weight:700;cursor:pointer;transition:background .2s;font-family:'DM Sans',sans-serif;letter-spacing:.3px}
+.rv-submit:hover{background:#1a2f50}
+.rv-ok{display:none;text-align:center;padding:1.8rem 1rem}
+.rv-ok-icon{font-size:2.6rem;margin-bottom:.6rem}
+.rv-ok-ttl{font-weight:700;color:var(--navy);font-size:1.05rem;margin-bottom:.3rem}
+.rv-ok-sub{color:#888;font-size:.83rem}
 /* Review reader modal */
 .testi-modal-overlay{display:none;position:fixed;inset:0;z-index:99990;background:rgba(6,15,30,.92);align-items:center;justify-content:center;padding:1.5rem;overflow-y:auto}
 .testi-modal-overlay.open{display:flex;animation:lbFade .25s ease}
@@ -576,6 +604,38 @@ footer{background:var(--dark);padding:4rem 2rem 2rem;border-top:1px solid rgba(1
   </div>
 </div>
 
+<!-- ======= REVIEW FORM MODAL ======= -->
+<div class="rv-overlay" id="rvModal" onclick="closeReviewForm(event)">
+  <div class="rv-card">
+    <button class="rv-x" onclick="closeReviewForm()" aria-label="Fermer">✕</button>
+    <div id="rvForm">
+      <div class="rv-head">✍ Partagez votre avis</div>
+      <div class="rv-sub">Votre expérience aide les autres clients à choisir en toute confiance.</div>
+      <div class="rv-lbl" style="margin-top:0">Note <span class="rv-req">*</span></div>
+      <div class="rv-stars-row" id="rvStarsRow">
+        <button class="rv-s" onclick="pickStar(1)" aria-label="1 étoile">★</button>
+        <button class="rv-s" onclick="pickStar(2)" aria-label="2 étoiles">★</button>
+        <button class="rv-s" onclick="pickStar(3)" aria-label="3 étoiles">★</button>
+        <button class="rv-s" onclick="pickStar(4)" aria-label="4 étoiles">★</button>
+        <button class="rv-s" onclick="pickStar(5)" aria-label="5 étoiles">★</button>
+      </div>
+      <div class="rv-lbl">Prénom <span class="rv-req">*</span></div>
+      <input class="rv-input" id="rvName" type="text" placeholder="Ex : Mohamed, Thomas…" maxlength="40">
+      <div class="rv-lbl">Ville <span style="color:#aaa;font-weight:400">(optionnel)</span></div>
+      <input class="rv-input" id="rvCity" type="text" placeholder="Ex : Paris, Créteil…" maxlength="60">
+      <div class="rv-lbl">Votre commentaire <span class="rv-req">*</span></div>
+      <textarea class="rv-ta" id="rvText" placeholder="Décrivez votre expérience avec CapiXpert Paris…" maxlength="1000" rows="4"></textarea>
+      <div class="rv-err" id="rvErr"></div>
+      <button class="rv-submit" onclick="submitReview()">Publier mon avis →</button>
+    </div>
+    <div class="rv-ok" id="rvOk">
+      <div class="rv-ok-icon">🎉</div>
+      <div class="rv-ok-ttl">Merci pour votre avis !</div>
+      <div class="rv-ok-sub">Votre témoignage a été ajouté à la liste des avis.</div>
+    </div>
+  </div>
+</div>
+
 <!-- ======= PRODUCT MODAL ======= -->
 <div class="prod-modal" id="prodModal" onclick="closeProdModal(event)">
   <div class="pm-inner" id="pmInner">
@@ -803,6 +863,9 @@ footer{background:var(--dark);padding:4rem 2rem 2rem;border-top:1px solid rgba(1
       <div class="gold-bar c"></div>
     </div>
     <div class="testi-grid" id="testiGrid"></div>
+    <div class="rv-cta-wrap fi">
+      <button class="rv-cta-btn" onclick="openReviewForm()">✍ Laisser un avis</button>
+    </div>
   </div>
 </section>
 
@@ -1380,9 +1443,12 @@ function renderBA(){
    ============================================================ */
 function renderTestis(){
   const g = document.getElementById('testiGrid');
-  g.innerHTML = data.testimonials.map((t,i)=>`
+  g.innerHTML = data.testimonials.map((t,i)=>{
+    const n=t.stars||5;
+    const starsHtml='<span style="color:var(--gold)">'+'★'.repeat(n)+'</span>'+(n<5?'<span style="opacity:.2">'+'★'.repeat(5-n)+'</span>':'');
+    return `
     <div class="testi-card" onclick="openTestiModal(${i})" title="Lire l'avis complet">
-      <div class="testi-stars">★★★★★</div>
+      <div class="testi-stars">${starsHtml}</div>
       <p class="testi-txt">"${t.text}"</p>
       <div class="testi-read-hint">Lire la suite →</div>
       <div class="testi-author">
@@ -1393,14 +1459,17 @@ function renderTestis(){
           <div class="testi-src">✓ ${t.source}</div>
         </div>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
   initCarousel(g);
 }
 
 function openTestiModal(idx){
   const t = data.testimonials[idx];
   if(!t) return;
-  document.getElementById('tmTxt').textContent = '“' + t.text + '”';
+  const n=t.stars||5;
+  document.getElementById('tmStars').innerHTML='<span style=”color:var(--gold)”>'+'★'.repeat(n)+'</span>'+(n<5?'<span style=”opacity:.3”>'+'★'.repeat(5-n)+'</span>':'');
+  document.getElementById('tmTxt').textContent = '”' + t.text + '”';
   const av = document.getElementById('tmAv');
   av.src = t.avatar; av.alt = t.name;
   av.onerror = ()=>{ av.onerror=null; av.src='https://i.pravatar.cc/80'; };
@@ -1415,6 +1484,62 @@ function closeTestiModal(e){
   if(e && !e.target.classList.contains('testi-modal-overlay') && !e.target.classList.contains('testi-mc-close')) return;
   document.getElementById('testiModal').classList.remove('open');
   document.body.style.overflow='';
+}
+
+/* ============================================================
+   REVIEW FORM
+   ============================================================ */
+let _rvStars = 0;
+
+function openReviewForm(){
+  _rvStars = 0;
+  ['rvName','rvCity','rvText'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('rvErr').textContent='';
+  document.getElementById('rvOk').style.display='none';
+  document.getElementById('rvForm').style.display='block';
+  pickStar(0);
+  document.getElementById('rvModal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeReviewForm(e){
+  if(e && !e.target.classList.contains('rv-overlay') && !e.target.classList.contains('rv-x')) return;
+  document.getElementById('rvModal').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function pickStar(n){
+  _rvStars = n;
+  document.querySelectorAll('.rv-s').forEach((s,i)=>s.classList.toggle('on',i<n));
+}
+
+function submitReview(){
+  const name = document.getElementById('rvName').value.trim();
+  const city = document.getElementById('rvCity').value.trim();
+  const text = document.getElementById('rvText').value.trim();
+  const errEl = document.getElementById('rvErr');
+  if(!_rvStars){ errEl.textContent='Veuillez choisir une note (1 à 5 étoiles).'; return; }
+  if(!name){ errEl.textContent='Veuillez entrer votre prénom.'; return; }
+  if(text.length < 10){ errEl.textContent='Le commentaire doit faire au moins 10 caractères.'; return; }
+  errEl.textContent='';
+  data.testimonials.push({
+    avatar:`https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=B8922C&color=fff&bold=true&size=80`,
+    name,
+    location: city ? `Client vérifié — ${city}` : 'Client vérifié',
+    source:'CapiXpert Paris',
+    stars: _rvStars,
+    text
+  });
+  saveData();
+  renderTestis();
+  document.getElementById('rvForm').style.display='none';
+  document.getElementById('rvOk').style.display='block';
+  setTimeout(()=>{
+    document.getElementById('rvModal').classList.remove('open');
+    document.body.style.overflow='';
+    const cards = document.querySelectorAll('#testiGrid .testi-card');
+    if(cards.length) cards[cards.length-1].scrollIntoView({behavior:'smooth',block:'nearest',inline:'end'});
+  }, 2200);
 }
 
 /* ============================================================
