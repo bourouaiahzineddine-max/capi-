@@ -1173,6 +1173,11 @@ data.products.forEach((p,i)=>{
 });
 // Always sync beforeAfter from DEFAULT
 data.beforeAfter = DEFAULT.beforeAfter.map(d=>({...d}));
+// Sync existing testimonials + append any new ones added to DEFAULT (preserves locally-submitted reviews beyond DEFAULT's length)
+data.testimonials.forEach((t,i)=>{ const d = DEFAULT.testimonials[i]; if(d) Object.assign(t, d); });
+if (data.testimonials.length < DEFAULT.testimonials.length) {
+  data.testimonials = data.testimonials.concat(DEFAULT.testimonials.slice(data.testimonials.length).map(d=>({...d})));
+}
 
 /* ============================================================
    TRANSLATIONS
