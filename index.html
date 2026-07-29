@@ -897,10 +897,10 @@ footer{background:var(--dark);padding:4rem 2rem 2rem;border-top:1px solid rgba(1
           <label data-i18n="form_prod">Produit d'intérêt (optionnel)</label>
           <select id="fprod">
             <option value="" data-i18n="form_sel">-- Sélectionnez --</option>
-            <option>Complément Capillaire Ultra HD — 295€</option>
-            <option>Complément Capillaire Australia — 480€</option>
+            <option>Complément Capillaire Ultra HD — à partir de 295€</option>
+            <option>Complément Capillaire Australia — 395€</option>
             <option>Complément Full Lace Afro — 395€</option>
-            <option>Complément Cheveux Bouclés — 450€</option>
+            <option>Complément Cheveux Bouclés — 395€</option>
             <option>Kit Colle + Dissolvant — 34.98€</option>
             <option data-i18n="form_other">Autre / Je ne sais pas encore</option>
           </select>
@@ -1059,15 +1059,15 @@ const DEFAULT = {
       id:'p1', badge:'BEST-SELLER',
       name:'Complément Capillaire Ultra HD',
       imgA:'assets/prod1_a.jpg', imgB:'assets/prod1_b.jpg', imgVideo:'assets/video_prod1a.mp4', imgVideo2:'assets/video_prod1b.mp4', imgVideo3:'assets/video_prod1c.mp4',
-      oldPrice:'364€', newPrice:'295€', discount:'-19%',
+      oldPrice:'364€', newPrice:'à partir de 295€', discount:'-19%',
       duration:'4 à 6 mois', hasColors:true,
-      desc:'100% cheveux humains Remy Indiens, doux et naturels. Base en peau ultra-fine 0.03–0.04mm — non réfléchissante, s\'adapte parfaitement à votre tête (taille 20×25cm). Confort absolu, invisible même au toucher. Boucle V 28mm. Peut être coupé, lissé et lavé selon votre style.'
+      desc:'100% cheveux humains Remy Indiens, doux et naturels. Base en peau ultra-fine 0.03–0.04mm — non réfléchissante, s\'adapte parfaitement à votre tête (taille 20×25cm). Confort absolu, invisible même au toucher. Boucle V 28mm. Peut être coupé, lissé et lavé selon votre style. Également disponible en base PU 0.06mm, 0.09mm et 0.12mm.'
     },
     {
       id:'p2', badge:'POPULAIRE',
       name:'Complément Capillaire Australia',
       imgA:'assets/prod2_a.jpg', imgB:'assets/prod2_b.jpg', imgVideo:'assets/video_prod2b.mp4',
-      oldPrice:'593€', newPrice:'480€', discount:'-19%',
+      oldPrice:'488€', newPrice:'395€', discount:'-19%',
       duration:'17 mois à 2 ans', hasColors:true,
       desc:'Idéal pour les sportifs et actifs. Centre en dentelle avec polyester transparent — respirant, durable et ultra-naturel. Cheveux humains Remy indiens, densité 130%, ondulation 30mm. Résistant à la transpiration. Nœud double. Tailles disponibles : 6×8 à 8×10 pouces.'
     },
@@ -1083,7 +1083,7 @@ const DEFAULT = {
       id:'p4', badge:'TENDANCE',
       name:'Complément Cheveux Bouclés',
       imgA:'assets/prod4.jpg', imgB:'assets/prod4_b.jpg', imgVideo:'assets/video_prod4b.mp4',
-      oldPrice:'556€', newPrice:'450€', discount:'-19%',
+      oldPrice:'488€', newPrice:'395€', discount:'-19%',
       duration:'12 à 18 mois', hasColors:true,
       desc:'Base PU ultra-fine 0.09mm pour homme. Cheveux humains indiens vierges — soyeux, sans enchevêtrement. Taille 17.8×22.9cm ou 20.3×25.4cm. Longueur 12.7–15.2cm, densité 120–130%. Convient à toutes occasions : sport, natation, mariage. Double nœud, résultat 100% indétectable.'
     },
@@ -1161,6 +1161,11 @@ data.products.forEach((p,i)=>{
   p.imgVideo  = d.imgVideo  || null;
   p.imgVideo2 = d.imgVideo2 || null;
   p.imgVideo3 = d.imgVideo3 || null;
+  // Always sync price + description from DEFAULT (ensures updates are reflected)
+  p.oldPrice = d.oldPrice;
+  p.newPrice = d.newPrice;
+  p.discount = d.discount;
+  p.desc     = d.desc;
 });
 // Always sync beforeAfter from DEFAULT
 data.beforeAfter = DEFAULT.beforeAfter.map(d=>({...d}));
